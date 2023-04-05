@@ -14,7 +14,18 @@
  * @return string* Die konkatenierten Strings dest und src.
  */
 string* str_cat(string* dest, const char* src, size_t len) {
-    printf("TODO!\n");
+    //Berechnet die neue länge des Strings
+    size_t total_len = dest->len + len -1 ;
+
+    //reservierter Speicher wird auf die benötigte länge angepasst
+    dest->str = realloc(dest->str, total_len);
+
+    //kopiert 'len' Bytes aus src auf die letzte Position von dest->str.
+    memcpy(dest->str + dest->len,src, len -1);
+
+    //setzt die länge des
+    dest->len = total_len;
+
     return dest;
 }
 
