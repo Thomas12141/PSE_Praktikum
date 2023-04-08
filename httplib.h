@@ -14,6 +14,13 @@ struct string {
 };
 typedef struct string string;
 
+struct request {
+    char* method; // z. B. GET
+    char* resource; // z. B. /index.html
+    char* protocol; // z. B. HTTP/1.1
+};
+typedef struct request request;
+
 string* str_cat(string* dest, const char* src, size_t len);
 string* _new_string();
 void print_string(string* str);
