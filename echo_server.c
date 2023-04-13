@@ -254,6 +254,10 @@ string* process(string *request) {
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
+    if(isFileExistent(*request) == 0) {
+        //Statuscode 404
+    }
+
     string *response = request;
     return response;
 }
