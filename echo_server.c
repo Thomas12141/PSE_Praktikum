@@ -12,6 +12,27 @@
 #define PORT 31337
 #define BUFFER_SIZE 1024*1024
 
+/**
+ * Überprüft, ob eine html-Datei existiert:
+ * @param html_file html-Datei.
+ * @return Wahrheitswert.
+*/
+int isFileExistent(string html_file) {
+    //Das Verzeichnis, wo die html-Dateien liegen.
+    const char *docRoot = "htdocs/";
+    //Länge des html-Datei-Verzeichnisses für die str_cat-Funktion.
+    int file_path_length = get_length(&html_file) + strlen(docRoot);
+    //Zusammenfügen von docRoot (Verzeichnis) und string (html-Datei) für fopen.
+    char *file_path = (char *) str_cat((struct string *) docRoot, html_file.str, file_path_length);
+    //Prüfen, ob die Datei existiert.
+    FILE *file;
+    if ((file = fopen(file_path, "r")) != NULL) {
+        fclose(file);
+        return 1; // Datei existiert.
+    }
+    return 0; // Datei existiert nicht.
+}
+
 string* process(string *request);
 
 static bool run = true;
@@ -168,7 +189,7 @@ static void main_loop() {
     while (run) {
 
         /*
-         * Der accept()-Aufruf blockiert, bis eine neue Verbindung rein kommt.
+         * Der accept()-Aufruf blockiert, bis eine neue Verbindung reinkommt.
          */
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (newsockfd < 0) {
@@ -228,8 +249,8 @@ static void main_loop() {
  */
 string* process(string *request) {
     /*
-     * Diese Funktion müssen Sie anpassen, so dass der request von Ihrem Code verarbeitet wird,
-     * die response generiert und zurück gibt.
+     * Diese Funktion müssen Sie anpassen, sodass der request von Ihrem Code verarbeitet wird,
+     * die response generiert und zurückgibt.
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
