@@ -14,21 +14,27 @@ struct string {
 };
 typedef struct string string;
 
+struct http_request {
+    string* method; // z. B. GET
+    string* resource_path; // z. B. /index.html
+    float protocol; // HTTP Version z. B. HTTP/1.1
+    string* hostname; //z. B. Host: localhost
+};
+typedef struct http_request http_request;
 
 struct http_response_header {
 
-    float http_version;
-    int status_code;
-    string reason_phrase;
-    size_t content_length;
-    string content_type;
-};
-typedef struct http_response_header http_response_header;
+    float protocol; //HTTP Version z. B. HTTP/1.1
+    int status_code; // 3-stellige Ganzzahl zur kurzen Beschreibung des Zustandes
+    string* reason_phrase; // Beschreibung des Zustandes in Textform
+    size_t content_length;  // Leange des Inhalts
+    string* content_type;   // Art des Inhalts
+}
+;typedef struct http_response_header http_response_header;
 
 struct http_response {
-
     http_response_header header;
-    string http_body;
+    string* http_body;
 };
 typedef struct http_response http_response;
 
