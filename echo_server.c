@@ -11,19 +11,18 @@
 
 #define PORT 31337
 #define BUFFER_SIZE 1024*1024
+#define DOCROOT "htdocs/"
 
 /**
- * Überprüft, ob eine html-Datei existiert:
+ * Überprüft, ob eine html-Datei existiert.
  * @param html_file html-Datei.
  * @return Wahrheitswert.
 */
 int isFileExistent(string html_file) {
-    //Das Verzeichnis, wo die html-Dateien liegen.
-    const char *docRoot = "htdocs/";
     //Länge des html-Datei-Verzeichnisses für die str_cat-Funktion.
-    int file_path_length = get_length(&html_file) + strlen(docRoot);
-    //Zusammenfügen von docRoot (Verzeichnis) und string (html-Datei) für fopen.
-    char *file_path = (char *) str_cat((struct string *) docRoot, html_file.str, file_path_length);
+    int file_path_length = get_length(&html_file) + strlen(DOCROOT);
+    //Zusammenfügen von DOCROOT (Verzeichnis) und string (html-Datei) für fopen.
+    char *file_path = (char *) str_cat((struct string *) DOCROOT, html_file.str, file_path_length);
     //Prüfen, ob die Datei existiert.
     FILE *file;
     if ((file = fopen(file_path, "r")) != NULL) {
@@ -254,9 +253,6 @@ string* process(string *request) {
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
-    if(isFileExistent(*request) == 0) {
-        //Statuscode 404
-    }
 
     string *response = request;
     return response;
@@ -264,7 +260,7 @@ string* process(string *request) {
 
 int main(int argc, char *argv[]) {
     register_signal();
-
+    
     if(argc == 2 && strcmp("stdin", argv[1]) == 0) {
         main_loop_stdin();
     } else {
