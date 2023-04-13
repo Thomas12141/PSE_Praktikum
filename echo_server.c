@@ -206,7 +206,6 @@ static void main_loop() {
             error("ERROR writing to socket");
         }
         free_str(response);
-
         /*
          * Schließe die Verbindung.
          */
