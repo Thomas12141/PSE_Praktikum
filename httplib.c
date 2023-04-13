@@ -130,4 +130,3 @@ char* get_char_str(string* str) {
     assert(str != NULL);
     return str->str;
 }
-
