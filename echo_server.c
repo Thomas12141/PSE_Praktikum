@@ -11,21 +11,21 @@
 
 #define PORT 31337
 #define BUFFER_SIZE 1024*1024
-#define DOCROOT "htdocs/"
+#define DOCROOT "../htdocs/"
 
 /**
- * Überprüft, ob eine html-Datei existiert.
- * @param html_file html-Datei.
- * @return Wahrheitswert.
+ * Überprüft, ob eine Datei existiert.
+ * @param filename Dateiname im Docroot.
+ * @return Wahrheitswert (1 = datei existiert, 0 = datei existiert nicht).
 */
-int isFileExistent(string html_file) {
-    //Länge des html-Datei-Verzeichnisses für die str_cat-Funktion.
-    int file_path_length = get_length(&html_file) + strlen(DOCROOT);
+int isFileExistent(string* filename) {
     //Zusammenfügen von DOCROOT (Verzeichnis) und string (html-Datei) für fopen.
-    char *file_path = (char *) str_cat((struct string *) DOCROOT, html_file.str, file_path_length);
+    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = str_cat(docroot, filename->str, filename->len);
+
     //Prüfen, ob die Datei existiert.
-    FILE *file;
-    if ((file = fopen(file_path, "r")) != NULL) {
+    FILE *file = fopen(get_char_str(file_path), "r");;
+    if (file != NULL) {
         fclose(file);
         return 1; // Datei existiert.
     }
