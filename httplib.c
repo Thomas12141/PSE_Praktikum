@@ -4,6 +4,7 @@
 
 #include "httplib.h"
 #include <assert.h>
+#include <stdbool.h>
 
 /**
  * Hängt einen String src mit der Länge len an einen bestehenden String dest an.
@@ -130,4 +131,75 @@ size_t get_length(string* str) {
 char* get_char_str(string* str) {
     assert(str != NULL);
     return str->str;
+}
+
+
+http_request getRequestStruct(string* request_string){
+    http_request* request = calloc(sizeof(http_request), 1);
+    if(request == NULL) {
+        exit(2);
+    }
+    if(request_string->str[0] == 'G') {
+        request->method->str = realloc(request->method->str, 3);
+    }
+        else{
+            request->method->str = realloc(request->method->str, 4);
+        }
+
+    if(request->method->str == NULL) {
+        exit(3);
+    }
+
+      bool methode = false;
+      int mp = 0;
+      bool resource_path = false;
+      int rp = 0;
+      bool protocol = false;
+      int pp = 0;
+      bool hostname = false;
+      int hp = 0;
+
+      bool
+
+
+    for (int i = 0; i < request_string->len;i++){
+
+        // Initialisiert die request->methode mit Werten aus der Request-String
+        if (methode == false && request_string->str[i] != ' '){
+            request->method->str[mp] = request_string->str[i];
+            request->method->len++;
+            mp++;
+            continue;
+        }
+        methode = true;
+
+        if(resource_path == false && request_string->str[i] != ' ')
+        {
+            request->resource_path->str[rp] = request_string->str[i];
+            request->resource_path->len++;
+            rp++;
+            continue;
+        }
+        resource_path = true;
+
+        if(protocol == false && request_string->str[i] != ' ')
+        {
+            request->protocol->str[pp] = request_string->str[i];
+            request->protocol->len++;
+            pp++;
+            continue;
+        }
+        protocol = true;
+
+        if(hostname == false && request_string->str[i] != ' ')
+        {
+            request->hostname->str[pp] = request_string->str[i];
+            request->hostname->len++;
+            hp++;
+            continue;
+        }
+        hostname = true;
+    }
+
+    return request;
 }
