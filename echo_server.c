@@ -233,6 +233,7 @@ string* process(string *request) {
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
     string *response = request;
+    http_request  *request_struct = getRequestStruct(request);
     return response;
 }
 
