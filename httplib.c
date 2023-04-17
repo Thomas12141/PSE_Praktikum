@@ -131,3 +131,80 @@ char* get_char_str(string* str) {
     assert(str != NULL);
     return str->str;
 }
+
+int isMethodValid(http_request* request){
+
+// Erlaubte Methoden
+const char methoden[3][4] = {{'G', 'E','T'},{'P', 'O','S','T'},{'H', 'E','A','D'}};
+
+// Pruefft Bedinung der Rueckgabe  0 = False; 1 = True;
+
+/*
+ * Die j-Schleife durchlaueft das außere Array von methoden (wechselt das wort)
+ * Die i-Schleife durchlaueft den String und das innere Array von methoden
+ */
+    for (int j = 0; j < 3; j++) {
+        for(int i = 0; i < request->method->len; i++){
+
+            //  Prueft ob die character von String und methoden an der Position i gleich sind. Wenn nicht: j++
+            if (request->method->str[i] != methoden[j][i] || (j == 0 && i > 2)){
+                break;
+             }
+
+            // Wenn alle zeichen gleich von String gleich sind,.
+            if (i++ == request->method->len){
+                return 1;
+            }
+        }
+    }
+
+ return 0;
+}
+
+    // Funktion zur Methoden Validierung
+int isMethodValid2(http_request* request){
+
+    // Erlaubte HTTP-Methoden
+    const char methode_get[3] = {'G', 'E','T'};
+    const char methoden[2][4] = {{'P', 'O','S','T'},{'H', 'E','A','D'}};
+
+    /* Prueft ob die Methode die laenge = 3 besitzt.
+     * -> Wenn True: durchlaueft die i-Schleife den String und das Array von methode_get.
+     * Prueft ob die character von String und methoden an der Position i gleich sind.
+     * -> Wenn False: Methode ist nicht erlaubt.
+     * -> Wenn True: Methode ist erlaubt.
+     */
+    if(request->method->len == 3) {
+        for (int i = 0; i < 3; i++) {
+            if(request->method->str[i] != methode_get[i]){
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+    /* Prueft ob die Methode die laenge = 4 besitzt.
+     * -> Wenn False: Methode ist nicht erlaubt. (Da die Methode die laenge =  3 || 4 haben muss)
+     * -> Wenn True: durchlaueft die j-Schleife das außere Array von methoden (Wechselt das Wort)
+     * i-Schleife durchlaueft den String und das innere Array von methoden
+     * Prueft ob die character von String und methoden an der Position i gleich sind.
+     * -> Wenn False: Prüft Naechstes Wort.
+     * -> Wenn True: Methode ist erlaubt.
+     */
+    if(request->method->len == 4)
+        for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < 4; i++) {
+
+                if (request->method->str[i] != methoden[j][i]) {
+                    break;
+                }
+
+                if (i++ == request->method->len) {
+                        return 1;
+                }
+            }
+        }
+
+    return 0;
+}
+
