@@ -148,21 +148,21 @@ http_request* getRequestStruct(string* request_string){
                 break;
             }
 
-            if (request_string->str[i++] == ' ' || request_string->str[i++] == '\r') {
+            if ((request_string->str[i+1] == ' ' &&  i+1 !=  i < request_string->len)|| request_string->str[i++] == '\r') {
                 positionen[j] = i;
                 j++;
                 continue;
             }
 
-            if (request_string->str[i--] == ' ') {
+            if (request_string->str[i-1] == ' ') {
                 positionen[j] = i;
                 j++;
             }
         }
 
-        realloc(request->method->str, positionen[0] + 1);
-        realloc(request->resource_path->str, positionen[2] - positionen[1] + 1);
-        realloc(request->protocol->str, positionen[4] - positionen[3] + 1);
+        request->method->str = realloc(request->method->str, positionen[0] + 1);
+        request->resource_path->str = realloc(request->resource_path->str, positionen[2] - positionen[1] + 1);
+        request->protocol->str = realloc(request->protocol->str, positionen[4] - positionen[3] + 1);
 
         memcpy(request->method->str, request_string->str, positionen[0] + 1);
         request->method->len = positionen[0] + 1;
