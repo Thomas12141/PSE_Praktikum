@@ -8,6 +8,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g -O")
 
 add_executable(pse_webserver echo_server.c httplib.c httplib.h)
 set_property(TARGET pse_webserver PROPERTY C_STANDARD 11)
