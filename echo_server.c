@@ -10,10 +10,29 @@
 #include "httplib.h"
 
 #define PORT 31337
-#define BUFFER_SIZE 1024*102
+#define BUFFER_SIZE 1024*1024
+#define DOCROOT "../htdocs/"
+
+/**
+ * Überprüft, ob eine Datei existiert.
+ * @param filename Dateiname im Docroot.
+ * @return Wahrheitswert (1 = datei existiert, 0 = datei existiert nicht).
+*/
+int isFileExistent(string* filename) {
+    //Zusammenfügen von DOCROOT (Verzeichnis) und string (html-Datei) für fopen.
+    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = str_cat(docroot, filename->str, filename->len);
+
+    //Prüfen, ob die Datei existiert.
+    FILE *file = fopen(get_char_str(file_path), "r");;
+    if (file != NULL) {
+        fclose(file);
+        return 1; // Datei existiert.
+    }
+    return 0; // Datei existiert nicht.
+}
 
 string* process(string *request);
-
 
 static bool run = true;
 
@@ -224,20 +243,17 @@ static void main_loop() {
 /**
  * Die Funktion akzeptiert den eingehenden Request und gibt eine entsprechende Response zurück.
  * @param request Der eingehende Request.
- * @return Die ausgehende Response.
-
+ * @return int (1 = ist valid, 0 = ist nicht valid, z.B. außerhalb des docroots).
  */
- int  istResourceValid( string *request){
-     for (int i=0; i<= get_length(request); i++){   //  Hier läuft ide Schleife unsere Request durch
-          if( request->str[i] == '.' &&  request->str[i++] == '.' && request->str[i+=2] == '/' ){
-              return 0;
-                          // Überprüft auf die Anwesenheit und Positionen der genannte Zeichen
-
+int isResourceValid(string* resource_path) {
+    for (int i = 0; i<= resource_path->len; i++) {   //  Hier läuft die Schleife unsere Request durch
+          if(resource_path->str[i] == '.' &&  resource_path->str[i+1] == '.' && resource_path->str[i+2] == '/') {
+              return 0; // Überprüft auf die Anwesenheit und Positionen der genannte Zeichen
           }
+    }
 
-     }
-          return 1;
- }
+    return 1;
+}
 string* process(string *request) {
     /*
      * Diese Funktion müssen Sie anpassen, so dass der request von Ihrem Code verarbeitet wird,
@@ -245,11 +261,6 @@ string* process(string *request) {
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
-
-
-    int istResourceValid(string *request);
-
-
 
     string *response = request;
     return response;
