@@ -183,13 +183,11 @@ int str_cmp(string* str1, string* str2){
         return 0;
     }
 
-    for(int i = 0; i < str1->len; i++){
-        if (str1->str[i] != str2->str[i]){
-            return 0;
-        }
+    if ( memcmp(str1->str,str2->str,str1->len) == 0){
+        return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 int methodValid(http_request* request){
