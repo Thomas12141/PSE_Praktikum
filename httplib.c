@@ -191,3 +191,20 @@ int str_cmp(string* str1, string* str2){
 
     return 1;
 }
+
+int methodValid(http_request* request){
+
+    if ( request->method->len == 3 && memcmp(request->method->str, "GET",3) == 0){
+        return 1;
+    }
+
+    if (request->method->len == 4 && memcmp(request->method->str, "POST",4) == 0){
+        return 1;
+    }
+
+    if (request->method->len == 4 && memcmp(request->method->str, "HEAD",4) == 0){
+        return 1;
+    }
+
+    return 0;
+}
