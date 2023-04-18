@@ -4,7 +4,7 @@
 
 #include "httplib.h"
 #include <assert.h>
-#include <stdbool.h>
+
 
 /**
  * Hängt einen String src mit der Länge len an einen bestehenden String dest an.
@@ -19,8 +19,15 @@ string* str_cat(string* dest, const char* src, size_t len) {
     //Berechnet die neue länge des Strings
     size_t total_len = dest->len + len;
 
-    //Der reservierte  Speicher von des->str wird auf die benötigte länge angepasst
-    dest->str = realloc(dest->str, total_len);
+    //Der reservierte Speicher von des->str wird auf die benötigte länge angepasst
+    char * tmp = (char *) realloc(dest->str, len);
+    if (tmp == NULL){
+        exit(3);
+    }
+    else{
+        dest->str =  tmp;
+    }
+
 
     //kopiert 'len' Bytes aus src auf die letzte Position von dest->str.
     memcpy(dest->str + dest->len,src, len);
@@ -133,84 +140,6 @@ char* get_char_str(string* str) {
     return str->str;
 }
 
-int isMethodValid(http_request* request){
-
-// Erlaubte Methoden
-const char methoden[3][4] = {{'G', 'E','T'},{'P', 'O','S','T'},{'H', 'E','A','D'}};
-
-// Pruefft Bedinung der Rueckgabe  0 = False; 1 = True;
-
-/*
- * Die j-Schleife durchlaueft das außere Array von methoden (wechselt das wort)
- * Die i-Schleife durchlaueft den String und das innere Array von methoden
- */
-    for (int j = 0; j < 3; j++) {
-        for(int i = 0; i < request->method->len; i++){
-
-            //  Prueft ob die character von String und methoden an der Position i gleich sind. Wenn nicht: j++
-            if (request->method->str[i] != methoden[j][i] || (j == 0 && i > 2)){
-                break;
-             }
-
-            // Wenn alle zeichen gleich von String gleich sind,.
-            if (i++ == request->method->len){
-                return 1;
-            }
-        }
-    }
-
- return 0;
-}
-
-    // Funktion zur Methoden Validierung
-int isMethodValid2(http_request* request){
-
-    // Erlaubte HTTP-Methoden
-    const char methode_get[3] = {'G', 'E','T'};
-    const char methoden[2][4] = {{'P', 'O','S','T'},{'H', 'E','A','D'}};
-
-    /* Prueft ob die Methode die laenge = 3 besitzt.
-     * -> Wenn True: durchlaueft die i-Schleife den String und das Array von methode_get.
-     * Prueft ob die character von String und methoden an der Position i gleich sind.
-     * -> Wenn False: Methode ist nicht erlaubt.
-     * -> Wenn True: Methode ist erlaubt.
-     */
-    if(request->method->len == 3) {
-        for (int i = 0; i < 3; i++) {
-            if(request->method->str[i] != methode_get[i]){
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    /* Prueft ob die Methode die laenge = 4 besitzt.
-     * -> Wenn False: Methode ist nicht erlaubt. (Da die Methode die laenge =  3 || 4 haben muss)
-     * -> Wenn True: durchlaueft die j-Schleife das außere Array von methoden (Wechselt das Wort)
-     * i-Schleife durchlaueft den String und das innere Array von methoden
-     * Prueft ob die character von String und methoden an der Position i gleich sind.
-     * -> Wenn False: Prüft Naechstes Wort.
-     * -> Wenn True: Methode ist erlaubt.
-     */
-    if(request->method->len == 4)
-        for (int j = 0; j < 2; j++) {
-            for (int i = 0; i < 4; i++) {
-
-                if (request->method->str[i] != methoden[j][i]) {
-                    break;
-                }
-
-                if (i++ == request->method->len) {
-                        return 1;
-                }
-            }
-        }
-
-    return 0;
-}
-
-
-
 http_request* getRequestStruct(string* request_string){
     http_request* request = calloc(sizeof(http_request), 1);
 
@@ -240,9 +169,29 @@ http_request* getRequestStruct(string* request_string){
     size_t resource_size = endpositionen[1] - method_size;
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
 
-    request->method->str = realloc(request->method->str, method_size);
-    request->resource_path->str = realloc(request->resource_path->str, resource_size);
-    request->protocol->str = realloc(request->protocol->str, protocol_size);
+    char * tmp_method = (char *) realloc(request->method->str, method_size);
+    if (tmp_method == NULL){
+        exit(3);
+    }
+    else{
+        request->method->str =  tmp_method;
+    }
+
+    char * tmp_path = (char *) realloc(request->resource_path->str, resource_size);
+    if (tmp_path == NULL){
+        exit(3);
+    }
+    else{
+        request->resource_path->str =  tmp_path;
+    }
+
+    char * tmp_protocol = (char *) realloc(request->protocol->str, protocol_size);
+    if (tmp_protocol == NULL){
+        exit(3);
+    }
+    else{
+        request->protocol->str =  tmp_protocol;
+    }
 
     memcpy(request->method->str, request_string->str, method_size);
     request->method->len = method_size;
