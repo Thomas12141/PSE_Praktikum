@@ -252,7 +252,8 @@ string* process(string *request) {
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
-
+   http_request* request_struct = getRequestStruct(request);
+   printf("%s", request_struct->method->str);
     string *response = request;
     return response;
 }
