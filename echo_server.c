@@ -7,11 +7,12 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sys/syslimits.h>
 #include "httplib.h"
 
 #define PORT 31337
 #define BUFFER_SIZE 1024*1024
-#define DOCROOT "../htdocs/"
+#define DOCROOT "../htdocs"
 
 /**
  * Überprüft, ob eine Datei existiert.
@@ -23,8 +24,11 @@ int isFileExistent(string* filename) {
     string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
     string* file_path = str_cat(docroot, filename->str, filename->len);
 
+    char* filepathPointer = calloc(file_path->len + 1, 1);
+    memcpy(filepathPointer, file_path->str, file_path->len);
+
     //Prüfen, ob die Datei existiert.
-    FILE *file = fopen(get_char_str(file_path), "r");;
+    FILE *file = fopen(filepathPointer, "r");;
     if (file != NULL) {
         fclose(file);
         return 1; // Datei existiert.
@@ -246,13 +250,23 @@ static void main_loop() {
  * @return int (1 = ist valid, 0 = ist nicht valid, z.B. außerhalb des docroots).
  */
 int isResourceValid(string* resource_path) {
-    for (int i = 0; i<= resource_path->len; i++) {   //  Hier läuft die Schleife unsere Request durch
-          if(resource_path->str[i] == '.' &&  resource_path->str[i+1] == '.' && resource_path->str[i+2] == '/') {
-              return 0; // Überprüft auf die Anwesenheit und Positionen der genannte Zeichen
-          }
-    }
+    char pathBuffer [PATH_MAX+1];
+    char* ptr = realpath(DOCROOT, pathBuffer);
 
-    return 1;
+    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = str_cat(docroot, resource_path->str, resource_path->len);
+    string* docrootPathString = cpy_str(ptr, strlen(ptr));
+
+    char* filepathPointer = calloc(file_path->len + 1, 1);
+    memcpy(filepathPointer, file_path->str, file_path->len);
+
+    char* requestedFilePath = realpath(filepathPointer, pathBuffer);
+    string* filePathString = cpy_str(requestedFilePath, strlen(requestedFilePath));
+    free(filepathPointer);
+
+    int res = memcmp(filePathString->str, docrootPathString->str, docrootPathString->len);
+
+    return res == 0;
 }
 string* process(string *request) {
     /*
