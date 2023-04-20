@@ -9,6 +9,6 @@ endif ()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -fsanitize=address")
 
-add_executable(pse_webserver echo_server.c httplib.c httplib.h)
+add_executable(pse_webserver echo_server.c httplib.c httplib.h validation.c validation.h strlib.c strlib.h config.h)
 set_property(TARGET pse_webserver PROPERTY C_STANDARD 11)
 install(TARGETS pse_webserver DESTINATION bin)
