@@ -220,15 +220,8 @@ static void main_loop() {
 }
 
 string* process(string *request) {
-    /*
-     * Diese Funktion müssen Sie anpassen, so dass der request von Ihrem Code verarbeitet wird,
-     * die response generiert und zurück gibt.
-     *
-     * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
-     */
-
-    string *response = request;
-    return response;
+   string *response = request;
+   return response;
 }
 
 int main(int argc, char *argv[]) {

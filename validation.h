@@ -11,5 +11,6 @@
 
 int isResourceValid(string* resource_path);
 int isFileExistent(string* filename);
+int isMethodValid(string* method);
 
 #endif //PSE_WEBSERVER_VALIDATION_H
