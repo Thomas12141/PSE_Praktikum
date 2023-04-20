@@ -35,5 +35,4 @@ struct http_response {
 typedef struct http_response http_response;
 
 http_request* getRequestStruct(string* str);
-//int methodValid(http_request*);
 #endif //ECHO_SERVER_HTTPLIB_H
