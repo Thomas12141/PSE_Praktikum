@@ -8,29 +8,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include "httplib.h"
-
-#define PORT 31337
-#define BUFFER_SIZE 1024*1024
-#define DOCROOT "../htdocs/"
-
-/**
- * Überprüft, ob eine Datei existiert.
- * @param filename Dateiname im Docroot.
- * @return Wahrheitswert (1 = datei existiert, 0 = datei existiert nicht).
-*/
-int isFileExistent(string* filename) {
-    //Zusammenfügen von DOCROOT (Verzeichnis) und string (html-Datei) für fopen.
-    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
-    string* file_path = str_cat(docroot, filename->str, filename->len);
-
-    //Prüfen, ob die Datei existiert.
-    FILE *file = fopen(get_char_str(file_path), "r");;
-    if (file != NULL) {
-        fclose(file);
-        return 1; // Datei existiert.
-    }
-    return 0; // Datei existiert nicht.
-}
+#include "validation.h"
+#include "config.h"
 
 string* process(string *request);
 
@@ -188,7 +167,7 @@ static void main_loop() {
     while (run) {
 
         /*
-         * Der accept()-Aufruf blockiert, bis eine neue Verbindung reinkommt.
+         * Der accept()-Aufruf blockiert, bis eine neue Verbindung rein kommt.
          */
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (newsockfd < 0) {
@@ -240,15 +219,10 @@ static void main_loop() {
     }
 }
 
-/**
- * Die Funktion akzeptiert den eingehenden Request und gibt eine entsprechende Response zurück.
- * @param request Der eingehende Request.
- * @return Die ausgehende Response.
- */
 string* process(string *request) {
     /*
-     * Diese Funktion müssen Sie anpassen, sodass der request von Ihrem Code verarbeitet wird,
-     * die response generiert und zurückgibt.
+     * Diese Funktion müssen Sie anpassen, so dass der request von Ihrem Code verarbeitet wird,
+     * die response generiert und zurück gibt.
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
@@ -260,7 +234,7 @@ string* process(string *request) {
 
 int main(int argc, char *argv[]) {
     register_signal();
-    
+
     if(argc == 2 && strcmp("stdin", argv[1]) == 0) {
         main_loop_stdin();
     } else {
