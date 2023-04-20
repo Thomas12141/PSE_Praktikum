@@ -51,3 +51,13 @@ int isFileExistent(string* filename) {
     }
     return 0; // Datei existiert nicht.
 }
+
+int isMethodValid(string* method) {
+    string* tmpStr = cpy_str("GET", 3);
+
+    if(str_cmp(method, tmpStr)) {
+        return 1;
+    }
+
+    return 0;
+}
