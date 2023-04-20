@@ -7,11 +7,12 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sys/syslimits.h>
 #include "httplib.h"
 
 #define PORT 31337
 #define BUFFER_SIZE 1024*1024
-#define DOCROOT "../htdocs/"
+#define DOCROOT "../htdocs"
 
 /**
  * Überprüft, ob eine Datei existiert.
@@ -23,8 +24,11 @@ int isFileExistent(string* filename) {
     string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
     string* file_path = str_cat(docroot, filename->str, filename->len);
 
+    char* filepathPointer = calloc(file_path->len + 1, 1);
+    memcpy(filepathPointer, file_path->str, file_path->len);
+
     //Prüfen, ob die Datei existiert.
-    FILE *file = fopen(get_char_str(file_path), "r");;
+    FILE *file = fopen(filepathPointer, "r");;
     if (file != NULL) {
         fclose(file);
         return 1; // Datei existiert.
@@ -188,7 +192,7 @@ static void main_loop() {
     while (run) {
 
         /*
-         * Der accept()-Aufruf blockiert, bis eine neue Verbindung reinkommt.
+         * Der accept()-Aufruf blockiert, bis eine neue Verbindung rein kommt.
          */
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (newsockfd < 0) {
@@ -243,12 +247,31 @@ static void main_loop() {
 /**
  * Die Funktion akzeptiert den eingehenden Request und gibt eine entsprechende Response zurück.
  * @param request Der eingehende Request.
- * @return Die ausgehende Response.
+ * @return int (1 = ist valid, 0 = ist nicht valid, z.B. außerhalb des docroots).
  */
+int isResourceValid(string* resource_path) {
+    char pathBuffer [PATH_MAX+1];
+    char* ptr = realpath(DOCROOT, pathBuffer);
+
+    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = str_cat(docroot, resource_path->str, resource_path->len);
+    string* docrootPathString = cpy_str(ptr, strlen(ptr));
+
+    char* filepathPointer = calloc(file_path->len + 1, 1);
+    memcpy(filepathPointer, file_path->str, file_path->len);
+
+    char* requestedFilePath = realpath(filepathPointer, pathBuffer);
+    string* filePathString = cpy_str(requestedFilePath, strlen(requestedFilePath));
+    free(filepathPointer);
+
+    int res = memcmp(filePathString->str, docrootPathString->str, docrootPathString->len);
+
+    return res == 0;
+}
 string* process(string *request) {
     /*
-     * Diese Funktion müssen Sie anpassen, sodass der request von Ihrem Code verarbeitet wird,
-     * die response generiert und zurückgibt.
+     * Diese Funktion müssen Sie anpassen, so dass der request von Ihrem Code verarbeitet wird,
+     * die response generiert und zurück gibt.
      *
      * Für den Echo-Server wird der request einfach als response zurückgegeben, das Echo eben.
      */
@@ -259,7 +282,7 @@ string* process(string *request) {
 
 int main(int argc, char *argv[]) {
     register_signal();
-    
+
     if(argc == 2 && strcmp("stdin", argv[1]) == 0) {
         main_loop_stdin();
     } else {
