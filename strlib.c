@@ -142,3 +142,18 @@ int str_cmp(string* str1, string* str2) {
 
     return 0;
 }
+
+string* readFile(char* filepath) {
+    char* buffer = calloc(BUFFER_SIZE, 1);
+
+    FILE* file = fopen(filepath, "r");
+    fread(buffer, BUFFER_SIZE, 1, file);
+    fclose(file);
+
+    fprintf(stderr, "%s", buffer);
+
+    string* fileContent = cpy_str(buffer, strlen(buffer));
+    free(buffer);
+
+    return fileContent;
+}
