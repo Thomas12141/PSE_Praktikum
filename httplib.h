@@ -25,8 +25,8 @@ struct http_response_header {
     string* reason_phrase; // Beschreibung des Zustandes in Textform
     size_t content_length;  // Leange des Inhalts
     string* content_type;   // Art des Inhalts
-}
-;typedef struct http_response_header http_response_header;
+};
+typedef struct http_response_header http_response_header;
 
 struct http_response {
     http_response_header* header;
@@ -35,4 +35,5 @@ struct http_response {
 typedef struct http_response http_response;
 
 http_request* getRequestStruct(string* str);
+char* getFilePath(http_request* request);
 #endif //ECHO_SERVER_HTTPLIB_H
