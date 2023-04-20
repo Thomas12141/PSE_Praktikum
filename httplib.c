@@ -177,17 +177,14 @@ http_request* getRequestStruct(string* request_string){
     return request;
 }
 
-int str_cmp(string* str1, string* str2){
-
-    if (str1->len != str2->len){
+int str_cmp(string* str1, string* str2) {
+    if (str1->len != str2->len) {
         return 0;
     }
 
-    for(int i = 0; i < str1->len; i++){
-        if (str1->str[i] != str2->str[i]){
-            return 0;
-        }
+    if (memcmp(str1->str,str2->str,str1->len) == 0) {
+        return 1;
     }
 
-    return 1;
+    return 0;
 }

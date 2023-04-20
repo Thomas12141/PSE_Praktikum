@@ -48,4 +48,5 @@ void free_str(string* str);
 size_t get_length(string* str);
 char* get_char_str(string* str);
 http_request* getRequestStruct(string* str);
+int str_cmp(string* str1, string* str2);
 #endif //ECHO_SERVER_HTTPLIB_H
