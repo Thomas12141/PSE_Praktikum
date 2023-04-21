@@ -144,15 +144,20 @@ int str_cmp(string* str1, string* str2) {
 }
 
 string* readFile(char* filepath) {
-    char* buffer = calloc(BUFFER_SIZE, 1);
+    char* buffer;
+    unsigned long fileSize = 0;
 
-    FILE* file = fopen(filepath, "r");
-    fread(buffer, BUFFER_SIZE, 1, file);
+    FILE* file = fopen(filepath, "rb");
+
+    fseek(file, 0, SEEK_END); // seek to end of file
+    fileSize = ftell(file);
+    rewind(file);
+
+    buffer = calloc(fileSize, 1);
+    fread(buffer, 1, fileSize, file);
     fclose(file);
 
-    fprintf(stderr, "%s", buffer);
-
-    string* fileContent = cpy_str(buffer, strlen(buffer));
+    string* fileContent = cpy_str(buffer, fileSize);
     free(buffer);
 
     return fileContent;
