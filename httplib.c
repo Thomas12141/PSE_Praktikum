@@ -4,6 +4,14 @@
 
 #include "httplib.h"
 
+string* sanitizeRequestedResource(string* resource_path) {
+    if(resource_path->str[resource_path->len - 1] == '/') {
+        resource_path = str_cat(resource_path, "index.html", 10);
+    }
+
+    return resource_path;
+}
+
 http_request* getRequestStruct(string* request_string){
     http_request* request = calloc(sizeof(http_request), 1);
 
@@ -48,11 +56,19 @@ http_request* getRequestStruct(string* request_string){
 }
 
 char* getFilePath(http_request* request) {
+    char pathBuffer[PATH_MAX];
+
     string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
     string* file_path = str_cat(docroot, request->resource_path->str, request->resource_path->len);
 
     char* filepathPointer = calloc(file_path->len + 1, 1);
     memcpy(filepathPointer, file_path->str, file_path->len);
 
-    return filepathPointer;
+    realpath(filepathPointer, pathBuffer);
+
+    unsigned long pathLength = strlen(pathBuffer);
+    char* shortenedPath = calloc(strlen(pathBuffer) + 1, 1);
+    memcpy(shortenedPath, pathBuffer, pathLength);
+
+    return shortenedPath;
 }

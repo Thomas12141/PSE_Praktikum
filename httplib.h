@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/syslimits.h>
 #include "strlib.h"
 #include "config.h"
 
