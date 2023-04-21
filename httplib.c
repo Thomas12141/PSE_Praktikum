@@ -46,3 +46,13 @@ http_request* getRequestStruct(string* request_string){
 
     return request;
 }
+
+char* getFilePath(http_request* request) {
+    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = str_cat(docroot, request->resource_path->str, request->resource_path->len);
+
+    char* filepathPointer = calloc(file_path->len + 1, 1);
+    memcpy(filepathPointer, file_path->str, file_path->len);
+
+    return filepathPointer;
+}

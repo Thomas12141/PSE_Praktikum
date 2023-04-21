@@ -142,3 +142,23 @@ int str_cmp(string* str1, string* str2) {
 
     return 0;
 }
+
+string* readFile(char* filepath) {
+    char* buffer;
+    unsigned long fileSize = 0;
+
+    FILE* file = fopen(filepath, "rb");
+
+    fseek(file, 0, SEEK_END); // seek to end of file
+    fileSize = ftell(file);
+    rewind(file);
+
+    buffer = calloc(fileSize, 1);
+    fread(buffer, 1, fileSize, file);
+    fclose(file);
+
+    string* fileContent = cpy_str(buffer, fileSize);
+    free(buffer);
+
+    return fileContent;
+}

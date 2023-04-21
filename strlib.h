@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "config.h"
 
 struct string {
     size_t len;
@@ -25,5 +26,6 @@ void free_str(string* str);
 size_t get_length(string* str);
 char* get_char_str(string* str);
 int str_cmp(string* str1, string* str2);
+string* readFile(char* filepath);
 
 #endif //PSE_WEBSERVER_STRLIB_H
