@@ -6,11 +6,13 @@
 #define PSE_WEBSERVER_VALIDATION_H
 
 #include <sys/syslimits.h>
+#include <unistd.h>
 #include "strlib.h"
 #include "config.h"
 
-int isResourceValid(string* resource_path);
-int isFileExistent(string* filename);
+int isFileExistent(char* filepath);
+int isFileInsideDocroot(char* filepath);
+int isFileAccessible(char* filepath);
 int isMethodValid(string* method);
 
 #endif //PSE_WEBSERVER_VALIDATION_H
