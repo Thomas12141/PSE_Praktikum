@@ -131,6 +131,13 @@ char* get_char_str(string* str) {
     return str->str;
 }
 
+/**
+ * Vergleicht zwei Objekte des Typs String*, indem zuerst die Länge und dann der Inhalt verglichen wird.
+ *
+ * @param str1 Ein String*.
+ * @param str2 Ein String*.
+ * @return 1, wenn die Strings gleich sind und 0 wenn sie ungleich sind.
+ */
 int str_cmp(string* str1, string* str2) {
     if (str1->len != str2->len) {
         return 0;
@@ -143,6 +150,13 @@ int str_cmp(string* str1, string* str2) {
     return 0;
 }
 
+/**
+ * Ließt den Inhalt einer Datei filepath ein und gibt diesen als String* zurück.
+ * Der Inhalt wird in char* buffer eingelesen und dann mit cpy_str in ein String* umgewandelt.
+ *
+ * @param filepath Der Dateipfad.
+ * @return string* Dateiinhalt.
+ */
 string* readFile(char* filepath) {
     char* buffer;
     unsigned long fileSize = 0;
