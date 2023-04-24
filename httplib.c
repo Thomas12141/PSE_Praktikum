@@ -91,3 +91,27 @@ char* getFilePath(http_request* request) {
 
     return shortenedPath;
 }
+
+string* getResponseString(http_response* response) {
+    //maximum value of ulong is 4294967295 -> has 10 digits
+    char* contentSizeBuffer = calloc(10, 1);
+    snprintf(contentSizeBuffer, 10, "%ld", response->header->content_length);
+
+    string* responseStr = cpy_str(response->header->protocol->str, response->header->protocol->len);
+    responseStr = str_cat(responseStr, " ", 1);
+    responseStr = str_cat(responseStr, response->header->status_code->str, response->header->status_code->len);
+    responseStr = str_cat(responseStr, " ", 1);
+    responseStr = str_cat(responseStr, response->header->reason_phrase->str, response->header->reason_phrase->len);
+    if(response->header->content_type != NULL) {
+        responseStr = str_cat(responseStr, "\r\n", 2);
+        responseStr = str_cat(responseStr, "Content-Type: ", 14);
+        responseStr = str_cat(responseStr, response->header->content_type->str, response->header->content_type->len);
+    }
+    responseStr = str_cat(responseStr, "\r\n", 2);
+    responseStr = str_cat(responseStr, "Content-Length: ", 16);
+    responseStr = str_cat(responseStr, contentSizeBuffer, strlen(contentSizeBuffer));
+    responseStr = str_cat(responseStr, "\r\n\r\n", 4);
+    responseStr = str_cat(responseStr, response->http_body->str, response->http_body->len);
+
+    return responseStr;
+}
