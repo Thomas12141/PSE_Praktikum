@@ -10,6 +10,7 @@
 #include "httplib.h"
 #include "validation.h"
 #include "config.h"
+#include "http_status.h"
 
 string* process(string *request);
 
@@ -220,8 +221,56 @@ static void main_loop() {
 }
 
 string* process(string *request) {
-   string *response = request;
-   return response;
+    http_request* requestStruct = getRequestStruct(request);
+    http_response_header header = {.protocol = requestStruct->protocol};
+    http_response responseStruct = {.header = &header};
+    char* filepath = getFilePath(requestStruct);
+
+    if(!isFileInsideDocroot(filepath)) {
+        header.status_code = cpy_str("403", 3);
+        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
+    if(!isFileExistent(filepath)) {
+        header.status_code = cpy_str("404", 3);
+        header.reason_phrase = cpy_str(HTTP_404_MESSAGE, strlen(HTTP_404_MESSAGE));
+        header.content_length = strlen(HTTP_404_MESSAGE_FULL);
+        responseStruct.http_body = cpy_str(HTTP_404_MESSAGE_FULL, strlen(HTTP_404_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
+    if(!isFileAccessible(filepath)) {
+        header.status_code = cpy_str("403", 3);
+        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
+    if(!isMethodValid(requestStruct->method)) {
+        header.status_code = cpy_str("501", 3);
+        header.reason_phrase = cpy_str(HTTP_501_MESSAGE, strlen(HTTP_501_MESSAGE));
+        header.content_length = strlen(HTTP_501_MESSAGE_FULL);
+        responseStruct.http_body = cpy_str(HTTP_501_MESSAGE_FULL, strlen(HTTP_501_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
+    string* file = readFile(filepath);
+
+    header.status_code = cpy_str("200", 3);
+    header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
+    header.content_length = file->len;
+
+    responseStruct.http_body = file;
+
+    string* responseString = getResponseString(&responseStruct);
+
+    return responseString;
 }
 
 int main(int argc, char *argv[]) {
