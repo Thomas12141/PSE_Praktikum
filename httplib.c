@@ -4,6 +4,13 @@
 
 #include "httplib.h"
 
+/**
+ * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
+ * Wenn der Dateipfad nicht auf "/" endet, wird er ohne Änderung zurückgegeben.
+ *
+ * @param resource_path Dateipfad, an den index.html angehängt wird.
+ * @return Dateipfad mit index.html.
+ */
 string* sanitizeRequestedResource(string* resource_path) {
     if(resource_path->str[resource_path->len - 1] == '/') {
         resource_path = str_cat(resource_path, "index.html", 10);
@@ -12,6 +19,12 @@ string* sanitizeRequestedResource(string* resource_path) {
     return resource_path;
 }
 
+/**
+ * Übersetzt einen request_string der Form String* in ein request der Form http_request.
+ *
+ * @param request_string Der zu übersetzende String*.
+ * @return Ein http_request struct mit den Attributen method, resource_path und protocol.
+ */
 http_request* getRequestStruct(string* request_string){
     http_request* request = calloc(sizeof(http_request), 1);
 
@@ -55,6 +68,12 @@ http_request* getRequestStruct(string* request_string){
     return request;
 }
 
+/**
+ * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
+ *
+ * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
+ * @return Der Dateipfad.
+ */
 char* getFilePath(http_request* request) {
     char pathBuffer[PATH_MAX];
 
