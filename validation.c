@@ -8,7 +8,7 @@
 /**
  * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
  * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp verglichen.
- * 
+ *
  * @param filepath Der zu überprüfende Dateipfad.
  * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
  */
