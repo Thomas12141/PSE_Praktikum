@@ -32,10 +32,6 @@ http_request* getRequestStruct(string* request_string){
         exit(2);
     }
 
-    request->method = _new_string();
-    request->resource_path = _new_string();
-    request->protocol = _new_string();
-
     int endpositionen[3];
     int argumentCount = 0;
 
@@ -54,16 +50,10 @@ http_request* getRequestStruct(string* request_string){
     size_t resource_size = endpositionen[1] - method_size;
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
 
-    request->method->str = realloc(request->method->str, method_size);
-    request->resource_path->str = realloc(request->resource_path->str, resource_size);
-    request->protocol->str = realloc(request->protocol->str, protocol_size);
-
-    memcpy(request->method->str, request_string->str, method_size);
-    request->method->len = method_size;
-    memcpy(request->resource_path->str, request_string->str + endpositionen[0] + 2, resource_size);
-    request->resource_path->len = resource_size;
-    memcpy(request->protocol->str, request_string->str + endpositionen[1] + 2, protocol_size);
-    request->protocol->len = protocol_size;
+    request->method = cpy_str(request_string->str, method_size);
+    string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
+    request->resource_path = requestedResource;
+    request->protocol = cpy_str(request_string->str + endpositionen[1] + 2, protocol_size);
 
     return request;
 }
