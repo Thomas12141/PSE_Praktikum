@@ -5,6 +5,13 @@
 #include <linux/limits.h>
 #include "validation.h"
 
+/**
+ * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
+ * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp verglichen.
+ * 
+ * @param filepath Der zu überprüfende Dateipfad.
+ * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
+ */
 int isFileInsideDocroot(char* filepath) {
     char pathBuffer [PATH_MAX+1];
     char* ptr = realpath(DOCROOT, pathBuffer);
@@ -29,7 +36,7 @@ int isFileAccessible(char* filepath) {
 }
 
 /**
- *Überprüft, ob eine Datei existiert, indem versucht wird mit access (Typ F_OK) auf die Datei zuzugreifen.
+ * Überprüft, ob eine Datei existiert, indem versucht wird mit access (Typ F_OK) auf die Datei zuzugreifen.
  *
  * @param filepath Der Dateipfad der zu überprüfenden Datei.
  * @return 1, wenn die Datei existiert, 0 wenn nicht.
