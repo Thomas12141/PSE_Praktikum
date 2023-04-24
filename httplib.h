@@ -2,12 +2,17 @@
 // Created by Sebastian Schinzel on 25.03.20.
 //
 
+#ifdef linux
+#include <linux/limits.h>
+#else
+#include <sys/syslimits.h>
+#endif
+
 #ifndef ECHO_SERVER_HTTPLIB_H
 #define ECHO_SERVER_HTTPLIB_H
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sys/syslimits.h>
 #include "strlib.h"
 #include "config.h"
 
