@@ -29,6 +29,12 @@ int isFileExistent(char* filepath) {
     return 0;
 }
 
+/**
+ * Überprüft, ob eine HTTP Methode in Form eines String* die GET Methode ist, indem die übergebene Methode mit "GET" verglichen wird.
+ *
+ * @param method Die zu verifizierende HTTP-Methode.
+ * @return 1, wenn die Methode "GET" ist, 0 wenn nicht.
+ */
 int isMethodValid(string* method) {
     string* tmpStr = cpy_str("GET", 3);
 
