@@ -46,6 +46,10 @@ http_request* getRequestStruct(string* request_string){
         }
     }
 
+    if (argumentCount != 3) {
+        return NULL;
+    }
+
     size_t method_size = endpositionen[0] + 1;
     size_t resource_size = endpositionen[1] - method_size;
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
