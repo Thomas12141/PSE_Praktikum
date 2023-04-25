@@ -36,13 +36,13 @@ http_request* getRequestStruct(string* request_string){
     int argumentCount = 0;
 
     for (int i = 0; i < request_string->len; i++) {
-        if (argumentCount == 3) {
-            break;
-        }
-
         if (request_string->str[i+1] == ' ' || request_string->str[i+1] == '\r') {
             endpositionen[argumentCount] = i;
             argumentCount++;
+        }
+
+        if (argumentCount == 3 || request_string->str[i+1] == '\r') {
+            break;
         }
     }
 

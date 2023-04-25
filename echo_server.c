@@ -222,9 +222,8 @@ static void main_loop() {
 
 string* process(string *request) {
     http_request* requestStruct = getRequestStruct(request);
-    http_response_header header = {.protocol = requestStruct->protocol};
+    http_response_header header = {.protocol = cpy_str("HTTP/1.1", 8)};
     http_response responseStruct = {.header = &header};
-    char* filepath = getFilePath(requestStruct);
 
     if(requestStruct == NULL) {
         header.status_code = cpy_str("400", 3);
@@ -234,6 +233,8 @@ string* process(string *request) {
 
         return getResponseString(&responseStruct);
     }
+
+    char* filepath = getFilePath(requestStruct);
 
     if(!isFileInsideDocroot(filepath)) {
         header.status_code = cpy_str("403", 3);
