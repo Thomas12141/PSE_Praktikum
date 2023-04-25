@@ -12,6 +12,8 @@
  * @return Dateipfad mit index.html.
  */
 string* sanitizeRequestedResource(string* resource_path) {
+    resource_path = decodeString(resource_path);
+
     if(resource_path->str[resource_path->len - 1] == '/') {
         resource_path = str_cat(resource_path, "index.html", 10);
     }

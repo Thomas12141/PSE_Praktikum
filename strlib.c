@@ -5,6 +5,33 @@
 #include "strlib.h"
 
 /**
+ * Entfernt hexadezimale Zeichen von einem String, beispielsweise "%20" = " "
+ *
+ * @param str String, in dem die Zeichen ersetzt werden sollen
+ * @return string* Der String mit dekodierten Sonderzeichen
+ */
+string* decodeString(string* str) {
+    int hexCharCounter = 0;
+    for(int i = 0; i < str->len; i++) {
+        if(str->str[i] == '%' && i < str->len - 2) {
+            char c[3];
+            memcpy(&c, &(str->str[i])+1, 2);
+            int code = (int) strtol(c, NULL, 16);
+            hexCharCounter++;
+            str->str[i] = (char) code;
+            str->len -= 2;
+        } else if(hexCharCounter > 0) {
+            str->str[i] = str->str[i + 2*hexCharCounter];
+        }
+    }
+    if(hexCharCounter > 0) {
+        str->str = realloc(str->str, str->len);
+    }
+
+    return str;
+}
+
+/**
  * Hängt einen String src mit der Länge len an einen bestehenden String dest an.
  *
  * @param dest An diesen String wird angehängt.
