@@ -5,6 +5,8 @@
 #ifndef PSE_WEBSERVER_HTTP_STATUS_H
 #define PSE_WEBSERVER_HTTP_STATUS_H
 
+#define HTTP_400_MESSAGE "Bad Request"
+#define HTTP_400_MESSAGE_FULL "400 - Bad Request"
 #define HTTP_404_MESSAGE "Not found"
 #define HTTP_404_MESSAGE_FULL "404 - Not found"
 #define HTTP_403_MESSAGE "Forbidden"
