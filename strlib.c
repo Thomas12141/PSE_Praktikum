@@ -195,6 +195,10 @@ string* readFile(char* filepath) {
     rewind(file);
 
     buffer = calloc(fileSize, 1);
+    if(buffer == NULL) {
+        return NULL;
+    }
+
     fread(buffer, 1, fileSize, file);
     fclose(file);
 

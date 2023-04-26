@@ -71,19 +71,22 @@ http_request* getRequestStruct(string* request_string){
  * @return Der Dateipfad.
  */
 char* getFilePath(http_request* request) {
-    char pathBuffer[PATH_MAX];
-
     string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
     string* file_path = str_cat(docroot, request->resource_path->str, request->resource_path->len);
 
     char* filepathPointer = calloc(file_path->len + 1, 1);
     memcpy(filepathPointer, file_path->str, file_path->len);
 
-    realpath(filepathPointer, pathBuffer);
+    char *pathBuffer = realpath(filepathPointer, NULL);
+    if(pathBuffer == NULL) {
+        return NULL;
+    }
 
     unsigned long pathLength = strlen(pathBuffer);
     char* shortenedPath = calloc(strlen(pathBuffer) + 1, 1);
     memcpy(shortenedPath, pathBuffer, pathLength);
+
+    free(pathBuffer);
 
     return shortenedPath;
 }
@@ -108,6 +111,8 @@ string* getResponseString(http_response* response) {
     responseStr = str_cat(responseStr, contentSizeBuffer, strlen(contentSizeBuffer));
     responseStr = str_cat(responseStr, "\r\n\r\n", 4);
     responseStr = str_cat(responseStr, response->http_body->str, response->http_body->len);
+
+    free(contentSizeBuffer);
 
     return responseStr;
 }

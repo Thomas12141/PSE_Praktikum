@@ -236,13 +236,12 @@ string* process(string *request) {
             return getResponseString(&responseStruct);
         }
 
-        char *filepath = getFilePath(requestStruct);
-
-        if (!isFileInsideDocroot(filepath)) {
-            header.status_code = cpy_str("403", 3);
-            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+    char* filepath = getFilePath(requestStruct);
+    if(filepath == NULL || !isFileInsideDocroot(filepath)) {
+        header.status_code = cpy_str("403", 3);
+        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+        header.content_length = strlen(HTTP_403_MESSAGE_FULL);
+        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
 
             return getResponseString(&responseStruct);
         }
@@ -274,7 +273,16 @@ string* process(string *request) {
             return getResponseString(&responseStruct);
         }
 
-        string* file = readFile(filepath);
+    string* file = readFile(filepath);
+    if(file == NULL) {
+        header.status_code = cpy_str("403", 3);
+        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+        header.content_length = strlen(HTTP_403_MESSAGE_FULL);
+        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
 
         header.status_code = cpy_str("200", 3);
         header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
