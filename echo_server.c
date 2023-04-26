@@ -224,61 +224,78 @@ string* process(string *request) {
     http_request* requestStruct = getRequestStruct(request);
     http_response_header header = {.protocol = cpy_str("HTTP/1.1", 8)};
     http_response responseStruct = {.header = &header};
+    string* debug = cpy_str("/debug", 6);
 
-    if(requestStruct == NULL) {
-        header.status_code = cpy_str("400", 3);
-        header.reason_phrase = cpy_str(HTTP_400_MESSAGE, strlen(HTTP_400_MESSAGE));
-        header.content_length = strlen(HTTP_400_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_400_MESSAGE_FULL, strlen(HTTP_400_MESSAGE_FULL));
+    if(!str_cmp(debug, requestStruct->resource_path)) {
+        if (requestStruct == NULL) {
+            header.status_code = cpy_str("400", 3);
+            header.reason_phrase = cpy_str(HTTP_400_MESSAGE, strlen(HTTP_400_MESSAGE));
+            header.content_length = strlen(HTTP_400_MESSAGE_FULL);
+            responseStruct.http_body = cpy_str(HTTP_400_MESSAGE_FULL, strlen(HTTP_400_MESSAGE_FULL));
 
-        return getResponseString(&responseStruct);
+            return getResponseString(&responseStruct);
+        }
+
+        char *filepath = getFilePath(requestStruct);
+
+        if (!isFileInsideDocroot(filepath)) {
+            header.status_code = cpy_str("403", 3);
+            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
+            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+
+            return getResponseString(&responseStruct);
+        }
+
+        if (!isFileExistent(filepath)) {
+            header.status_code = cpy_str("404", 3);
+            header.reason_phrase = cpy_str(HTTP_404_MESSAGE, strlen(HTTP_404_MESSAGE));
+            header.content_length = strlen(HTTP_404_MESSAGE_FULL);
+            responseStruct.http_body = cpy_str(HTTP_404_MESSAGE_FULL, strlen(HTTP_404_MESSAGE_FULL));
+
+            return getResponseString(&responseStruct);
+        }
+
+        if (!isFileAccessible(filepath)) {
+            header.status_code = cpy_str("403", 3);
+            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
+            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
+            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
+
+            return getResponseString(&responseStruct);
+        }
+
+        if (!isMethodValid(requestStruct->method)) {
+            header.status_code = cpy_str("501", 3);
+            header.reason_phrase = cpy_str(HTTP_501_MESSAGE, strlen(HTTP_501_MESSAGE));
+            header.content_length = strlen(HTTP_501_MESSAGE_FULL);
+            responseStruct.http_body = cpy_str(HTTP_501_MESSAGE_FULL, strlen(HTTP_501_MESSAGE_FULL));
+
+            return getResponseString(&responseStruct);
+        }
+
+        string* file = readFile(filepath);
+
+        header.status_code = cpy_str("200", 3);
+        header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
+        header.content_length = file->len;
+
+        responseStruct.http_body = file;
+    } else {
+        string* debug_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
+        debug_body = str_cat(debug_body, " ", 1);
+        debug_body = str_cat(debug_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
+        debug_body = str_cat(debug_body, " ", 1);
+        debug_body = str_cat(debug_body,requestStruct->protocol->str,requestStruct->protocol->len);
+
+        header.status_code = cpy_str("200", 3);
+        header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
+        header.content_length = strlen(HTTP_200_MESSAGE);
+        header.content_length = debug_body->len;
+        responseStruct.http_body = cpy_str(debug_body->str, debug_body->len);
+        free(debug);
+        free(debug_body);
     }
-
-    char* filepath = getFilePath(requestStruct);
-
-    if(!isFileInsideDocroot(filepath)) {
-        header.status_code = cpy_str("403", 3);
-        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-        header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
-    }
-
-    if(!isFileExistent(filepath)) {
-        header.status_code = cpy_str("404", 3);
-        header.reason_phrase = cpy_str(HTTP_404_MESSAGE, strlen(HTTP_404_MESSAGE));
-        header.content_length = strlen(HTTP_404_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_404_MESSAGE_FULL, strlen(HTTP_404_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
-    }
-
-    if(!isFileAccessible(filepath)) {
-        header.status_code = cpy_str("403", 3);
-        header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-        header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
-    }
-
-    if(!isMethodValid(requestStruct->method)) {
-        header.status_code = cpy_str("501", 3);
-        header.reason_phrase = cpy_str(HTTP_501_MESSAGE, strlen(HTTP_501_MESSAGE));
-        header.content_length = strlen(HTTP_501_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_501_MESSAGE_FULL, strlen(HTTP_501_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
-    }
-
-    string* file = readFile(filepath);
-
-    header.status_code = cpy_str("200", 3);
-    header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
-    header.content_length = file->len;
-
-    responseStruct.http_body = file;
 
     string* responseString = getResponseString(&responseStruct);
 
