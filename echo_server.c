@@ -283,6 +283,7 @@ string* process(string *request) {
         return getResponseString(&responseStruct);
     }
 
+        string* filetype = getFiletype(filepath, strlen(filepath));
 
         header.status_code = cpy_str("200", 3);
         header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));

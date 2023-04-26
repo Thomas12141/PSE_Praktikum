@@ -116,3 +116,19 @@ string* getResponseString(http_response* response) {
 
     return responseStr;
 }
+
+string* getFiletype (char* resource_path, int len){
+
+    string* content_type = _new_string();
+    int dot_position;
+
+    for (int i = len; i >= 0; i--){
+       if (resource_path[i] == '.'){
+           dot_position = i;
+       }
+    }
+
+    content_type = cpy_str(resource_path+dot_position+1, len - dot_position);
+
+    return content_type;
+}

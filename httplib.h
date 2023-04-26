@@ -43,4 +43,5 @@ typedef struct http_response http_response;
 http_request* getRequestStruct(string* str);
 char* getFilePath(http_request* request);
 string* getResponseString(http_response* response);
+string* getFiletype (char* resource_path, int len);
 #endif //ECHO_SERVER_HTTPLIB_H
