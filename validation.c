@@ -65,17 +65,15 @@ int isMethodValid(string* method) {
 }
 
 /**
- * Überprüft, ob das HTTP Protokoll einer request HTTP-Version 0.9, 1.0 oder 1.1 entspricht.
+ * Überprüft, ob das HTTP Protokoll einer request HTTP-Version 1.1 entspricht.
  *
  * @param protocol Das zun überprüfende Protokoll des Typs string*.
- * @return 1, wenn das Protokoll den zugelassenen Versionen entspricht, 0 wenn nicht.
+ * @return 1, wenn das Protokoll der Version 1.1 entspricht, 0 wenn nicht.
  */
 int isProtocolValid(string* protocol) {
-    string* tmpStr1 = cpy_str("HTTP/0.9", 8);
-    string* tmpStr2 = cpy_str("HTTP/1.0", 8);
-    string* tmpStr3 = cpy_str("HTTP/1.1", 8);
+    string* tmpStr = cpy_str("HTTP/1.1", 8);
 
-    if(str_cmp(protocol, tmpStr1) || str_cmp(protocol, tmpStr2) || str_cmp(protocol, tmpStr3)) {
+    if(str_cmp(protocol, tmpStr)) {
         return 1;
     }
 
