@@ -18,5 +18,6 @@ int isFileExistent(char* filepath);
 int isFileInsideDocroot(char* filepath);
 int isFileAccessible(char* filepath);
 int isMethodValid(string* method);
+int isProtocolValid(string* protocol);
 
 #endif //PSE_WEBSERVER_VALIDATION_H

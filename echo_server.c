@@ -227,7 +227,7 @@ string* process(string *request) {
     string* debug = cpy_str("/debug", 6);
 
     if(!str_cmp(debug, requestStruct->resource_path)) {
-        if (requestStruct == NULL) {
+        if (requestStruct == NULL || !isProtocolValid(requestStruct->protocol)) {
             header.status_code = cpy_str("400", 3);
             header.reason_phrase = cpy_str(HTTP_400_MESSAGE, strlen(HTTP_400_MESSAGE));
             header.content_length = strlen(HTTP_400_MESSAGE_FULL);
@@ -283,7 +283,7 @@ string* process(string *request) {
         return getResponseString(&responseStruct);
     }
 
-        string* filetype = getFiletype(filepath, strlen(filepath));
+        //string* filetype = getFiletype(filepath, strlen(filepath));
 
         header.status_code = cpy_str("200", 3);
         header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
