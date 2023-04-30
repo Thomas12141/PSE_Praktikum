@@ -68,7 +68,7 @@ http_request* getRequestStruct(string* request_string){
  * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
  *
  * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
- * @return Der Dateipfad.
+ * @return Der Dateipfad als char*.
  */
 char* getFilePath(http_request* request) {
     string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
@@ -91,6 +91,12 @@ char* getFilePath(http_request* request) {
     return shortenedPath;
 }
 
+/**
+ * Gibt die http-response als String* zurück.
+ *
+ * @param response http-response der Form struct http_response.
+ * @return http-response der Form String*.
+ */
 string* getResponseString(http_response* response) {
     //maximum value of ulong is 4294967295 -> has 10 digits
     char* contentSizeBuffer = calloc(10, 1);
@@ -117,7 +123,7 @@ string* getResponseString(http_response* response) {
     return responseStr;
 }
 
-string* getFiletype (char* resource_path, int len){
+string* getFiletype (char* resource_path, int len) {
 
     string* content_type = _new_string();
     int dot_position;
