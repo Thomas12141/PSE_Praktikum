@@ -207,3 +207,20 @@ string* readFile(char* filepath) {
 
     return fileContent;
 }
+
+/**
+ * Wandelt alle Grossbuchstaben eines String in Kleinbuchstaben um.
+ *
+ * @param src Der String.
+ * @return string* modifizierter String.
+ */
+string* str_lower(string* src){
+
+    for (int i = 0; i < src->len; i++){
+        if (src->str[i] >= 'A' && src->str[i] <= 'Z'){
+            src->str[i] = src->str[i]+32;
+        }
+    }
+
+    return src;
+}

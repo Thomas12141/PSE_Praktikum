@@ -22,7 +22,7 @@ string* sanitizeRequestedResource(string* resource_path) {
 }
 
 /**
- * Übersetzt einen request_string der Form String* in ein request der Form http_request.
+ * Übersetzt einen request_string der Form String* in ein request der Form http_request struct.
  *
  * @param request_string Der zu übersetzende String*.
  * @return Ein http_request struct mit den Attributen method, resource_path und protocol.
