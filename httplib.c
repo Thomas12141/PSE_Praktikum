@@ -138,14 +138,3 @@ string* getFiletype (char* resource_path, int len) {
 
     return content_type;
 }
-
-string* str_lower(string* src){
-
-    for (int i = 0; i < src->len; i++){
-        if (src->str[i] >= 'A' && src->str[i] <= 'Z'){
-            src->str[i] = src->str[i]+32;
-        }
-    }
-
-    return src;
-}
