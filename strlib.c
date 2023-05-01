@@ -209,7 +209,7 @@ string* readFile(char* filepath) {
 }
 
 /**
- * Wandelt alle Großbuchstaben eines String in Kleinbuchstaben um.
+ * Wandelt alle Grossbuchstaben eines String in Kleinbuchstaben um.
  *
  * @param src Der String.
  * @return string* modifizierter String.
