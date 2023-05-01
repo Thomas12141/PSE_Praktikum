@@ -28,5 +28,6 @@ char* get_char_str(string* str);
 int str_cmp(string* str1, string* str2);
 string* readFile(char* filepath);
 string* decodeString(string* str);
+string* str_lower(string* src);
 
 #endif //PSE_WEBSERVER_STRLIB_H
