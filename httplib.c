@@ -56,6 +56,10 @@ http_request* getRequestStruct(string* request_string){
     size_t resource_size = endpositionen[1] - method_size;
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
 
+    if(method_size == 0 || resource_size == 0 || protocol_size == 0) {
+        return NULL;
+    }
+
     request->method = cpy_str(request_string->str, method_size);
     string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
     request->resource_path = requestedResource;
