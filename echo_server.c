@@ -226,11 +226,20 @@ string* process(string *request) {
     http_response responseStruct = {.header = &header};
     string* debug = cpy_str("/debug", 6);
 
-    if(requestStruct == NULL || !isProtocolValid(requestStruct->protocol)) {
+    if(requestStruct == NULL) {
         header.status_code = cpy_str("400", 3);
         header.reason_phrase = cpy_str(HTTP_400_MESSAGE, strlen(HTTP_400_MESSAGE));
         header.content_length = strlen(HTTP_400_MESSAGE_FULL);
         responseStruct.http_body = cpy_str(HTTP_400_MESSAGE_FULL, strlen(HTTP_400_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
+    if(!isProtocolValid(requestStruct->protocol)) {
+        header.status_code = cpy_str("505", 3);
+        header.reason_phrase = cpy_str(HTTP_505_MESSAGE, strlen(HTTP_505_MESSAGE));
+        header.content_length = strlen(HTTP_505_MESSAGE_FULL);
+        responseStruct.http_body = cpy_str(HTTP_505_MESSAGE_FULL, strlen(HTTP_505_MESSAGE_FULL));
 
         return getResponseString(&responseStruct);
     }
