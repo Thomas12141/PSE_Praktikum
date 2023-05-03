@@ -158,10 +158,19 @@ string* getContentType(string* fileType){
         exit(3);
     }
 
-    char *contentMap[10][1][2] = {
+    char *contentMap[20][1][2] = {
             {{"acc", "audio/acc"} },
             {{"txt","text/txt"} },
-            {{"png", "images/png"} }
+            {{"png", "image/png"} },
+            {{"css", "text/css"} },
+            {{"doc","application/msword"} },
+            {{"html", "text/html"} },
+            {{"jpeg", "image/jpeg"} },
+            {{"jpg","image/jpg"} },
+            {{"mp3", "audio/mpeg"} },
+            {{"mp4", "video/mp4"} },
+            {{"mpeg","video/mpeg"} },
+            {{"pdf", "application/pdf"} }
     };
 
     for (int x = 0; x < 3; x++) {
@@ -173,6 +182,5 @@ string* getContentType(string* fileType){
             }
         }
     }
-
     return contentType;
 }
