@@ -38,13 +38,15 @@ http_request* getRequestStruct(string* request_string){
     int argumentCount = 0;
 
     for (int i = 0; i < request_string->len; i++) {
-        if (request_string->str[i+1] == ' ' || request_string->str[i+1] == '\r') {
-            endpositionen[argumentCount] = i;
-            argumentCount++;
-        }
+        if(i+1 < request_string->len) {
+            if (request_string->str[i+1] == ' ' || request_string->str[i+1] == '\r') {
+                endpositionen[argumentCount] = i;
+                argumentCount++;
+            }
 
-        if (argumentCount == 3 || request_string->str[i+1] == '\r') {
-            break;
+            if (argumentCount == 3 || request_string->str[i+1] == '\r') {
+                break;
+            }
         }
     }
 
@@ -64,6 +66,39 @@ http_request* getRequestStruct(string* request_string){
     string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
     request->resource_path = requestedResource;
     request->protocol = cpy_str(request_string->str + endpositionen[1] + 2, protocol_size);
+
+    string* hostnameString = cpy_str("host:", 5);
+    int hostnamePositions[2];
+    char* paramBuffer = calloc(6, 1);
+    for(int i = endpositionen[2]; i < request_string->len; i++) {
+        if(i + 4 < request_string->len) {
+            memcpy(paramBuffer, request_string->str + i, 5);
+            string* paramStr = cpy_str(paramBuffer, strlen(paramBuffer));
+            paramStr = str_lower(paramStr);
+            if(str_cmp(hostnameString, paramStr)) {
+                i+=hostnameString->len;
+
+                while(request_string->str[i] == ' ') {
+                    i++;
+                }
+                hostnamePositions[0] = i;
+                while(request_string->str[i] != '\r' && request_string->str[i] != ':') {
+                    i++;
+                }
+                hostnamePositions[1] = i;
+                request->hostname = cpy_str(request_string->str + hostnamePositions[0], hostnamePositions[1] - hostnamePositions[0]);
+                break;
+            }
+            free_str(paramStr);
+        }
+    }
+
+    if(request->hostname == NULL) {
+        request->hostname = cpy_str("default", 7);
+    }
+
+    free_str(hostnameString);
+    free(paramBuffer);
 
     return request;
 }
