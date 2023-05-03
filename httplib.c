@@ -22,7 +22,7 @@ string* sanitizeRequestedResource(string* resource_path) {
 }
 
 /**
- * Übersetzt einen request_string der Form String* in ein request der Form http_request.
+ * Übersetzt einen request_string der Form String* in ein request der Form http_request struct.
  *
  * @param request_string Der zu übersetzende String*.
  * @return Ein http_request struct mit den Attributen method, resource_path und protocol.
@@ -55,6 +55,10 @@ http_request* getRequestStruct(string* request_string){
     size_t method_size = endpositionen[0] + 1;
     size_t resource_size = endpositionen[1] - method_size;
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
+
+    if(method_size == 0 || resource_size == 0 || protocol_size == 0) {
+        return NULL;
+    }
 
     request->method = cpy_str(request_string->str, method_size);
     string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
@@ -169,7 +173,6 @@ string* getContentType(string* fileType){
             }
         }
     }
-
 
     return contentType;
 }

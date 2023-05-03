@@ -208,23 +208,39 @@ string* readFile(char* filepath) {
     return fileContent;
 }
 
+
+/**
+ * Wandelt alle Grossbuchstaben eines String in Kleinbuchstaben um.
+ *
+ * @param src Der String.
+ * @return string* modifizierter String.
+ */
+string* str_lower(string* src){
+
+    for (int i = 0; i < src->len; i++){
+        if (src->str[i] >= 'A' && src->str[i] <= 'Z'){
+            src->str[i] = src->str[i]+32;
+        }
+    }
+
+    return src;
+}
+
 int get_char_length(char* input){
     int length = 0;
-    while(input[length]!='\0')  //  remove ;
-    {
-        length++;
-    }
+    while(input[length]!='\0'){
+            length++;
+        }
 
     return length;
 }
-
 
 int char_cmp(char* str1, char* str2, size_t len1, size_t len2) {
     if (len1 != len2) {
         return 0;
     }
 
-    if (memcmp(str1,str2,len1) == 0) {
+    if (memcmp(str1, str2, len1) == 0) {
         return 1;
     }
 
