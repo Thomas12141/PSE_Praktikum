@@ -158,29 +158,19 @@ string* getContentType(string* fileType){
         exit(3);
     }
 
-    char *contentMap[20][1][2] = {
-            {{"acc", "audio/acc"} },
-            {{"txt","text/txt"} },
-            {{"png", "image/png"} },
-            {{"css", "text/css"} },
-            {{"doc","application/msword"} },
-            {{"html", "text/html"} },
-            {{"jpeg", "image/jpeg"} },
-            {{"jpg","image/jpg"} },
-            {{"mp3", "audio/mpeg"} },
-            {{"mp4", "video/mp4"} },
-            {{"mpeg","video/mpeg"} },
-            {{"pdf", "application/pdf"} }
-    };
+    char* filetypeArray[12] = {"acc", "txt", "png", "css", "doc", "html",
+                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf"};
 
-    for (int x = 0; x < 3; x++) {
-        for (int y = 0; x < 3; x++) {
-            int type_length = get_char_length(contentMap[x][0][0]);
-            if (char_cmp(fileType->str, contentMap[x][0][0], fileType->len, type_length)) {
-                int contentType_length = get_char_length(contentMap[x][y][1]);
-                contentType = cpy_str(contentMap[x][0][1],contentType_length);
+    char* contenttypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
+                              "application/msword", "text/html", "image/jepg", "image/jpg",
+                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
+
+    for (int x = 0; x < 12; x++) {
+        int type_length = get_char_length(filetypeArray[x]);
+            if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
+                int contentType_length = get_char_length(contenttypeArray[x]);
+                contentType = cpy_str(contenttypeArray[x],contentType_length);
             }
-        }
     }
     return contentType;
 }
