@@ -226,15 +226,6 @@ string* str_lower(string* src){
     return src;
 }
 
-int get_char_length(char* input){
-    int length = 0;
-    while(input[length]!='\0'){
-            length++;
-        }
-
-    return length;
-}
-
 int char_cmp(char* str1, char* str2, size_t len1, size_t len2) {
     if (len1 != len2) {
         return 0;

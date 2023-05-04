@@ -129,15 +129,6 @@ string* getResponseString(http_response* response) {
 
 string* getFiletype (char* resource_path, int len) {
 
-    string* content_type = calloc(sizeof(string), 1);
-
-    content_type->str = calloc(1, len);
-    if(content_type->str == NULL) {
-        exit(3);
-    }
-    memcpy(content_type->str, resource_path, len);
-    content_type->len = len;
-
     int dot_position;
 
     for (int i = len; i >= 0; i--){
@@ -146,7 +137,7 @@ string* getFiletype (char* resource_path, int len) {
        }
     }
 
-    content_type = cpy_str(resource_path+dot_position+1, len - dot_position);
+    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position);
 
     return content_type;
 }
@@ -166,9 +157,9 @@ string* getContentType(string* fileType){
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
 
     for (int x = 0; x < 12; x++) {
-        int type_length = get_char_length(filetypeArray[x]);
+        int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
-                int contentType_length = get_char_length(contenttypeArray[x]);
+                int contentType_length = strlen(contenttypeArray[x]);
                 contentType = cpy_str(contenttypeArray[x],contentType_length);
             }
     }
