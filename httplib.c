@@ -137,7 +137,7 @@ string* getFiletype (char* resource_path, int len) {
        }
     }
 
-    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position);
+    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position - 1);
 
     return content_type;
 }
