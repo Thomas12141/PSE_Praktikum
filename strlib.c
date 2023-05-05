@@ -208,6 +208,7 @@ string* readFile(char* filepath) {
     return fileContent;
 }
 
+
 /**
  * Wandelt alle Grossbuchstaben eines String in Kleinbuchstaben um.
  *
@@ -223,4 +224,16 @@ string* str_lower(string* src){
     }
 
     return src;
+}
+
+int char_cmp(char* str1, char* str2, size_t len1, size_t len2) {
+    if (len1 != len2) {
+        return 0;
+    }
+
+    if (memcmp(str1, str2, len1) == 0) {
+        return 1;
+    }
+
+    return 0;
 }

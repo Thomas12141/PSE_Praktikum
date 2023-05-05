@@ -12,6 +12,8 @@
 #define HTTP_403_MESSAGE "Forbidden"
 #define HTTP_403_MESSAGE_FULL "403 - Forbidden"
 #define HTTP_501_MESSAGE "Not Implemented"
-#define HTTP_501_MESSAGE_FULL "501 Not Implemented"
+#define HTTP_501_MESSAGE_FULL "501 - Not Implemented"
+#define HTTP_505_MESSAGE "HTTP Version Not Supported"
+#define HTTP_505_MESSAGE_FULL "505 - HTTP Version Not Supported"
 #define HTTP_200_MESSAGE "OK"
 #endif //PSE_WEBSERVER_HTTP_STATUS_H

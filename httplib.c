@@ -51,6 +51,7 @@ http_request* getRequestStruct(string* request_string){
     }
 
     if (argumentCount != 3) {
+        free(request);
         return NULL;
     }
 
@@ -59,6 +60,7 @@ http_request* getRequestStruct(string* request_string){
     size_t protocol_size = endpositionen[2] - resource_size - method_size - 1;
 
     if(method_size == 0 || resource_size == 0 || protocol_size == 0) {
+        free(request);
         return NULL;
     }
 
@@ -110,13 +112,15 @@ http_request* getRequestStruct(string* request_string){
  * @return Der Dateipfad als char*.
  */
 char* getFilePath(http_request* request) {
-    string* docroot = cpy_str(DOCROOT, strlen(DOCROOT));
-    string* file_path = str_cat(docroot, request->resource_path->str, request->resource_path->len);
+    string* file_path = cpy_str(DOCROOT, strlen(DOCROOT));
+    file_path = str_cat(file_path, request->resource_path->str, request->resource_path->len);
 
     char* filepathPointer = calloc(file_path->len + 1, 1);
     memcpy(filepathPointer, file_path->str, file_path->len);
+    free_str(file_path);
 
     char *pathBuffer = realpath(filepathPointer, NULL);
+    free(filepathPointer);
     if(pathBuffer == NULL) {
         return NULL;
     }
@@ -159,12 +163,16 @@ string* getResponseString(http_response* response) {
 
     free(contentSizeBuffer);
 
+    free_str(response->http_body);
+    free_str(response->header->reason_phrase);
+    free_str(response->header->status_code);
+    free_str(response->header->protocol);;
+
     return responseStr;
 }
 
 string* getFiletype (char* resource_path, int len) {
 
-    string* content_type = _new_string();
     int dot_position;
 
     for (int i = len; i >= 0; i--){
@@ -173,7 +181,38 @@ string* getFiletype (char* resource_path, int len) {
        }
     }
 
-    content_type = cpy_str(resource_path+dot_position+1, len - dot_position);
+    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position - 1);
 
     return content_type;
+}
+
+void freeRequestStruct(http_request* req) {
+    free_str(req->resource_path);
+    free_str(req->protocol);
+    free_str(req->method);
+    free(req);
+}
+
+string* getContentType(string* fileType){
+
+    string* contentType = calloc(sizeof(string), 1);
+    if(contentType == NULL) {
+        exit(3);
+    }
+
+    char* filetypeArray[12] = {"acc", "txt", "png", "css", "doc", "html",
+                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf"};
+
+    char* contenttypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
+                              "application/msword", "text/html", "image/jepg", "image/jpg",
+                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
+
+    for (int x = 0; x < 12; x++) {
+        int type_length = strlen(filetypeArray[x]);
+            if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
+                int contentType_length = strlen(contenttypeArray[x]);
+                contentType = cpy_str(contenttypeArray[x],contentType_length);
+            }
+    }
+    return contentType;
 }
