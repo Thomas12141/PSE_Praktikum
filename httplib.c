@@ -170,6 +170,13 @@ string* getResponseString(http_response* response) {
     return responseStr;
 }
 
+/**
+ * Ermittelt den fileType (Dateiendung) einer Datei.
+ *
+ * @param resource_path Der Dateipfad der betroffenen Datei als char*.
+ * @param len Die Länge des Dateipfads.
+ * @return Den fileType ohne Punkt als string*.
+ */
 string* getFiletype (char* resource_path, int len) {
 
     int dot_position;
@@ -185,6 +192,11 @@ string* getFiletype (char* resource_path, int len) {
     return content_type;
 }
 
+/**
+ * Gibt den Speicher eines http_request struct frei.
+ *
+ * @param req Der freizugebende http_request struct.
+ */
 void freeRequestStruct(http_request* req) {
     free_str(req->resource_path);
     free_str(req->protocol);
@@ -192,6 +204,12 @@ void freeRequestStruct(http_request* req) {
     free(req);
 }
 
+/**
+ * Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).
+ *
+ * @param fileType Die Dateiendung ohne Punkt als string*.
+ * @return Den contentType als string*.
+ */
 string* getContentType(string* fileType){
 
     string* contentType = calloc(sizeof(string), 1);
