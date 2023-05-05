@@ -108,7 +108,7 @@ http_request* getRequestStruct(string* request_string){
  * @return Der Dateipfad als char*.
  */
 char* getFilePath(http_request* request) {
-    string* file_path = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = getDocrootpath(request->hostname);
     file_path = str_cat(file_path, request->resource_path->str, request->resource_path->len);
 
     char* filepathPointer = calloc(file_path->len + 1, 1);
@@ -229,9 +229,17 @@ string* getContentType(string* fileType){
 }
 
 string* getDocrootpath(string* hostname){
+
     char pathBuffer [PATH_MAX+1];
     char* ptr = realpath(DOCROOT, pathBuffer);
     string* docrootPathString = cpy_str(ptr, strlen(ptr));
+
+    string* intern_str = cpy_str("intern", 6);
+    string* extern_str = cpy_str("extern", 6);
+    if(str_cmp(hostname, intern_str) || str_cmp(hostname, extern_str)){
+        docrootPathString = str_cat(docrootPathString, hostname->str, hostname->len);
+    } else
+        docrootPathString = str_cat(docrootPathString, "default", 6);
 
 
     return docrootPathString;
