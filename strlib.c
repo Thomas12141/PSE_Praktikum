@@ -157,7 +157,7 @@ size_t get_length(string* str) {
  * Achtung, dieses char-Array ist nicht "null-terminiert"!
  *
  * @param str Der String*.
- * @return char* Der Zeiger auf das char-Arrrays des String.
+ * @return char* Der Zeiger auf das char-Arrays des String.
  */
 char* get_char_str(string* str) {
     assert(str != NULL);

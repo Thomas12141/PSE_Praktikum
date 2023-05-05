@@ -165,7 +165,7 @@ string* getResponseString(http_response* response) {
     free_str(response->http_body);
     free_str(response->header->reason_phrase);
     free_str(response->header->status_code);
-    free_str(response->header->protocol);;
+    free_str(response->header->protocol);
 
     return responseStr;
 }
@@ -220,15 +220,15 @@ string* getContentType(string* fileType){
     char* filetypeArray[12] = {"acc", "txt", "png", "css", "doc", "html",
                            "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf"};
 
-    char* contenttypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
+    char* contentTypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
                               "application/msword", "text/html", "image/jepg", "image/jpg",
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
 
     for (int x = 0; x < 12; x++) {
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
-                int contentType_length = strlen(contenttypeArray[x]);
-                contentType = cpy_str(contenttypeArray[x],contentType_length);
+                int contentType_length = strlen(contentTypeArray[x]);
+                contentType = cpy_str(contentTypeArray[x],contentType_length);
             }
     }
     return contentType;

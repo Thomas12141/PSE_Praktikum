@@ -168,7 +168,7 @@ static void main_loop() {
     while (run) {
 
         /*
-         * Der accept()-Aufruf blockiert, bis eine neue Verbindung rein kommt.
+         * Der accept()-Aufruf blockiert, bis eine neue Verbindung reinkommt.
          */
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (newsockfd < 0) {
