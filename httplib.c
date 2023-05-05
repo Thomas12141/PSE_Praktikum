@@ -139,6 +139,9 @@ char* getFilePath(http_request* request) {
 string* getResponseString(http_response* response) {
     //maximum value of ulong is 4294967295 -> has 10 digits
     char* contentSizeBuffer = calloc(10, 1);
+    if (contentSizeBuffer == NULL){
+        exit(3);
+    }
     snprintf(contentSizeBuffer, 10, "%ld", response->header->content_length);
 
     string* responseStr = cpy_str(response->header->protocol->str, response->header->protocol->len);

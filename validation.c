@@ -85,6 +85,12 @@ int isProtocolValid(string* protocol) {
     return 0;
 }
 
+/**
+ * Prüft ob der Hostname intern ist und eine Authentifizierung benötigt wird.
+ *
+ * @param hostname ein String*
+ * @return 1, wenn eine Authentifizierung benötigt wird, 0 wenn nicht.
+ */
 int isAuthenticationRequired(string* hostname) {
     string* tmpStr = cpy_str("intern", 6);
 
