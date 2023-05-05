@@ -44,5 +44,6 @@ http_request* getRequestStruct(string* str);
 char* getFilePath(http_request* request);
 string* getResponseString(http_response* response);
 string* getFiletype (char* resource_path, int len);
+void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
 #endif //ECHO_SERVER_HTTPLIB_H

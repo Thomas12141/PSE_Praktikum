@@ -17,6 +17,7 @@ int isFileInsideDocroot(char* filepath) {
     string* docrootPathString = cpy_str(ptr, strlen(ptr));
 
     int res = memcmp(filepath, docrootPathString->str, docrootPathString->len);
+    free_str(docrootPathString);
     return res == 0;
 }
 
@@ -58,9 +59,11 @@ int isMethodValid(string* method) {
     string* tmpStr = cpy_str("GET", 3);
 
     if(str_cmp(method, tmpStr)) {
+        free_str((tmpStr));
         return 1;
     }
 
+    free_str(tmpStr);
     return 0;
 }
 
@@ -74,8 +77,10 @@ int isProtocolValid(string* protocol) {
     string* tmpStr = cpy_str("HTTP/1.1", 8);
 
     if(str_cmp(protocol, tmpStr)) {
+        free_str(tmpStr);
         return 1;
     }
 
+    free_str(tmpStr);
     return 0;
 }
