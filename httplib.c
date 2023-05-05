@@ -227,3 +227,12 @@ string* getContentType(string* fileType){
     free_str(fileType);
     return contentType;
 }
+
+string* getDocrootpath(string* hostname){
+    char pathBuffer [PATH_MAX+1];
+    char* ptr = realpath(DOCROOT, pathBuffer);
+    string* docrootPathString = cpy_str(ptr, strlen(ptr));
+
+
+    return docrootPathString;
+}

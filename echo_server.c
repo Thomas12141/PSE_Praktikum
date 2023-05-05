@@ -260,7 +260,7 @@ string* process(string *request) {
     if(!str_cmp(debug, requestStruct->resource_path)) {
         free_str(debug);
         char* filepath = getFilePath(requestStruct);
-        if(filepath == NULL || !isFileInsideDocroot(filepath)) {
+        if(filepath == NULL || !isFileInsideDocroot(filepath, requestStruct->hostname)) {
             freeRequestStruct(requestStruct);
             free(filepath);
             header.status_code = cpy_str("403", 3);
