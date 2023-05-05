@@ -71,12 +71,9 @@ http_request* getRequestStruct(string* request_string){
 
     string* hostnameString = cpy_str("host:", 5);
     int hostnamePositions[2];
-    char* paramBuffer = calloc(6, 1);
     for(int i = endpositionen[2]; i < request_string->len; i++) {
         if(i + 4 < request_string->len) {
-            memcpy(paramBuffer, request_string->str + i, 5);
-            string* paramStr = cpy_str(paramBuffer, strlen(paramBuffer));
-            paramStr = str_lower(paramStr);
+            string* paramStr = str_lower(cpy_str(request_string->str + i, 5));
             if(str_cmp(hostnameString, paramStr)) {
                 i+=hostnameString->len;
 
@@ -100,7 +97,6 @@ http_request* getRequestStruct(string* request_string){
     }
 
     free_str(hostnameString);
-    free(paramBuffer);
 
     return request;
 }
