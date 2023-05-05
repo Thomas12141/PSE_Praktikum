@@ -31,6 +31,7 @@ struct http_response_header {
     string* reason_phrase; // Beschreibung des Zustandes in Textform
     unsigned long content_length;  // Leange des Inhalts
     string* content_type;   // Art des Inhalts
+    int isAuthenticationRequired;
 };
 typedef struct http_response_header http_response_header;
 

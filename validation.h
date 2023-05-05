@@ -19,5 +19,5 @@ int isFileInsideDocroot(char* filepath);
 int isFileAccessible(char* filepath);
 int isMethodValid(string* method);
 int isProtocolValid(string* protocol);
-
+int isAuthenticationRequired(string* hostname);
 #endif //PSE_WEBSERVER_VALIDATION_H

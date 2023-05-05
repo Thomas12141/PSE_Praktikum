@@ -245,6 +245,17 @@ string* process(string *request) {
         return getResponseString(&responseStruct);
     }
 
+    if(isAuthenticationRequired(requestStruct->hostname)) {
+        freeRequestStruct(requestStruct);
+        header.status_code = cpy_str("401", 3);
+        header.reason_phrase = cpy_str(HTTP_401_MESSAGE, strlen(HTTP_401_MESSAGE));
+        header.content_length = strlen(HTTP_401_MESSAGE_FULL);
+        header.isAuthenticationRequired = 1;
+        responseStruct.http_body = cpy_str(HTTP_401_MESSAGE_FULL, strlen(HTTP_401_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
     string* debug = cpy_str("/debug", 6);
     if(!str_cmp(debug, requestStruct->resource_path)) {
         free_str(debug);
