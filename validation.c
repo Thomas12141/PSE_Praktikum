@@ -84,3 +84,15 @@ int isProtocolValid(string* protocol) {
     free_str(tmpStr);
     return 0;
 }
+
+int isAuthenticationRequired(string* hostname) {
+    string* tmpStr = cpy_str("intern", 6);
+
+    if(str_cmp(hostname, tmpStr)) {
+        free_str(tmpStr);
+        return 1;
+    }
+
+    free_str(tmpStr);
+    return 0;
+}
