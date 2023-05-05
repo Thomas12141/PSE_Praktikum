@@ -166,22 +166,32 @@ string* getResponseString(http_response* response) {
     free_str(response->http_body);
     free_str(response->header->reason_phrase);
     free_str(response->header->status_code);
-    free_str(response->header->protocol);;
+    free_str(response->header->protocol);
+    free_str(response->header->content_type);
 
     return responseStr;
 }
 
 string* getFiletype (char* resource_path, int len) {
 
-    int dot_position;
+    int dot_position = 0;
+    string* content_type;
 
     for (int i = len; i >= 0; i--){
-       if (resource_path[i] == '.'){
+        if(resource_path[i] == '/') {
+            break;
+        }
+       if (resource_path[i] == '.') {
            dot_position = i;
        }
     }
 
-    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position - 1);
+    //check if there is no dot in the file path
+    if(dot_position == 0) {
+        content_type = cpy_str("txt", 3);
+    } else {
+        content_type = str_lower(cpy_str(resource_path+dot_position+1, len - dot_position - 1));
+    }
 
     return content_type;
 }
@@ -194,25 +204,26 @@ void freeRequestStruct(http_request* req) {
 }
 
 string* getContentType(string* fileType){
-
     string* contentType = calloc(sizeof(string), 1);
     if(contentType == NULL) {
         exit(3);
     }
 
-    char* filetypeArray[12] = {"acc", "txt", "png", "css", "doc", "html",
-                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf"};
+    char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
+                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
-    char* contenttypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
+    char* contenttypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
                               "application/msword", "text/html", "image/jepg", "image/jpg",
-                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
+                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
-    for (int x = 0; x < 12; x++) {
+    for (int x = 0; x < 13; x++) {
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
                 int contentType_length = strlen(contenttypeArray[x]);
                 contentType = cpy_str(contenttypeArray[x],contentType_length);
             }
     }
+
+    free_str(fileType);
     return contentType;
 }

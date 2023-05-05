@@ -316,7 +316,9 @@ string* process(string *request) {
             return getResponseString(&responseStruct);
         }
 
-        //string* filetype = getFiletype(filepath, strlen(filepath));
+        string* filetype = getFiletype(filepath, strlen(filepath));
+        string* contenttype = getContentType(filetype);
+        header.content_type = contenttype;
         free(filepath);
         freeRequestStruct(requestStruct);
 
@@ -336,7 +338,6 @@ string* process(string *request) {
 
         header.status_code = cpy_str("200", 3);
         header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
-        header.content_length = strlen(HTTP_200_MESSAGE);
         header.content_length = responseStruct.http_body->len;
         free_str(debug);
     }
