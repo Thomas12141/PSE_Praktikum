@@ -223,7 +223,9 @@ static void main_loop() {
 string* process(string *request) {
     http_request* requestStruct = getRequestStruct(request);
     free_str(request);
-    http_response_header header = {.protocol = cpy_str("HTTP/1.1", 8)};
+    string* defaultContentType = cpy_str("text/plain", 10);
+    string* defaultProtocol = cpy_str("HTTP/1.1", 8);
+    http_response_header header = {.protocol = defaultProtocol, .content_type = defaultContentType};
     http_response responseStruct = {.header = &header};
 
     if(requestStruct == NULL) {

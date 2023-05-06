@@ -232,14 +232,14 @@ string* getDocrootpath(string* hostname){
 
     char pathBuffer [PATH_MAX+1];
     char* ptr = realpath(DOCROOT, pathBuffer);
-    string* docrootPathString = cpy_str(ptr, strlen(ptr));
+    string* docrootPathString = str_cat(cpy_str(ptr, strlen(ptr)), "/", 1);
 
     string* intern_str = cpy_str("intern", 6);
     string* extern_str = cpy_str("extern", 6);
     if(str_cmp(hostname, intern_str) || str_cmp(hostname, extern_str)){
         docrootPathString = str_cat(docrootPathString, hostname->str, hostname->len);
     } else
-        docrootPathString = str_cat(docrootPathString, "default", 6);
+        docrootPathString = str_cat(docrootPathString, "default", 7);
 
 
     return docrootPathString;
