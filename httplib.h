@@ -31,6 +31,7 @@ struct http_response_header {
     string* reason_phrase; // Beschreibung des Zustandes in Textform
     unsigned long content_length;  // Länge des Inhalts
     string* content_type;   // Art des Inhalts
+    int isAuthenticationRequired;
 };
 typedef struct http_response_header http_response_header;
 
@@ -46,4 +47,5 @@ string* getResponseString(http_response* response);
 string* getFiletype (char* resource_path, int len);
 void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
+string* getDocrootpath(string* hostname);
 #endif //ECHO_SERVER_HTTPLIB_H

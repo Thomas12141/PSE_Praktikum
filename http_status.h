@@ -7,6 +7,8 @@
 
 #define HTTP_400_MESSAGE "Bad Request"
 #define HTTP_400_MESSAGE_FULL "400 - Bad Request"
+#define HTTP_401_MESSAGE "Unauthorized"
+#define HTTP_401_MESSAGE_FULL "401 - Unauthorized"
 #define HTTP_404_MESSAGE "Not found"
 #define HTTP_404_MESSAGE_FULL "404 - Not found"
 #define HTTP_403_MESSAGE "Forbidden"

@@ -108,7 +108,7 @@ http_request* getRequestStruct(string* request_string){
  * @return Der Dateipfad als char*.
  */
 char* getFilePath(http_request* request) {
-    string* file_path = cpy_str(DOCROOT, strlen(DOCROOT));
+    string* file_path = getDocrootpath(request->hostname);
     file_path = str_cat(file_path, request->resource_path->str, request->resource_path->len);
 
     char* filepathPointer = calloc(file_path->len + 1, 1);
@@ -157,6 +157,10 @@ string* getResponseString(http_response* response) {
     responseStr = str_cat(responseStr, "\r\n", 2);
     responseStr = str_cat(responseStr, "Content-Length: ", 16);
     responseStr = str_cat(responseStr, contentSizeBuffer, strlen(contentSizeBuffer));
+    if(response->header->isAuthenticationRequired) {
+        responseStr = str_cat(responseStr, "\r\n", 2);
+        responseStr = str_cat(responseStr, "WWW-Authenticate: ", 18);
+    }
     responseStr = str_cat(responseStr, "\r\n\r\n", 4);
     responseStr = str_cat(responseStr, response->http_body->str, response->http_body->len);
 
@@ -166,6 +170,7 @@ string* getResponseString(http_response* response) {
     free_str(response->header->reason_phrase);
     free_str(response->header->status_code);
     free_str(response->header->protocol);
+    free_str(response->header->content_type);
 
     return responseStr;
 }
@@ -179,15 +184,24 @@ string* getResponseString(http_response* response) {
  */
 string* getFiletype (char* resource_path, int len) {
 
-    int dot_position;
+    int dot_position = 0;
+    string* content_type;
 
     for (int i = len; i >= 0; i--){
-       if (resource_path[i] == '.'){
+        if(resource_path[i] == '/') {
+            break;
+        }
+       if (resource_path[i] == '.') {
            dot_position = i;
        }
     }
 
-    string* content_type = cpy_str(resource_path+dot_position+1, len - dot_position - 1);
+    //check if there is no dot in the file path
+    if(dot_position == 0) {
+        content_type = cpy_str("txt", 3);
+    } else {
+        content_type = str_lower(cpy_str(resource_path+dot_position+1, len - dot_position - 1));
+    }
 
     return content_type;
 }
@@ -211,25 +225,43 @@ void freeRequestStruct(http_request* req) {
  * @return Den contentType als string*.
  */
 string* getContentType(string* fileType){
-
     string* contentType = calloc(sizeof(string), 1);
     if(contentType == NULL) {
         exit(3);
     }
 
-    char* filetypeArray[12] = {"acc", "txt", "png", "css", "doc", "html",
-                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf"};
+    char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
+                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
-    char* contentTypeArray[12] = {"audio/acc", "text/txt", "image/png", "text/css",
+    char* contentTypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
                               "application/msword", "text/html", "image/jepg", "image/jpg",
-                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf"};
+                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
-    for (int x = 0; x < 12; x++) {
+    for (int x = 0; x < 13; x++) {
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
                 int contentType_length = strlen(contentTypeArray[x]);
                 contentType = cpy_str(contentTypeArray[x],contentType_length);
             }
     }
+
+    free_str(fileType);
     return contentType;
+}
+
+string* getDocrootpath(string* hostname){
+
+    char pathBuffer [PATH_MAX+1];
+    char* ptr = realpath(DOCROOT, pathBuffer);
+    string* docrootPathString = str_cat(cpy_str(ptr, strlen(ptr)), "/", 1);
+
+    string* intern_str = cpy_str("intern", 6);
+    string* extern_str = cpy_str("extern", 6);
+    if(str_cmp(hostname, intern_str) || str_cmp(hostname, extern_str)){
+        docrootPathString = str_cat(docrootPathString, hostname->str, hostname->len);
+    } else
+        docrootPathString = str_cat(docrootPathString, "default", 7);
+
+
+    return docrootPathString;
 }

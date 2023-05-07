@@ -223,7 +223,9 @@ static void main_loop() {
 string* process(string *request) {
     http_request* requestStruct = getRequestStruct(request);
     free_str(request);
-    http_response_header header = {.protocol = cpy_str("HTTP/1.1", 8)};
+    string* defaultContentType = cpy_str("text/plain", 10);
+    string* defaultProtocol = cpy_str("HTTP/1.1", 8);
+    http_response_header header = {.protocol = defaultProtocol, .content_type = defaultContentType};
     http_response responseStruct = {.header = &header};
 
     if(requestStruct == NULL) {
@@ -245,11 +247,22 @@ string* process(string *request) {
         return getResponseString(&responseStruct);
     }
 
+    if(isAuthenticationRequired(requestStruct->hostname)) {
+        freeRequestStruct(requestStruct);
+        header.status_code = cpy_str("401", 3);
+        header.reason_phrase = cpy_str(HTTP_401_MESSAGE, strlen(HTTP_401_MESSAGE));
+        header.content_length = strlen(HTTP_401_MESSAGE_FULL);
+        header.isAuthenticationRequired = 1;
+        responseStruct.http_body = cpy_str(HTTP_401_MESSAGE_FULL, strlen(HTTP_401_MESSAGE_FULL));
+
+        return getResponseString(&responseStruct);
+    }
+
     string* debug = cpy_str("/debug", 6);
     if(!str_cmp(debug, requestStruct->resource_path)) {
         free_str(debug);
         char* filepath = getFilePath(requestStruct);
-        if(filepath == NULL || !isFileInsideDocroot(filepath)) {
+        if(filepath == NULL || !isFileInsideDocroot(filepath, requestStruct->hostname)) {
             freeRequestStruct(requestStruct);
             free(filepath);
             header.status_code = cpy_str("403", 3);
@@ -305,7 +318,9 @@ string* process(string *request) {
             return getResponseString(&responseStruct);
         }
 
-        //string* filetype = getFiletype(filepath, strlen(filepath));
+        string* filetype = getFiletype(filepath, strlen(filepath));
+        string* contenttype = getContentType(filetype);
+        header.content_type = contenttype;
         free(filepath);
         freeRequestStruct(requestStruct);
 
@@ -325,7 +340,6 @@ string* process(string *request) {
 
         header.status_code = cpy_str("200", 3);
         header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
-        header.content_length = strlen(HTTP_200_MESSAGE);
         header.content_length = responseStruct.http_body->len;
         free_str(debug);
     }
