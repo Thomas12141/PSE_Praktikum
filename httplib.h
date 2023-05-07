@@ -47,4 +47,5 @@ string* getResponseString(http_response* response);
 string* getFiletype (char* resource_path, int len);
 void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
+string* getDocrootpath(string* hostname);
 #endif //ECHO_SERVER_HTTPLIB_H

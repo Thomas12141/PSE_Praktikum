@@ -15,7 +15,7 @@
 #include "config.h"
 
 int isFileExistent(char* filepath);
-int isFileInsideDocroot(char* filepath);
+int isFileInsideDocroot(char* filepath, string* hostname);
 int isFileAccessible(char* filepath);
 int isMethodValid(string* method);
 int isProtocolValid(string* protocol);

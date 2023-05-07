@@ -223,7 +223,9 @@ static void main_loop() {
 string* process(string *request) {
     http_request* requestStruct = getRequestStruct(request);
     free_str(request);
-    http_response_header header = {.protocol = cpy_str("HTTP/1.1", 8)};
+    string* defaultContentType = cpy_str("text/plain", 10);
+    string* defaultProtocol = cpy_str("HTTP/1.1", 8);
+    http_response_header header = {.protocol = defaultProtocol, .content_type = defaultContentType};
     http_response responseStruct = {.header = &header};
 
     if(requestStruct == NULL) {
@@ -260,7 +262,7 @@ string* process(string *request) {
     if(!str_cmp(debug, requestStruct->resource_path)) {
         free_str(debug);
         char* filepath = getFilePath(requestStruct);
-        if(filepath == NULL || !isFileInsideDocroot(filepath)) {
+        if(filepath == NULL || !isFileInsideDocroot(filepath, requestStruct->hostname)) {
             freeRequestStruct(requestStruct);
             free(filepath);
             header.status_code = cpy_str("403", 3);

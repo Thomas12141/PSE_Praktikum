@@ -3,6 +3,7 @@
 //
 
 #include "validation.h"
+#include "httplib.h"
 
 /**
  * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
@@ -11,10 +12,8 @@
  * @param filepath Der zu überprüfende Dateipfad.
  * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
  */
-int isFileInsideDocroot(char* filepath) {
-    char pathBuffer [PATH_MAX+1];
-    char* ptr = realpath(DOCROOT, pathBuffer);
-    string* docrootPathString = cpy_str(ptr, strlen(ptr));
+int isFileInsideDocroot(char* filepath, string* hostname) {
+    string* docrootPathString = getDocrootpath(hostname);
 
     int res = memcmp(filepath, docrootPathString->str, docrootPathString->len);
     free_str(docrootPathString);
