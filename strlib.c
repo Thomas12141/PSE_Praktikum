@@ -184,38 +184,6 @@ int str_cmp(string* str1, string* str2) {
 }
 
 /**
- * Ließt den Inhalt einer Datei filepath ein und gibt diesen als string* zurück.
- * Der Inhalt wird in char* buffer eingelesen und dann mit cpy_str in ein String* umgewandelt.
- *
- * @param filepath Der Dateipfad.
- * @return string* Dateiinhalt.
- */
-string* readFile(char* filepath) {
-    char* buffer;
-    unsigned long fileSize = 0;
-
-    FILE* file = fopen(filepath, "rb");
-
-    fseek(file, 0, SEEK_END); // seek to end of file
-    fileSize = ftell(file);
-    rewind(file);
-
-    buffer = calloc(fileSize, 1);
-    if(buffer == NULL) {
-        return NULL;
-    }
-
-    fread(buffer, 1, fileSize, file);
-    fclose(file);
-
-    string* fileContent = cpy_str(buffer, fileSize);
-    free(buffer);
-
-    return fileContent;
-}
-
-
-/**
  * Wandelt alle Grossbuchstaben eines string* in Kleinbuchstaben um.
  *
  * @param src Der String.

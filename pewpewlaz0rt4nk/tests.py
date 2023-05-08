@@ -54,6 +54,31 @@ cannon += Beam(
     request='GET /index.html\r\nHost: {host}:{port}\r\n\r\n',
     response=['HTTP/1.1 400']
 )
+cannon += Beam(
+    description='Ungültige HTTP-Version',
+    request='GET /index.html HTTP/1.5\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+cannon += Beam(
+    description='HTTP-Version mit mehr als einer Ziffer',
+    request='GET /index.html HTTP/1.13\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+cannon += Beam(
+    description='Kein vollständiges CRLF nach der Requestline',
+    request='GET /index.html HTTP/1.1\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+cannon += Beam(
+    description='Gar kein CRLF nach der Requestline',
+    request='GET /index.html HTTP/1.1',
+    response=['HTTP/1.1 400']
+)
 
+cannon += Beam(
+    description='Anfrage mit ASCII %2F statt /',
+    request='GET %2F HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
 # Pew pew!
 cannon.pewpew()

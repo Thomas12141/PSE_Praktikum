@@ -102,35 +102,6 @@ http_request* getRequestStruct(string* request_string){
 }
 
 /**
- * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
- *
- * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
- * @return Der Dateipfad als char*.
- */
-char* getFilePath(http_request* request) {
-    string* file_path = getDocrootpath(request->hostname);
-    file_path = str_cat(file_path, request->resource_path->str, request->resource_path->len);
-
-    char* filepathPointer = calloc(file_path->len + 1, 1);
-    memcpy(filepathPointer, file_path->str, file_path->len);
-    free_str(file_path);
-
-    char *pathBuffer = realpath(filepathPointer, NULL);
-    free(filepathPointer);
-    if(pathBuffer == NULL) {
-        return NULL;
-    }
-
-    unsigned long pathLength = strlen(pathBuffer);
-    char* shortenedPath = calloc(strlen(pathBuffer) + 1, 1);
-    memcpy(shortenedPath, pathBuffer, pathLength);
-
-    free(pathBuffer);
-
-    return shortenedPath;
-}
-
-/**
  * Gibt die http-response als String* zurück.
  *
  * @param response http-response der Form struct http_response.
@@ -176,37 +147,6 @@ string* getResponseString(http_response* response) {
 }
 
 /**
- * Ermittelt den fileType (Dateiendung) einer Datei.
- *
- * @param resource_path Der Dateipfad der betroffenen Datei als char*.
- * @param len Die Länge des Dateipfads.
- * @return Den fileType ohne Punkt als string*.
- */
-string* getFiletype (char* resource_path, int len) {
-
-    int dot_position = 0;
-    string* content_type;
-
-    for (int i = len; i >= 0; i--){
-        if(resource_path[i] == '/') {
-            break;
-        }
-       if (resource_path[i] == '.') {
-           dot_position = i;
-       }
-    }
-
-    //check if there is no dot in the file path
-    if(dot_position == 0) {
-        content_type = cpy_str("txt", 3);
-    } else {
-        content_type = str_lower(cpy_str(resource_path+dot_position+1, len - dot_position - 1));
-    }
-
-    return content_type;
-}
-
-/**
  * Gibt den Speicher eines http_request struct frei.
  *
  * @param req Der freizugebende http_request struct.
@@ -247,21 +187,4 @@ string* getContentType(string* fileType){
 
     free_str(fileType);
     return contentType;
-}
-
-string* getDocrootpath(string* hostname){
-
-    char pathBuffer [PATH_MAX+1];
-    char* ptr = realpath(DOCROOT, pathBuffer);
-    string* docrootPathString = str_cat(cpy_str(ptr, strlen(ptr)), "/", 1);
-
-    string* intern_str = cpy_str("intern", 6);
-    string* extern_str = cpy_str("extern", 6);
-    if(str_cmp(hostname, intern_str) || str_cmp(hostname, extern_str)){
-        docrootPathString = str_cat(docrootPathString, hostname->str, hostname->len);
-    } else
-        docrootPathString = str_cat(docrootPathString, "default", 7);
-
-
-    return docrootPathString;
 }
