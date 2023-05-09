@@ -3,6 +3,7 @@
 //
 
 #include "httplib.h"
+#include "filelib.h"
 
 /**
  * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
@@ -11,14 +12,26 @@
  * @param resource_path Dateipfad, an den index.html angehängt wird.
  * @return Dateipfad mit index.html.
  */
-string* sanitizeRequestedResource(string* resource_path) {
-    resource_path = decodeString(resource_path);
+void sanitizeRequestedResource(http_request* request) {
+    request->resource_path = decodeString(request->resource_path);
 
-    if(resource_path->str[resource_path->len - 1] == '/') {
-        resource_path = str_cat(resource_path, "index.html", 10);
+    string* absoluteResourcePath = getDocrootpath(request->hostname);
+    char* filepathBuffer = calloc(PATH_MAX, 1);
+    absoluteResourcePath = str_cat(absoluteResourcePath, request->resource_path->str, request->resource_path->len);
+    char* filepath = calloc(absoluteResourcePath->len+1, 1);
+    memcpy(filepath, absoluteResourcePath->str, absoluteResourcePath->len);
+    free_str(absoluteResourcePath);
+    realpath(filepath, filepathBuffer);
+
+    string* fileTest = readFile(filepathBuffer);
+    if(fileTest == NULL || (fileTest->len > 0 && fileTest->str[0] == '\0')) {
+        request->resource_path = str_cat(request->resource_path, "/index.html", 11);
     }
 
-    return resource_path;
+    if(fileTest)
+        free_str(fileTest);
+    free(filepathBuffer);
+    free(filepath);
 }
 
 /**
@@ -44,7 +57,7 @@ http_request* getRequestStruct(string* request_string){
                 argumentCount++;
             }
 
-            if (argumentCount == 3 || request_string->str[i+1] == '\r') {
+            if (argumentCount == 3 || request_string->str[i+1] == '\r' || request_string->str[i+1] == '\n') {
                 break;
             }
         }
@@ -65,8 +78,7 @@ http_request* getRequestStruct(string* request_string){
     }
 
     request->method = cpy_str(request_string->str, method_size);
-    string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
-    request->resource_path = requestedResource;
+    request->resource_path = cpy_str(request_string->str + endpositionen[0] + 2, resource_size);
     request->protocol = cpy_str(request_string->str + endpositionen[1] + 2, protocol_size);
 
     string* hostnameString = cpy_str("host:", 5);
@@ -86,6 +98,7 @@ http_request* getRequestStruct(string* request_string){
                 }
                 hostnamePositions[1] = i;
                 request->hostname = cpy_str(request_string->str + hostnamePositions[0], hostnamePositions[1] - hostnamePositions[0]);
+                free_str(paramStr);
                 break;
             }
             free_str(paramStr);
@@ -102,35 +115,6 @@ http_request* getRequestStruct(string* request_string){
 }
 
 /**
- * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
- *
- * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
- * @return Der Dateipfad als char*.
- */
-char* getFilePath(http_request* request) {
-    string* file_path = getDocrootpath(request->hostname);
-    file_path = str_cat(file_path, request->resource_path->str, request->resource_path->len);
-
-    char* filepathPointer = calloc(file_path->len + 1, 1);
-    memcpy(filepathPointer, file_path->str, file_path->len);
-    free_str(file_path);
-
-    char *pathBuffer = realpath(filepathPointer, NULL);
-    free(filepathPointer);
-    if(pathBuffer == NULL) {
-        return NULL;
-    }
-
-    unsigned long pathLength = strlen(pathBuffer);
-    char* shortenedPath = calloc(strlen(pathBuffer) + 1, 1);
-    memcpy(shortenedPath, pathBuffer, pathLength);
-
-    free(pathBuffer);
-
-    return shortenedPath;
-}
-
-/**
  * Gibt die http-response als String* zurück.
  *
  * @param response http-response der Form struct http_response.
@@ -139,6 +123,9 @@ char* getFilePath(http_request* request) {
 string* getResponseString(http_response* response) {
     //maximum value of ulong is 4294967295 -> has 10 digits
     char* contentSizeBuffer = calloc(10, 1);
+    if (contentSizeBuffer == NULL){
+        exit(3);
+    }
     snprintf(contentSizeBuffer, 10, "%ld", response->header->content_length);
 
     string* responseStr = cpy_str(response->header->protocol->str, response->header->protocol->len);
@@ -168,79 +155,77 @@ string* getResponseString(http_response* response) {
     free_str(response->header->status_code);
     free_str(response->header->protocol);
     free_str(response->header->content_type);
+    free(response->header);
+    free(response);
 
     return responseStr;
 }
 
-string* getFiletype (char* resource_path, int len) {
-
-    int dot_position = 0;
-    string* content_type;
-
-    for (int i = len; i >= 0; i--){
-        if(resource_path[i] == '/') {
-            break;
-        }
-       if (resource_path[i] == '.') {
-           dot_position = i;
-       }
-    }
-
-    //check if there is no dot in the file path
-    if(dot_position == 0) {
-        content_type = cpy_str("txt", 3);
-    } else {
-        content_type = str_lower(cpy_str(resource_path+dot_position+1, len - dot_position - 1));
-    }
-
-    return content_type;
-}
-
+/**
+ * Gibt den Speicher eines http_request struct frei.
+ *
+ * @param req Der freizugebende http_request struct.
+ */
 void freeRequestStruct(http_request* req) {
     free_str(req->resource_path);
     free_str(req->protocol);
     free_str(req->method);
+    if(req->hostname != NULL)
+        free_str(req->hostname);
     free(req);
 }
 
+/**
+ * Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).
+ *
+ * @param fileType Die Dateiendung ohne Punkt als string*.
+ * @return Den contentType als string*.
+ */
 string* getContentType(string* fileType){
-    string* contentType = calloc(sizeof(string), 1);
-    if(contentType == NULL) {
-        exit(3);
-    }
-
     char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
                            "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
-    char* contenttypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
+    char* contentTypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
                               "application/msword", "text/html", "image/jepg", "image/jpg",
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
     for (int x = 0; x < 13; x++) {
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
-                int contentType_length = strlen(contenttypeArray[x]);
-                contentType = cpy_str(contenttypeArray[x],contentType_length);
+                int contentType_length = strlen(contentTypeArray[x]);
+                free_str(fileType);
+                return cpy_str(contentTypeArray[x],contentType_length);
             }
     }
 
     free_str(fileType);
-    return contentType;
+    return _new_string();
 }
 
-string* getDocrootpath(string* hostname){
+/**
+ * Konstruiert die Statusmeldungen in Form eines http_response structs.
+ *
+ * @param statusCode Der zu verwendende Statuscode.
+ * @param message Die dazugehörige Status-message.
+ * @return Der http_response struct.
+ */
+http_response* getShortResponse(char* statusCode, char* message) {
+    http_response* response = calloc(1, sizeof(http_response));
+    http_response_header* header = calloc(1, sizeof(http_response_header));
+    response->header = header;
+    header->content_type = cpy_str("text/plain", 10);
+    header->protocol = cpy_str("HTTP/1.1", 8);
 
-    char pathBuffer [PATH_MAX+1];
-    char* ptr = realpath(DOCROOT, pathBuffer);
-    string* docrootPathString = str_cat(cpy_str(ptr, strlen(ptr)), "/", 1);
+    header->status_code = cpy_str(statusCode, 3);
+    header->reason_phrase = cpy_str(message, strlen(message));
+    response->http_body = cpy_str(statusCode, strlen(statusCode));
+    response->http_body = str_cat(response->http_body, " - ", 3);
+    response->http_body = str_cat(response->http_body, message, strlen(message));
+    header->content_length = response->http_body->len;
 
-    string* intern_str = cpy_str("intern", 6);
-    string* extern_str = cpy_str("extern", 6);
-    if(str_cmp(hostname, intern_str) || str_cmp(hostname, extern_str)){
-        docrootPathString = str_cat(docrootPathString, hostname->str, hostname->len);
-    } else
-        docrootPathString = str_cat(docrootPathString, "default", 7);
+    if(char_cmp(statusCode, "401", 3, 3)) {
+        header->isAuthenticationRequired = 1;
+    }
 
-
-    return docrootPathString;
+    return response;
 }

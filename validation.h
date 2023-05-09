@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "strlib.h"
 #include "config.h"
+#include "filelib.h"
 
 int isFileExistent(char* filepath);
 int isFileInsideDocroot(char* filepath, string* hostname);

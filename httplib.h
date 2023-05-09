@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "strlib.h"
 #include "config.h"
+#include "http_status.h"
 
 struct http_request {
     string* method; // z. B. GET
@@ -29,7 +30,7 @@ struct http_response_header {
     string* protocol; //HTTP Version z. B. HTTP/1.1
     string* status_code; // 3-stellige Ganzzahl zur kurzen Beschreibung des Zustandes
     string* reason_phrase; // Beschreibung des Zustandes in Textform
-    unsigned long content_length;  // Leange des Inhalts
+    unsigned long content_length;  // Länge des Inhalts
     string* content_type;   // Art des Inhalts
     int isAuthenticationRequired;
 };
@@ -42,10 +43,9 @@ struct http_response {
 typedef struct http_response http_response;
 
 http_request* getRequestStruct(string* str);
-char* getFilePath(http_request* request);
 string* getResponseString(http_response* response);
-string* getFiletype (char* resource_path, int len);
 void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
-string* getDocrootpath(string* hostname);
+http_response* getShortResponse(char* statusCode, char* message);
+void sanitizeRequestedResource(http_request* request);
 #endif //ECHO_SERVER_HTTPLIB_H

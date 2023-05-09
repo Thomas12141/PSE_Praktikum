@@ -114,6 +114,10 @@ static int setup_socket() {
     return sockfd;
 }
 
+/**
+ * Liest Daten von stdin ein, überführt sie in einen string* und übergibt sie an process().
+ * Wenn ein Fehler auftritt wird error() aufgerufen.
+ */
 static void main_loop_stdin() {
     void *const buffer = malloc(BUFFER_SIZE);
     if (buffer == NULL) {
@@ -168,7 +172,7 @@ static void main_loop() {
     while (run) {
 
         /*
-         * Der accept()-Aufruf blockiert, bis eine neue Verbindung rein kommt.
+         * Der accept()-Aufruf blockiert, bis eine neue Verbindung reinkommt.
          */
         newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
         if (newsockfd < 0) {
@@ -220,133 +224,93 @@ static void main_loop() {
     }
 }
 
-string* process(string *request) {
+/**
+ * Verarbeitet den übergebenen request-String* struct und gibt eine entsprechende http_response* als string* struct zurück.
+ * Wenn die http_request ungültig ist, besteht die http_response aus, den Fehlern entsprechenden, Statusmeldungen.
+ *
+ * @param request Der http_request struct.
+ * @return Der http_response struct.
+ */
+string* process(string* request) {
     http_request* requestStruct = getRequestStruct(request);
     free_str(request);
-    string* defaultContentType = cpy_str("text/plain", 10);
-    string* defaultProtocol = cpy_str("HTTP/1.1", 8);
-    http_response_header header = {.protocol = defaultProtocol, .content_type = defaultContentType};
-    http_response responseStruct = {.header = &header};
 
     if(requestStruct == NULL) {
-        header.status_code = cpy_str("400", 3);
-        header.reason_phrase = cpy_str(HTTP_400_MESSAGE, strlen(HTTP_400_MESSAGE));
-        header.content_length = strlen(HTTP_400_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_400_MESSAGE_FULL, strlen(HTTP_400_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
+        return getResponseString(getShortResponse("400", HTTP_400_MESSAGE));
     }
 
     if(!isProtocolValid(requestStruct->protocol)) {
         freeRequestStruct(requestStruct);
-        header.status_code = cpy_str("505", 3);
-        header.reason_phrase = cpy_str(HTTP_505_MESSAGE, strlen(HTTP_505_MESSAGE));
-        header.content_length = strlen(HTTP_505_MESSAGE_FULL);
-        responseStruct.http_body = cpy_str(HTTP_505_MESSAGE_FULL, strlen(HTTP_505_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
+        return getResponseString(getShortResponse("505", HTTP_505_MESSAGE));
     }
 
     if(isAuthenticationRequired(requestStruct->hostname)) {
         freeRequestStruct(requestStruct);
-        header.status_code = cpy_str("401", 3);
-        header.reason_phrase = cpy_str(HTTP_401_MESSAGE, strlen(HTTP_401_MESSAGE));
-        header.content_length = strlen(HTTP_401_MESSAGE_FULL);
-        header.isAuthenticationRequired = 1;
-        responseStruct.http_body = cpy_str(HTTP_401_MESSAGE_FULL, strlen(HTTP_401_MESSAGE_FULL));
-
-        return getResponseString(&responseStruct);
+        return getResponseString(getShortResponse("401", HTTP_401_MESSAGE));
     }
 
-    string* debug = cpy_str("/debug", 6);
-    if(!str_cmp(debug, requestStruct->resource_path)) {
-        free_str(debug);
-        char* filepath = getFilePath(requestStruct);
-        if(filepath == NULL || !isFileInsideDocroot(filepath, requestStruct->hostname)) {
-            freeRequestStruct(requestStruct);
-            free(filepath);
-            header.status_code = cpy_str("403", 3);
-            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
-
-            return getResponseString(&responseStruct);
-        }
-
-        if (!isFileExistent(filepath)) {
-            freeRequestStruct(requestStruct);
-            free(filepath);
-            header.status_code = cpy_str("404", 3);
-            header.reason_phrase = cpy_str(HTTP_404_MESSAGE, strlen(HTTP_404_MESSAGE));
-            header.content_length = strlen(HTTP_404_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_404_MESSAGE_FULL, strlen(HTTP_404_MESSAGE_FULL));
-
-            return getResponseString(&responseStruct);
-        }
-
-        if (!isFileAccessible(filepath)) {
-            freeRequestStruct(requestStruct);
-            free(filepath);
-            header.status_code = cpy_str("403", 3);
-            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
-
-            return getResponseString(&responseStruct);
-        }
-
-        if (!isMethodValid(requestStruct->method)) {
-            free(filepath);
-            freeRequestStruct(requestStruct);
-            header.status_code = cpy_str("501", 3);
-            header.reason_phrase = cpy_str(HTTP_501_MESSAGE, strlen(HTTP_501_MESSAGE));
-            header.content_length = strlen(HTTP_501_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_501_MESSAGE_FULL, strlen(HTTP_501_MESSAGE_FULL));
-
-            return getResponseString(&responseStruct);
-        }
-
-        string* file = readFile(filepath);
-        if(file == NULL) {
-            free(filepath);
-            free_str(file);
-            header.status_code = cpy_str("403", 3);
-            header.reason_phrase = cpy_str(HTTP_403_MESSAGE, strlen(HTTP_403_MESSAGE));
-            header.content_length = strlen(HTTP_403_MESSAGE_FULL);
-            responseStruct.http_body = cpy_str(HTTP_403_MESSAGE_FULL, strlen(HTTP_403_MESSAGE_FULL));
-
-            return getResponseString(&responseStruct);
-        }
-
-        string* filetype = getFiletype(filepath, strlen(filepath));
-        string* contenttype = getContentType(filetype);
-        header.content_type = contenttype;
-        free(filepath);
-        freeRequestStruct(requestStruct);
-
-        header.status_code = cpy_str("200", 3);
-        header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
-        header.content_length = file->len;
-
-        responseStruct.http_body = file;
-    } else {
-        responseStruct.http_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
-        responseStruct.http_body = str_cat(responseStruct.http_body, " ", 1);
-        responseStruct.http_body = str_cat(responseStruct.http_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
-        responseStruct.http_body = str_cat(responseStruct.http_body, " ", 1);
-        responseStruct.http_body = str_cat(responseStruct.http_body,requestStruct->protocol->str,requestStruct->protocol->len);
+    if(char_cmp(requestStruct->resource_path->str, "/debug", requestStruct->resource_path->len, 6)) {
+        http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
+        res->http_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
+        res->http_body = str_cat(res->http_body, " ", 1);
+        res->http_body = str_cat(res->http_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
+        res->http_body = str_cat(res->http_body, " ", 1);
+        res->http_body = str_cat(res->http_body,requestStruct->protocol->str,requestStruct->protocol->len);
+        res->header->content_length = res->http_body->len;
 
         freeRequestStruct(requestStruct);
 
-        header.status_code = cpy_str("200", 3);
-        header.reason_phrase = cpy_str(HTTP_200_MESSAGE, strlen(HTTP_200_MESSAGE));
-        header.content_length = responseStruct.http_body->len;
-        free_str(debug);
+        return getResponseString(res);
     }
 
-    string* responseString = getResponseString(&responseStruct);
+    sanitizeRequestedResource(requestStruct);
+    char* secureFilepath = getFilePath(requestStruct);
 
-    return responseString;
+    if(!secureFilepath || !isFileInsideDocroot(secureFilepath, requestStruct->hostname)) {
+        freeRequestStruct(requestStruct);
+        free(secureFilepath);
+        return getResponseString(getShortResponse("403", HTTP_403_MESSAGE));
+    }
+
+    if(!isFileExistent(secureFilepath)) {
+        freeRequestStruct(requestStruct);
+        free(secureFilepath);
+        return getResponseString(getShortResponse("404", HTTP_404_MESSAGE));
+    }
+
+    if (!isFileAccessible(secureFilepath)) {
+        freeRequestStruct(requestStruct);
+        free(secureFilepath);
+        return getResponseString(getShortResponse("403", HTTP_403_MESSAGE));
+    }
+
+    if (!isMethodValid(requestStruct->method)) {
+        free(secureFilepath);
+        freeRequestStruct(requestStruct);
+        return getResponseString(getShortResponse("501", HTTP_501_MESSAGE));
+    }
+
+    string* file = readFile(secureFilepath);
+    if(file == NULL) {
+        freeRequestStruct(requestStruct);
+        free(secureFilepath);
+        return getResponseString(getShortResponse("403", HTTP_403_MESSAGE));
+    }
+
+    http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
+
+    string* filetype = getFiletype(secureFilepath, strlen(secureFilepath));
+    string* contenttype = getContentType(filetype);
+    free(secureFilepath);
+    freeRequestStruct(requestStruct);
+
+    free_str(res->header->content_type);
+    res->header->content_type = contenttype;
+    res->header->content_length = file->len;
+    free_str(res->http_body);
+    res->http_body = file;
+
+    return getResponseString(res);
 }
 
 int main(int argc, char *argv[]) {
