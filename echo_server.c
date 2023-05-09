@@ -251,6 +251,7 @@ string* process(string* request) {
 
     if(char_cmp(requestStruct->resource_path->str, "/debug", requestStruct->resource_path->len, 6)) {
         http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
+        free_str(res->http_body);
         res->http_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
         res->http_body = str_cat(res->http_body, " ", 1);
         res->http_body = str_cat(res->http_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
