@@ -15,21 +15,21 @@
 void sanitizeRequestedResource(http_request* request) {
     request->resource_path = decodeString(request->resource_path);
 
-    string* docrootPath = getDocrootpath(request->hostname);
+    string* absoluteResourcePath = getDocrootpath(request->hostname);
     char* filepathBuffer = calloc(PATH_MAX, 1);
-    string* absoluteResourcePath = str_cat(docrootPath, request->resource_path->str, request->resource_path->len);
+    absoluteResourcePath = str_cat(absoluteResourcePath, request->resource_path->str, request->resource_path->len);
     char* filepath = calloc(absoluteResourcePath->len+1, 1);
     memcpy(filepath, absoluteResourcePath->str, absoluteResourcePath->len);
+    free_str(absoluteResourcePath);
     realpath(filepath, filepathBuffer);
 
     string* fileTest = readFile(filepathBuffer);
-    if(fileTest) {
-        if(fileTest->len > 0 && fileTest->str[0] == '\0') {
-            request->resource_path = str_cat(request->resource_path, "/index.html", 11);
-        }
+    if(fileTest == NULL || (fileTest->len > 0 && fileTest->str[0] == '\0')) {
+        request->resource_path = str_cat(request->resource_path, "/index.html", 11);
     }
 
-    free(fileTest);
+    if(fileTest)
+        free_str(fileTest);
     free(filepathBuffer);
     free(filepath);
 }
@@ -98,6 +98,7 @@ http_request* getRequestStruct(string* request_string){
                 }
                 hostnamePositions[1] = i;
                 request->hostname = cpy_str(request_string->str + hostnamePositions[0], hostnamePositions[1] - hostnamePositions[0]);
+                free_str(paramStr);
                 break;
             }
             free_str(paramStr);
@@ -154,6 +155,7 @@ string* getResponseString(http_response* response) {
     free_str(response->header->status_code);
     free_str(response->header->protocol);
     free_str(response->header->content_type);
+    free(response->header);
     free(response);
 
     return responseStr;
@@ -168,6 +170,8 @@ void freeRequestStruct(http_request* req) {
     free_str(req->resource_path);
     free_str(req->protocol);
     free_str(req->method);
+    if(req->hostname != NULL)
+        free_str(req->hostname);
     free(req);
 }
 
@@ -178,11 +182,6 @@ void freeRequestStruct(http_request* req) {
  * @return Den contentType als string*.
  */
 string* getContentType(string* fileType){
-    string* contentType = calloc(sizeof(string), 1);
-    if(contentType == NULL) {
-        exit(3);
-    }
-
     char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
                            "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
@@ -194,12 +193,13 @@ string* getContentType(string* fileType){
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
                 int contentType_length = strlen(contentTypeArray[x]);
-                contentType = cpy_str(contentTypeArray[x],contentType_length);
+                free_str(fileType);
+                return cpy_str(contentTypeArray[x],contentType_length);
             }
     }
 
     free_str(fileType);
-    return contentType;
+    return _new_string();
 }
 
 http_response* getShortResponse(char* statusCode, char* message) {
@@ -221,5 +221,4 @@ http_response* getShortResponse(char* statusCode, char* message) {
     }
 
     return response;
-
 }

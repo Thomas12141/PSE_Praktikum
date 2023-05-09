@@ -222,16 +222,19 @@ static void main_loop() {
 
 string* process(string* request) {
     http_request* requestStruct = getRequestStruct(request);
+    free_str(request);
 
     if(requestStruct == NULL) {
         return getResponseString(getShortResponse("400", HTTP_400_MESSAGE));
     }
 
     if(!isProtocolValid(requestStruct->protocol)) {
+        freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("505", HTTP_505_MESSAGE));
     }
 
     if(isAuthenticationRequired(requestStruct->hostname)) {
+        freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("401", HTTP_401_MESSAGE));
     }
 
@@ -278,6 +281,7 @@ string* process(string* request) {
 
     string* file = readFile(secureFilepath);
     if(file == NULL) {
+        freeRequestStruct(requestStruct);
         free(secureFilepath);
         return getResponseString(getShortResponse("403", HTTP_403_MESSAGE));
     }
@@ -289,8 +293,10 @@ string* process(string* request) {
     free(secureFilepath);
     freeRequestStruct(requestStruct);
 
+    free_str(res->header->content_type);
     res->header->content_type = contenttype;
     res->header->content_length = file->len;
+    free_str(res->http_body);
     res->http_body = file;
 
     return getResponseString(res);

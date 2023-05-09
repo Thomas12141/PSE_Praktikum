@@ -14,9 +14,9 @@ string* decodeString(string* str) {
     int hexCharCounter = 0;
     for(int i = 0; i < str->len; i++) {
         if(str->str[i] == '%' && i < str->len - 2) {
-            char c[3];
+            char c[3] = {'\0'};
             memcpy(&c, &(str->str[i])+1, 2);
-            int code = (int) strtol(c, NULL, 16);
+            long code = strtol(c, NULL, 16);
             hexCharCounter++;
             str->str[i] = (char) code;
             str->len -= 2;
