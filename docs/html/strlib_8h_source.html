@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PSE Webserver: strlib.h Quellcode</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">PSE Webserver
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Erzeugt von Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Suchen');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Suchen');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">strlib.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="strlib_8h.html">gehe zur Dokumentation dieser Datei</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Created by Matteo Illing on 20.04.23.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef PSE_WEBSERVER_STRLIB_H</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define PSE_WEBSERVER_STRLIB_H</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;string.h&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;assert.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">config.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structstring.html">   14</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structstring.html">string</a> {</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="structstring.html#a7360b55975153b822efc5217b7734e6a">   15</a></span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="structstring.html#a7360b55975153b822efc5217b7734e6a">len</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">   16</a></span>&#160;    <span class="keywordtype">char</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="strlib_8h.html#a63e2e3ee7db5274c6a3929edfc07c6c9">   18</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structstring.html">string</a> <a class="code" href="structstring.html">string</a>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">string</span>* <a class="code" href="strlib_8h.html#afcca4cee18a312639416055cd773b430">str_cat</a>(<span class="keywordtype">string</span>* dest, <span class="keyword">const</span> <span class="keywordtype">char</span>* src, <span class="keywordtype">size_t</span> <a class="code" href="structstring.html#a7360b55975153b822efc5217b7734e6a">len</a>);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">string</span>* <a class="code" href="strlib_8h.html#a145fa85a0df6c9eaff5fd37d8ce505ad">_new_string</a>();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keywordtype">void</span> <a class="code" href="strlib_8h.html#adaf7921c8c14ecd87e941c4b71b70dac">print_string</a>(<span class="keywordtype">string</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">string</span>* <a class="code" href="strlib_8h.html#a531528eaa7276490632a44a0358a57db">cpy_str</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* src, <span class="keywordtype">size_t</span> <a class="code" href="structstring.html#a7360b55975153b822efc5217b7734e6a">len</a>);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keywordtype">void</span> <a class="code" href="strlib_8h.html#ae988132fd8cdb8fc75ef5a2c639e41dc">free_str</a>(<span class="keywordtype">string</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">size_t</span> <a class="code" href="strlib_8h.html#a6d71a368e3ca5be66f239b6daae663e1">get_length</a>(<span class="keywordtype">string</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">char</span>* <a class="code" href="strlib_8h.html#a5f7ca8bf8a55e587615357e574e94832">get_char_str</a>(<span class="keywordtype">string</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">int</span> <a class="code" href="strlib_8h.html#ab16c5fa6d33f0ffe0d0ae51b73f8d8c8">str_cmp</a>(<span class="keywordtype">string</span>* str1, <span class="keywordtype">string</span>* str2);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">string</span>* <a class="code" href="strlib_8h.html#adc6384378a32f1dc4c38433010b8e5d2">decodeString</a>(<span class="keywordtype">string</span>* <a class="code" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">str</a>);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">int</span> <a class="code" href="strlib_8h.html#a3857d1f186d6b4f22e9e598ea77de663">char_cmp</a>(<span class="keywordtype">char</span>* str1, <span class="keywordtype">char</span>* str2, <span class="keywordtype">size_t</span> len1, <span class="keywordtype">size_t</span> len2);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keywordtype">string</span>* <a class="code" href="strlib_8h.html#ad37e64f7a993c551a9648a165e6e86eb">str_lower</a>(<span class="keywordtype">string</span>* src);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#endif //PSE_WEBSERVER_STRLIB_H</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astrlib_8h_html_ad37e64f7a993c551a9648a165e6e86eb"><div class="ttname"><a href="strlib_8h.html#ad37e64f7a993c551a9648a165e6e86eb">str_lower</a></div><div class="ttdeci">string * str_lower(string *src)</div><div class="ttdef"><b>Definition:</b> strlib.c:199</div></div>
+<div class="ttc" id="astructstring_html"><div class="ttname"><a href="structstring.html">string</a></div><div class="ttdef"><b>Definition:</b> strlib.h:14</div></div>
+<div class="ttc" id="astrlib_8h_html_adc6384378a32f1dc4c38433010b8e5d2"><div class="ttname"><a href="strlib_8h.html#adc6384378a32f1dc4c38433010b8e5d2">decodeString</a></div><div class="ttdeci">string * decodeString(string *str)</div><div class="ttdef"><b>Definition:</b> strlib.c:13</div></div>
+<div class="ttc" id="astrlib_8h_html_a5f7ca8bf8a55e587615357e574e94832"><div class="ttname"><a href="strlib_8h.html#a5f7ca8bf8a55e587615357e574e94832">get_char_str</a></div><div class="ttdeci">char * get_char_str(string *str)</div><div class="ttdef"><b>Definition:</b> strlib.c:169</div></div>
+<div class="ttc" id="astructstring_html_a7360b55975153b822efc5217b7734e6a"><div class="ttname"><a href="structstring.html#a7360b55975153b822efc5217b7734e6a">string::len</a></div><div class="ttdeci">size_t len</div><div class="ttdef"><b>Definition:</b> strlib.h:15</div></div>
+<div class="ttc" id="astrlib_8h_html_adaf7921c8c14ecd87e941c4b71b70dac"><div class="ttname"><a href="strlib_8h.html#adaf7921c8c14ecd87e941c4b71b70dac">print_string</a></div><div class="ttdeci">void print_string(string *str)</div><div class="ttdef"><b>Definition:</b> strlib.c:105</div></div>
+<div class="ttc" id="astrlib_8h_html_ab16c5fa6d33f0ffe0d0ae51b73f8d8c8"><div class="ttname"><a href="strlib_8h.html#ab16c5fa6d33f0ffe0d0ae51b73f8d8c8">str_cmp</a></div><div class="ttdeci">int str_cmp(string *str1, string *str2)</div><div class="ttdef"><b>Definition:</b> strlib.c:181</div></div>
+<div class="ttc" id="astrlib_8h_html_a6d71a368e3ca5be66f239b6daae663e1"><div class="ttname"><a href="strlib_8h.html#a6d71a368e3ca5be66f239b6daae663e1">get_length</a></div><div class="ttdeci">size_t get_length(string *str)</div><div class="ttdef"><b>Definition:</b> strlib.c:157</div></div>
+<div class="ttc" id="astrlib_8h_html_a531528eaa7276490632a44a0358a57db"><div class="ttname"><a href="strlib_8h.html#a531528eaa7276490632a44a0358a57db">cpy_str</a></div><div class="ttdeci">string * cpy_str(const char *src, size_t len)</div><div class="ttdef"><b>Definition:</b> strlib.c:120</div></div>
+<div class="ttc" id="astrlib_8h_html_a3857d1f186d6b4f22e9e598ea77de663"><div class="ttname"><a href="strlib_8h.html#a3857d1f186d6b4f22e9e598ea77de663">char_cmp</a></div><div class="ttdeci">int char_cmp(char *str1, char *str2, size_t len1, size_t len2)</div><div class="ttdef"><b>Definition:</b> strlib.c:217</div></div>
+<div class="ttc" id="astrlib_8h_html_ae988132fd8cdb8fc75ef5a2c639e41dc"><div class="ttname"><a href="strlib_8h.html#ae988132fd8cdb8fc75ef5a2c639e41dc">free_str</a></div><div class="ttdeci">void free_str(string *str)</div><div class="ttdef"><b>Definition:</b> strlib.c:144</div></div>
+<div class="ttc" id="astrlib_8h_html_a145fa85a0df6c9eaff5fd37d8ce505ad"><div class="ttname"><a href="strlib_8h.html#a145fa85a0df6c9eaff5fd37d8ce505ad">_new_string</a></div><div class="ttdeci">string * _new_string()</div><div class="ttdef"><b>Definition:</b> strlib.c:82</div></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="astrlib_8h_html_afcca4cee18a312639416055cd773b430"><div class="ttname"><a href="strlib_8h.html#afcca4cee18a312639416055cd773b430">str_cat</a></div><div class="ttdeci">string * str_cat(string *dest, const char *src, size_t len)</div><div class="ttdef"><b>Definition:</b> strlib.c:52</div></div>
+<div class="ttc" id="astructstring_html_ab50d783982593ef993ea0b68f7ad8b80"><div class="ttname"><a href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">string::str</a></div><div class="ttdeci">char * str</div><div class="ttdef"><b>Definition:</b> strlib.h:16</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Erzeugt von &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

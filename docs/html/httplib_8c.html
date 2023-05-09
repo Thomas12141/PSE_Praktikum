@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PSE Webserver: httplib.c-Dateireferenz</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">PSE Webserver
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Erzeugt von Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Suchen');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Suchen');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Funktionen</a>  </div>
+  <div class="headertitle">
+<div class="title">httplib.c-Dateireferenz</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="httplib_8h_source.html">httplib.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="filelib_8h_source.html">filelib.h</a>&quot;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Funktionen</h2></td></tr>
+<tr class="memitem:ac62e51d3517e857ba737b4c7e36fd866"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#ac62e51d3517e857ba737b4c7e36fd866">sanitizeRequestedResource</a> (<a class="el" href="structhttp__request.html">http_request</a> *request)</td></tr>
+<tr class="separator:ac62e51d3517e857ba737b4c7e36fd866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeea1a85d3f6601a501c3d5764b440459"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhttp__request.html">http_request</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#aeea1a85d3f6601a501c3d5764b440459">getRequestStruct</a> (<a class="el" href="structstring.html">string</a> *request_string)</td></tr>
+<tr class="separator:aeea1a85d3f6601a501c3d5764b440459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1af724cb6c917ad68c6b45558bdc7c25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstring.html">string</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#a1af724cb6c917ad68c6b45558bdc7c25">getResponseString</a> (<a class="el" href="structhttp__response.html">http_response</a> *response)</td></tr>
+<tr class="separator:a1af724cb6c917ad68c6b45558bdc7c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a280ac7b9c2842917cd830745595f5142"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#a280ac7b9c2842917cd830745595f5142">freeRequestStruct</a> (<a class="el" href="structhttp__request.html">http_request</a> *req)</td></tr>
+<tr class="separator:a280ac7b9c2842917cd830745595f5142"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f73a64a7bf28a74281262cb42dc3b91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structstring.html">string</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#a2f73a64a7bf28a74281262cb42dc3b91">getContentType</a> (<a class="el" href="structstring.html">string</a> *fileType)</td></tr>
+<tr class="separator:a2f73a64a7bf28a74281262cb42dc3b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53973b80f4ac377b1f970cb4b138c40e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhttp__response.html">http_response</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="httplib_8c.html#a53973b80f4ac377b1f970cb4b138c40e">getShortResponse</a> (char *statusCode, char *message)</td></tr>
+<tr class="separator:a53973b80f4ac377b1f970cb4b138c40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Dokumentation der Funktionen</h2>
+<a id="a280ac7b9c2842917cd830745595f5142"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a280ac7b9c2842917cd830745595f5142">&#9670;&nbsp;</a></span>freeRequestStruct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void freeRequestStruct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhttp__request.html">http_request</a> *&#160;</td>
+          <td class="paramname"><em>req</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gibt den Speicher eines <a class="el" href="structhttp__request.html" title="Diese Struktur enthält alle nötigen Eigenschaften einer http_request.">http_request</a> struct frei.</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">req</td><td>Der freizugebende <a class="el" href="structhttp__request.html" title="Diese Struktur enthält alle nötigen Eigenschaften einer http_request.">http_request</a> struct. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2f73a64a7bf28a74281262cb42dc3b91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f73a64a7bf28a74281262cb42dc3b91">&#9670;&nbsp;</a></span>getContentType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structstring.html">string</a>* getContentType </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structstring.html">string</a> *&#160;</td>
+          <td class="paramname"><em>fileType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fileType</td><td>Die Dateiendung ohne Punkt als string*. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Rückgabe</dt><dd>Den contentType als string*. </dd></dl>
+
+</div>
+</div>
+<a id="aeea1a85d3f6601a501c3d5764b440459"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeea1a85d3f6601a501c3d5764b440459">&#9670;&nbsp;</a></span>getRequestStruct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhttp__request.html">http_request</a>* getRequestStruct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structstring.html">string</a> *&#160;</td>
+          <td class="paramname"><em>request_string</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Übersetzt einen request_string der Form String* in ein request der Form <a class="el" href="structhttp__request.html" title="Diese Struktur enthält alle nötigen Eigenschaften einer http_request.">http_request</a> struct.</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">request_string</td><td>Der zu übersetzende String*. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Rückgabe</dt><dd>Ein <a class="el" href="structhttp__request.html" title="Diese Struktur enthält alle nötigen Eigenschaften einer http_request.">http_request</a> struct mit den Attributen method, resource_path und protocol. </dd></dl>
+
+</div>
+</div>
+<a id="a1af724cb6c917ad68c6b45558bdc7c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1af724cb6c917ad68c6b45558bdc7c25">&#9670;&nbsp;</a></span>getResponseString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structstring.html">string</a>* getResponseString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhttp__response.html">http_response</a> *&#160;</td>
+          <td class="paramname"><em>response</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gibt die http-response als String* zurück.</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">response</td><td>http-response der Form struct <a class="el" href="structhttp__response.html">http_response</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Rückgabe</dt><dd>http-response der Form String*. </dd></dl>
+
+</div>
+</div>
+<a id="a53973b80f4ac377b1f970cb4b138c40e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53973b80f4ac377b1f970cb4b138c40e">&#9670;&nbsp;</a></span>getShortResponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhttp__response.html">http_response</a>* getShortResponse </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>statusCode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>message</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Konstruiert die Statusmeldungen in Form eines <a class="el" href="structhttp__response.html">http_response</a> structs.</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">statusCode</td><td>Der zu verwendende Statuscode. </td></tr>
+    <tr><td class="paramname">message</td><td>Die dazugehörige Status-message. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Rückgabe</dt><dd>Der <a class="el" href="structhttp__response.html">http_response</a> struct. </dd></dl>
+
+</div>
+</div>
+<a id="ac62e51d3517e857ba737b4c7e36fd866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac62e51d3517e857ba737b4c7e36fd866">&#9670;&nbsp;</a></span>sanitizeRequestedResource()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sanitizeRequestedResource </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhttp__request.html">http_request</a> *&#160;</td>
+          <td class="paramname"><em>request</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet. Wenn der Dateipfad nicht auf "/" endet, wird er ohne Änderung zurückgegeben.</p>
+<dl class="params"><dt>Parameter</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resource_path</td><td>Dateipfad, an den index.html angehängt wird. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Rückgabe</dt><dd>Dateipfad mit index.html. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Erzeugt von &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

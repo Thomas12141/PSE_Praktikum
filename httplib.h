@@ -17,28 +17,39 @@
 #include "config.h"
 #include "http_status.h"
 
+/**
+ * @struct http_request
+ * @brief Diese Struktur enthält alle nötigen Eigenschaften einer http_request.
+ */
 struct http_request {
-    string* method; // z. B. GET
-    string* resource_path; // z. B. /index.html
-    string* protocol; // HTTP Version z. B. HTTP/1.1
-    string* hostname; //z. B. Host: localhost
+    string* method; /**< Die HTTP-Methode.*/
+    string* resource_path; /**< Der Dateipfad der angeforderten Ressource.*/
+    string* protocol; /**< Die HTTP-Version.*/
+    string* hostname; /**< Hier wird angegeben, ob auf die interne oder externe Seite zugegriffen werden soll.*/
 };
 typedef struct http_request http_request;
 
+/**
+ * @struct http_response_header
+ * @brief Diese Struktur enthält alle nötigen Eigenschaften eines http_response_header.
+ */
 struct http_response_header {
-
-    string* protocol; //HTTP Version z. B. HTTP/1.1
-    string* status_code; // 3-stellige Ganzzahl zur kurzen Beschreibung des Zustandes
-    string* reason_phrase; // Beschreibung des Zustandes in Textform
-    unsigned long content_length;  // Länge des Inhalts
-    string* content_type;   // Art des Inhalts
-    int isAuthenticationRequired;
+    string* protocol; /**< Die HTTP-Version.*/
+    string* status_code; /**< 3-stellige Ganzzahl zur kurzen Beschreibung des Zustandes.*/
+    string* reason_phrase; /**< Beschreibung des Zustandes in Textform.*/
+    unsigned long content_length;  /**< Länge des Inhalts.*/
+    string* content_type;   /**< Art des Inhalts.*/
+    int isAuthenticationRequired; /**< Wahrheitswert, ob eine Authentifikation durchgeführt werden muss.*/
 };
 typedef struct http_response_header http_response_header;
 
+/**
+ * @struct http_response
+ * @brief Diese Struktur enthält alle nötigen Eigenschaften einer http_response.
+ */
 struct http_response {
-    http_response_header* header;
-    string* http_body;
+    http_response_header* header; /**< Der Response-Header*/
+    string* http_body; /**< Der Response-Body.*/
 };
 typedef struct http_response http_response;
 
