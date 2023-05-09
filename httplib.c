@@ -225,6 +225,9 @@ http_response* getShortResponse(char* statusCode, char* message) {
 
     if(char_cmp(statusCode, "401", 3, 3)) {
         header->isAuthenticationRequired = 1;
+        free_str(response->http_body);
+        response->http_body = cpy_str("Authentification Required", 25);
+
     }
 
     return response;
