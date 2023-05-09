@@ -7,6 +7,7 @@
 /**
  * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " ". Das Nullterminierungszeichen wird aus dem Pfad entfernt.
  *
+ * @author Matteo Illing
  * @param str String, in dem die Zeichen ersetzt werden sollen.
  * @return string* Der String mit dekodierten Sonderzeichen.
  */
@@ -44,6 +45,7 @@ string* decodeString(string* str) {
 /**
  * Hängt einen String* src mit der Länge len an einen bestehenden String* dest an.
  *
+ * @author Jeremy Beltran
  * @param dest An diesen String* wird angehängt.
  * @param src Dieser String wird an dest angehängt.
  * @param len Die Länge von src.
@@ -193,6 +195,7 @@ int str_cmp(string* str1, string* str2) {
 /**
  * Wandelt alle Großbuchstaben eines string* in Kleinbuchstaben um.
  *
+ * @author Jeremy Beltran
  * @param src Der String*.
  * @return Der modifizierte String* in lowercase.
  */
@@ -210,6 +213,7 @@ string* str_lower(string* src){
 /**
  * Vergleicht zwei Objekte des Typs char*, indem die Länge und der Inhalt verglichen wird.
  *
+ * @author Jeremy Beltran
  * @param str1 Ein char*.
  * @param str2 Ein char*.
  * @return 1, wenn die Strings gleich sind und 0 wenn sie ungleich sind.

@@ -8,6 +8,7 @@
  * Ließt den Inhalt einer Datei filepath ein und gibt diesen als string* zurück.
  * Der Inhalt wird in char* buffer eingelesen und dann mit cpy_str in ein String* umgewandelt.
  *
+ * @author Matteo Illing
  * @param filepath Der Dateipfad.
  * @return string* Dateiinhalt.
  */
@@ -41,6 +42,7 @@ string* readFile(char* filepath) {
 /**
  * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
  *
+ * @author Matteo Illing
  * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
  * @return Der Dateipfad als char*.
  */
@@ -68,6 +70,7 @@ char* getFilePath(http_request* request) {
 /**
  * Ermittelt den fileType (Dateiendung) einer Datei.
  *
+ * @author Simon Lammers
  * @param resource_path Der Dateipfad der betroffenen Datei als char*.
  * @param len Die Länge des Dateipfads.
  * @return Den fileType ohne Punkt als string*.
@@ -100,6 +103,7 @@ string* getFiletype (char* resource_path, int len) {
  * Gibt den Docroot-Pfad abhängig vom Hostnamen als String* zurück.
  * Wenn der Hostname nicht "intern" oder "extern" entspricht, wird der Default-Dateipfad verwendet.
  *
+ * @author Jeremy Beltran
  * @param hostname Der Hostname als string*.
  * @return Der Docroot-Pfad als string*.
  */

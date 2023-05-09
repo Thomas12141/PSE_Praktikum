@@ -228,6 +228,7 @@ static void main_loop() {
  * Verarbeitet den übergebenen request-String* struct und gibt eine entsprechende http_response* als string* struct zurück.
  * Wenn die http_request ungültig ist, besteht die http_response aus, den Fehlern entsprechenden, Statusmeldungen.
  *
+ * @author Matteo Illing
  * @param request Der http_request struct.
  * @return Der http_response struct.
  */

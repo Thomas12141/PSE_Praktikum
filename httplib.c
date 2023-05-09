@@ -9,6 +9,7 @@
  * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
  * Wenn der Dateipfad nicht auf "/" endet, wird er ohne Änderung zurückgegeben.
  *
+ * @author Matteo Illing
  * @param resource_path Dateipfad, an den index.html angehängt wird.
  * @return Dateipfad mit index.html.
  */
@@ -37,6 +38,7 @@ void sanitizeRequestedResource(http_request* request) {
 /**
  * Übersetzt einen request_string der Form String* in ein request der Form http_request struct.
  *
+ * @author Jeremy Beltran
  * @param request_string Der zu übersetzende String*.
  * @return Ein http_request struct mit den Attributen method, resource_path und protocol.
  */
@@ -117,6 +119,7 @@ http_request* getRequestStruct(string* request_string){
 /**
  * Gibt die http-response als String* zurück.
  *
+ * @author Matteo Illing
  * @param response http-response der Form struct http_response.
  * @return http-response der Form String*.
  */
@@ -164,6 +167,7 @@ string* getResponseString(http_response* response) {
 /**
  * Gibt den Speicher eines http_request struct frei.
  *
+ * @author Matteo Illing
  * @param req Der freizugebende http_request struct.
  */
 void freeRequestStruct(http_request* req) {
@@ -178,6 +182,7 @@ void freeRequestStruct(http_request* req) {
 /**
  * Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).
  *
+ * @author Simon Lammers
  * @param fileType Die Dateiendung ohne Punkt als string*.
  * @return Den contentType als string*.
  */
@@ -205,6 +210,7 @@ string* getContentType(string* fileType){
 /**
  * Konstruiert die Statusmeldungen in Form eines http_response structs.
  *
+ * @author Matteo Illing
  * @param statusCode Der zu verwendende Statuscode.
  * @param message Die dazugehörige Status-message.
  * @return Der http_response struct.

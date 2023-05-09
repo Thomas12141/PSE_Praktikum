@@ -9,6 +9,7 @@
  * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
  * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp() verglichen.
  *
+ * @author Matteo Illing
  * @param filepath Der zu überprüfende Dateipfad.
  * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
  */
@@ -23,6 +24,7 @@ int isFileInsideDocroot(char* filepath, string* hostname) {
 /**
  * Überprüft, ob die Datei gelesen werden kann, indem versucht wird mit access (Typ R_OK) auf die Datei zuzugreifen.
  *
+ * @author Matteo Illing
  * @param filepath Der Dateipfad der zu überprüfenden Datei.
  * @return 1, wenn auf die Datei zugegriffen werden kann, 0 wenn nicht.
  */
@@ -37,6 +39,7 @@ int isFileAccessible(char* filepath) {
 /**
  * Überprüft, ob eine Datei existiert, indem versucht wird mit access (Typ F_OK) auf die Datei zuzugreifen.
  *
+ * @author Matteo Illing
  * @param filepath Der Dateipfad der zu überprüfenden Datei.
  * @return 1, wenn die Datei existiert, 0 wenn nicht.
  */
@@ -51,6 +54,7 @@ int isFileExistent(char* filepath) {
 /**
  * Überprüft, ob eine HTTP Methode in Form eines String* die GET Methode ist, indem die übergebene Methode mit "GET" verglichen wird.
  *
+ * @author Jeremy Beltran
  * @param method Die zu verifizierende HTTP-Methode.
  * @return 1, wenn die Methode "GET" ist, 0 wenn nicht.
  */
@@ -69,6 +73,7 @@ int isMethodValid(string* method) {
 /**
  * Überprüft, ob das HTTP Protokoll einer request HTTP-Version 1.1 entspricht.
  *
+ * @author Simon Lammers
  * @param protocol Das zu überprüfende Protokoll des Typs string*.
  * @return 1, wenn das Protokoll der Version 1.1 entspricht, 0 wenn nicht.
  */
@@ -87,6 +92,7 @@ int isProtocolValid(string* protocol) {
 /**
  * Prüft, ob der Hostname intern ist und eine Authentifizierung benötigt wird.
  *
+ * @author Simon Lammers
  * @param hostname ein String*
  * @return 1, wenn eine Authentifizierung benötigt wird, 0 wenn nicht.
  */

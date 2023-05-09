@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.17"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>PSE Webserver: Datenstruktur-Elemente</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -19,8 +19,8 @@
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
+ <tr id="projectrow">
+  <td id="projectalign">
    <div id="projectname">PSE Webserver
    </div>
   </td>
@@ -29,21 +29,22 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Erzeugt von Doxygen 1.8.17 -->
+<!-- Erzeugt von Doxygen 1.9.6 -->
 <script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-var searchBox = new SearchBox("searchBox", "search",false,'Suchen');
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
 /* @license-end */
 </script>
 <script type="text/javascript" src="menudata.js"></script>
 <script type="text/javascript" src="menu.js"></script>
 <script type="text/javascript">
-/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 $(function() {
   initMenu('',true,false,'search.php','Suchen');
   $(document).ready(function() { init_search(); });
 });
-/* @license-end */</script>
+/* @license-end */
+</script>
 <div id="main-nav"></div>
 </div><!-- top -->
 <!-- window showing the filter options -->
@@ -55,60 +56,38 @@ $(function() {
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Lade ...</div>
+<div class="SRStatus" id="Searching">Suche ...</div>
+<div class="SRStatus" id="NoMatches">Keine Treffer</div>
+</div>
+</div>
+</div>
 </div>
 
 <div class="contents">
 <div class="textblock">Hier folgt die Aufzählung aller Strukturen und Varianten mit Verweisen auf die zugehörigen Elemente:</div><ul>
-<li>content_length
-: <a class="el" href="structhttp__response__header.html#a792422aeb44d89128fad4d8f23713835">http_response_header</a>
-</li>
-<li>content_type
-: <a class="el" href="structhttp__response__header.html#aafedf2890cd84785099fb665775f0501">http_response_header</a>
-</li>
-<li>header
-: <a class="el" href="structhttp__response.html#abf28dc58cc700b17a36f4d171828e11a">http_response</a>
-</li>
-<li>hostname
-: <a class="el" href="structhttp__request.html#a8ccf4b9bc48ceb12c9cce4e00ac0688f">http_request</a>
-</li>
-<li>http_body
-: <a class="el" href="structhttp__response.html#aea7f4790bd3db6596f3b760a80e2c432">http_response</a>
-</li>
-<li>isAuthenticationRequired
-: <a class="el" href="structhttp__response__header.html#a382a66831b3850f0398eb45ac47db1d2">http_response_header</a>
-</li>
-<li>len
-: <a class="el" href="structstring.html#a7360b55975153b822efc5217b7734e6a">string</a>
-</li>
-<li>method
-: <a class="el" href="structhttp__request.html#a594173f80b9975fd3ba5394b63ebc509">http_request</a>
-</li>
-<li>protocol
-: <a class="el" href="structhttp__request.html#ab53e38b280863e87a7a64526faacb4c9">http_request</a>
-, <a class="el" href="structhttp__response__header.html#ab53e38b280863e87a7a64526faacb4c9">http_response_header</a>
-</li>
-<li>reason_phrase
-: <a class="el" href="structhttp__response__header.html#aab93fef9495fce777027ff5faadb605e">http_response_header</a>
-</li>
-<li>resource_path
-: <a class="el" href="structhttp__request.html#ae27afe17e92bc120962406d9686b3b9e">http_request</a>
-</li>
-<li>status_code
-: <a class="el" href="structhttp__response__header.html#a4ab3494e35566729a673fa1bdfca3669">http_response_header</a>
-</li>
-<li>str
-: <a class="el" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">string</a>
-</li>
+<li>content_length&#160;:&#160;<a class="el" href="structhttp__response__header.html#a792422aeb44d89128fad4d8f23713835">http_response_header</a></li>
+<li>content_type&#160;:&#160;<a class="el" href="structhttp__response__header.html#aafedf2890cd84785099fb665775f0501">http_response_header</a></li>
+<li>header&#160;:&#160;<a class="el" href="structhttp__response.html#abf28dc58cc700b17a36f4d171828e11a">http_response</a></li>
+<li>hostname&#160;:&#160;<a class="el" href="structhttp__request.html#a8ccf4b9bc48ceb12c9cce4e00ac0688f">http_request</a></li>
+<li>http_body&#160;:&#160;<a class="el" href="structhttp__response.html#aea7f4790bd3db6596f3b760a80e2c432">http_response</a></li>
+<li>isAuthenticationRequired&#160;:&#160;<a class="el" href="structhttp__response__header.html#a382a66831b3850f0398eb45ac47db1d2">http_response_header</a></li>
+<li>len&#160;:&#160;<a class="el" href="structstring.html#a7360b55975153b822efc5217b7734e6a">string</a></li>
+<li>method&#160;:&#160;<a class="el" href="structhttp__request.html#a594173f80b9975fd3ba5394b63ebc509">http_request</a></li>
+<li>protocol&#160;:&#160;<a class="el" href="structhttp__request.html#ab53e38b280863e87a7a64526faacb4c9">http_request</a>, <a class="el" href="structhttp__response__header.html#ab53e38b280863e87a7a64526faacb4c9">http_response_header</a></li>
+<li>reason_phrase&#160;:&#160;<a class="el" href="structhttp__response__header.html#aab93fef9495fce777027ff5faadb605e">http_response_header</a></li>
+<li>resource_path&#160;:&#160;<a class="el" href="structhttp__request.html#ae27afe17e92bc120962406d9686b3b9e">http_request</a></li>
+<li>status_code&#160;:&#160;<a class="el" href="structhttp__response__header.html#a4ab3494e35566729a673fa1bdfca3669">http_response_header</a></li>
+<li>str&#160;:&#160;<a class="el" href="structstring.html#ab50d783982593ef993ea0b68f7ad8b80">string</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Erzeugt von &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.17
+Erzeugt von&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
 </small></address>
 </body>
 </html>
