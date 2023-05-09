@@ -5,10 +5,10 @@
 #include "strlib.h"
 
 /**
- * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " "
+ * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " ".
  *
- * @param str String, in dem die Zeichen ersetzt werden sollen
- * @return string* Der String mit dekodierten Sonderzeichen
+ * @param str String, in dem die Zeichen ersetzt werden sollen.
+ * @return string* Der String mit dekodierten Sonderzeichen.
  */
 string* decodeString(string* str) {
     int hexCharCounter = 0;
@@ -37,10 +37,10 @@ string* decodeString(string* str) {
 /**
  * Hängt einen String* src mit der Länge len an einen bestehenden String* dest an.
  *
- * @param dest An diesen String wird angehängt.
+ * @param dest An diesen String* wird angehängt.
  * @param src Dieser String wird an dest angehängt.
  * @param len Die Länge von src.
- * @return string* Die konkatenierten Strings dest und src.
+ * @return Die konkatenierten Strings dest und src als String*.
  */
 string* str_cat(string* dest, const char* src, size_t len) {
 
@@ -130,9 +130,9 @@ string* cpy_str(const char* src, size_t len) {
 }
 
 /**
- * Gibt den String str frei.
+ * Gibt den String* str frei.
  *
- * @param str Der freizugebende String.
+ * @param str Der freizugebende String vom Typ String*.
  */
 void free_str(string* str) {
     assert(str != NULL);
@@ -144,7 +144,7 @@ void free_str(string* str) {
 /**
  * Gibt die Länge des Strings* str zurück.
  *
- * @param str Der String.
+ * @param str Der String*.
  * @return size_t Die Länge des Strings.
  */
 size_t get_length(string* str) {
@@ -184,10 +184,10 @@ int str_cmp(string* str1, string* str2) {
 }
 
 /**
- * Wandelt alle Grossbuchstaben eines string* in Kleinbuchstaben um.
+ * Wandelt alle Großbuchstaben eines string* in Kleinbuchstaben um.
  *
- * @param src Der String.
- * @return string* modifizierter string* in lowercase.
+ * @param src Der String*.
+ * @return Der modifizierte String* in lowercase.
  */
 string* str_lower(string* src){
 

@@ -114,6 +114,10 @@ static int setup_socket() {
     return sockfd;
 }
 
+/**
+ * Liest Daten von stdin ein, überführt sie in einen string* und übergibt sie an process().
+ * Wenn ein Fehler auftritt wird error() aufgerufen.
+ */
 static void main_loop_stdin() {
     void *const buffer = malloc(BUFFER_SIZE);
     if (buffer == NULL) {
@@ -220,6 +224,13 @@ static void main_loop() {
     }
 }
 
+/**
+ * Verarbeitet den übergebenen request-String* struct und gibt eine entsprechende http_response* als string* struct zurück.
+ * Wenn die http_request ungültig ist, besteht die http_response aus, den Fehlern entsprechenden, Statusmeldungen.
+ *
+ * @param request Der http_request struct.
+ * @return Der http_response struct.
+ */
 string* process(string* request) {
     http_request* requestStruct = getRequestStruct(request);
 

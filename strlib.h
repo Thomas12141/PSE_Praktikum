@@ -17,7 +17,6 @@ struct string {
 };
 typedef struct string string;
 
-
 string* str_cat(string* dest, const char* src, size_t len);
 string* _new_string();
 void print_string(string* str);

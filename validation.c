@@ -7,7 +7,7 @@
 
 /**
  * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
- * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp verglichen.
+ * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp() verglichen.
  *
  * @param filepath Der zu überprüfende Dateipfad.
  * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
@@ -69,7 +69,7 @@ int isMethodValid(string* method) {
 /**
  * Überprüft, ob das HTTP Protokoll einer request HTTP-Version 1.1 entspricht.
  *
- * @param protocol Das zun überprüfende Protokoll des Typs string*.
+ * @param protocol Das zu überprüfende Protokoll des Typs string*.
  * @return 1, wenn das Protokoll der Version 1.1 entspricht, 0 wenn nicht.
  */
 int isProtocolValid(string* protocol) {
@@ -85,7 +85,7 @@ int isProtocolValid(string* protocol) {
 }
 
 /**
- * Prüft ob der Hostname intern ist und eine Authentifizierung benötigt wird.
+ * Prüft, ob der Hostname intern ist und eine Authentifizierung benötigt wird.
  *
  * @param hostname ein String*
  * @return 1, wenn eine Authentifizierung benötigt wird, 0 wenn nicht.

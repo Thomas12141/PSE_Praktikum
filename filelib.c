@@ -96,6 +96,13 @@ string* getFiletype (char* resource_path, int len) {
     return content_type;
 }
 
+/**
+ * Gibt den Docroot-Pfad abhängig vom Hostnamen als String* zurück.
+ * Wenn der Hostname nicht "intern" oder "extern" entspricht, wird der Default-Dateipfad verwendet.
+ *
+ * @param hostname Der Hostname als string*.
+ * @return Der Docroot-Pfad als string*.
+ */
 string* getDocrootpath(string* hostname) {
     char pathBuffer [PATH_MAX+1];
     char* ptr = realpath(DOCROOT, pathBuffer);

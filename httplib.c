@@ -202,6 +202,13 @@ string* getContentType(string* fileType){
     return contentType;
 }
 
+/**
+ * Konstruiert die Statusmeldungen in Form eines http_response structs.
+ *
+ * @param statusCode Der zu verwendende Statuscode.
+ * @param message Die dazugehörige Status-message.
+ * @return Der http_response struct.
+ */
 http_response* getShortResponse(char* statusCode, char* message) {
     http_response* response = calloc(1, sizeof(http_response));
     http_response_header* header = calloc(1, sizeof(http_response_header));
