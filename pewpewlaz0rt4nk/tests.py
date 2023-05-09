@@ -161,7 +161,7 @@ cannon += Beam(
 
 cannon += Beam(
     description='Anfrage auf Ressource mit Terminierungszeichen im Dateinamen',
-    request='GET /image/tu%00x.jpg HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    request='GET /images/tu%00x.jpg HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
     response=['HTTP/1.1 200']
 )
 
@@ -175,6 +175,18 @@ cannon += Beam(
     description='Anfrage auf Debug-Seite mit / am Ende',
     request='GET /debug/ HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
     response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Anfrage mit Leerzeichen nach dem Host',
+    request='GET / HTTP/1.1\r\nHost: {host}:{port}      \r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage mit Leerzeichen nach dem Intern-Host',
+    request='GET /debug/ HTTP/1.1\r\nHost: intern      \r\n\r\n',
+    response=['HTTP/1.1 401']
 )
 # Pew pew!
 cannon.pewpew()

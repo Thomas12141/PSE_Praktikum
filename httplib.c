@@ -93,7 +93,7 @@ http_request* getRequestStruct(string* request_string){
                     i++;
                 }
                 hostnamePositions[0] = i;
-                while(request_string->str[i] != '\r' && request_string->str[i] != ':') {
+                while(request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ') {
                     i++;
                 }
                 hostnamePositions[1] = i;
