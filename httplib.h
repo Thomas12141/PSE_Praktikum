@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "strlib.h"
 #include "config.h"
+#include "http_status.h"
 
 struct http_request {
     string* method; // z. B. GET
@@ -45,4 +46,6 @@ http_request* getRequestStruct(string* str);
 string* getResponseString(http_response* response);
 void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
+http_response* getShortResponse(char* statusCode, char* message);
+void sanitizeRequestedResource(http_request* request);
 #endif //ECHO_SERVER_HTTPLIB_H

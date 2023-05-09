@@ -16,6 +16,9 @@ string* readFile(char* filepath) {
     unsigned long fileSize = 0;
 
     FILE* file = fopen(filepath, "rb");
+    if(file == NULL) {
+        return NULL;
+    }
 
     fseek(file, 0, SEEK_END); // seek to end of file
     fileSize = ftell(file);

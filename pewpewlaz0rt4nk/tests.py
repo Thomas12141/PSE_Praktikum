@@ -80,5 +80,71 @@ cannon += Beam(
     request='GET %2F HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
     response=['HTTP/1.1 200']
 )
+
+cannon += Beam(
+    description='Anfrage mit ../default (Parsen der Dateipfade testen)',
+    request='GET /../default/index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage mit ./index.html (Parsen der Dateipfade testen)',
+    request='GET /./index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage auf eine Resource außerhalb des Docroots',
+    request='GET /../../echo_server.c HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 403']
+)
+
+cannon += Beam(
+    description='Anfrage auf eine Resource außerhalb des Host-directories',
+    request='GET /../extern/index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 403']
+)
+
+cannon += Beam(
+    description='Anfrage auf eine nicht vorhandene Resource außerhalb des Host-directories',
+    request='GET /../extern/index.htm HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 403']
+)
+
+cannon += Beam(
+    description='Anfrage auf eine nicht vorhandene Resource',
+    request='GET /index.htm HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Anfrage auf Resource ohne Dateiendung',
+    request='GET /test HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage auf einen Ordner',
+    request='GET /../default HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage auf einen Ordner mit Slash',
+    request='GET /../default/ HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Anfrage auf den intern-Host',
+    request='GET / HTTP/1.1\r\nHost: intern\r\n\r\n',
+    response=['HTTP/1.1 401']
+)
+
+cannon += Beam(
+    description='Anfrage auf den intern-Host mit Port',
+    request='GET / HTTP/1.1\r\nHost: intern:{port}\r\n\r\n',
+    response=['HTTP/1.1 401']
+)
 # Pew pew!
 cannon.pewpew()

@@ -3,6 +3,7 @@
 //
 
 #include "httplib.h"
+#include "filelib.h"
 
 /**
  * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
@@ -11,14 +12,26 @@
  * @param resource_path Dateipfad, an den index.html angehängt wird.
  * @return Dateipfad mit index.html.
  */
-string* sanitizeRequestedResource(string* resource_path) {
-    resource_path = decodeString(resource_path);
+void sanitizeRequestedResource(http_request* request) {
+    request->resource_path = decodeString(request->resource_path);
 
-    if(resource_path->str[resource_path->len - 1] == '/') {
-        resource_path = str_cat(resource_path, "index.html", 10);
+    string* docrootPath = getDocrootpath(request->hostname);
+    char* filepathBuffer = calloc(PATH_MAX, 1);
+    string* absoluteResourcePath = str_cat(docrootPath, request->resource_path->str, request->resource_path->len);
+    char* filepath = calloc(absoluteResourcePath->len+1, 1);
+    memcpy(filepath, absoluteResourcePath->str, absoluteResourcePath->len);
+    realpath(filepath, filepathBuffer);
+
+    string* fileTest = readFile(filepathBuffer);
+    if(fileTest) {
+        if(fileTest->len > 0 && fileTest->str[0] == '\0') {
+            request->resource_path = str_cat(request->resource_path, "/index.html", 11);
+        }
     }
 
-    return resource_path;
+    free(fileTest);
+    free(filepathBuffer);
+    free(filepath);
 }
 
 /**
@@ -44,7 +57,7 @@ http_request* getRequestStruct(string* request_string){
                 argumentCount++;
             }
 
-            if (argumentCount == 3 || request_string->str[i+1] == '\r') {
+            if (argumentCount == 3 || request_string->str[i+1] == '\r' || request_string->str[i+1] == '\n') {
                 break;
             }
         }
@@ -65,8 +78,7 @@ http_request* getRequestStruct(string* request_string){
     }
 
     request->method = cpy_str(request_string->str, method_size);
-    string* requestedResource = sanitizeRequestedResource(cpy_str(request_string->str + endpositionen[0] + 2, resource_size));
-    request->resource_path = requestedResource;
+    request->resource_path = cpy_str(request_string->str + endpositionen[0] + 2, resource_size);
     request->protocol = cpy_str(request_string->str + endpositionen[1] + 2, protocol_size);
 
     string* hostnameString = cpy_str("host:", 5);
@@ -142,6 +154,7 @@ string* getResponseString(http_response* response) {
     free_str(response->header->status_code);
     free_str(response->header->protocol);
     free_str(response->header->content_type);
+    free(response);
 
     return responseStr;
 }
@@ -187,4 +200,26 @@ string* getContentType(string* fileType){
 
     free_str(fileType);
     return contentType;
+}
+
+http_response* getShortResponse(char* statusCode, char* message) {
+    http_response* response = calloc(1, sizeof(http_response));
+    http_response_header* header = calloc(1, sizeof(http_response_header));
+    response->header = header;
+    header->content_type = cpy_str("text/plain", 10);
+    header->protocol = cpy_str("HTTP/1.1", 8);
+
+    header->status_code = cpy_str(statusCode, 3);
+    header->reason_phrase = cpy_str(message, strlen(message));
+    response->http_body = cpy_str(statusCode, strlen(statusCode));
+    response->http_body = str_cat(response->http_body, " - ", 3);
+    response->http_body = str_cat(response->http_body, message, strlen(message));
+    header->content_length = response->http_body->len;
+
+    if(char_cmp(statusCode, "401", 3, 3)) {
+        header->isAuthenticationRequired = 1;
+    }
+
+    return response;
+
 }
