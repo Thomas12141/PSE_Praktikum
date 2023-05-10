@@ -24,6 +24,9 @@ string* readFile(char* filepath) {
     fseek(file, 0, SEEK_END); // seek to end of file
     fileSize = ftell(file);
     rewind(file);
+    if(fileSize > BUFFER_SIZE) {
+        return NULL;
+    }
 
     buffer = calloc(fileSize, 1);
     if(buffer == NULL) {

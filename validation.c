@@ -16,6 +16,11 @@
 int isFileInsideDocroot(char* filepath, string* hostname) {
     string* docrootPathString = getDocrootpath(hostname);
 
+    if(strlen(filepath) < docrootPathString->len) {
+        free_str(docrootPathString);
+        return 0;
+    }
+
     int res = memcmp(filepath, docrootPathString->str, docrootPathString->len);
     free_str(docrootPathString);
     return res == 0;
