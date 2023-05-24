@@ -7,7 +7,6 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "DEBUG")
 endif ()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
 
 add_executable(pse_webserver echo_server.c httplib.c httplib.h validation.c validation.h strlib.c strlib.h config.h http_status.h filelib.c filelib.h)
 set_property(TARGET pse_webserver PROPERTY C_STANDARD 11)
