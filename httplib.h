@@ -26,6 +26,7 @@ struct http_request {
     string* resource_path; /**< Der Dateipfad der angeforderten Ressource.*/
     string* protocol; /**< Die HTTP-Version.*/
     string* hostname; /**< Hier wird angegeben, ob auf die interne oder externe Seite zugegriffen werden soll.*/
+    string* authorization; /**< Wenn es keine Autorisierung gibt wird der Wert auf NULL gesetzt, wenn ja, dann wird dort als string username und passwort gesetzt*/
 };
 typedef struct http_request http_request;
 

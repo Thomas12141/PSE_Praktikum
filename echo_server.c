@@ -246,6 +246,7 @@ string* process(string* request) {
     }
 
     if(isAuthenticationRequired(requestStruct->hostname)) {
+
         freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("401", HTTP_401_MESSAGE));
     }
