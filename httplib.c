@@ -143,7 +143,7 @@ http_request* getRequestStruct(string* request_string){
 
     free_str(hostnameString);
 
-    string* authorizationString=getAthorizationString(request_string);
+    request->authorization=getAthorizationString(request_string);
     return request;
 }
 
@@ -208,6 +208,8 @@ void freeRequestStruct(http_request* req) {
     free_str(req->method);
     if(req->hostname != NULL)
         free_str(req->hostname);
+    if(req->authorization != NULL)
+        free_str(req->authorization);
     free(req);
 }
 

@@ -21,4 +21,5 @@ int isFileAccessible(char* filepath);
 int isMethodValid(string* method);
 int isProtocolValid(string* protocol);
 int isAuthenticationRequired(string* hostname);
+int isPasswordUsernameRight(http_request * request);
 #endif //PSE_WEBSERVER_VALIDATION_H

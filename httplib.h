@@ -60,4 +60,5 @@ void freeRequestStruct(http_request* req);
 string* getContentType(string* fileType);
 http_response* getShortResponse(char* statusCode, char* message);
 void sanitizeRequestedResource(http_request* request);
+string* getAthorizationString(string* request_string);
 #endif //ECHO_SERVER_HTTPLIB_H

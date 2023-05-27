@@ -112,3 +112,22 @@ int isAuthenticationRequired(string* hostname) {
     free_str(tmpStr);
     return 0;
 }
+
+/**
+ * Prüft ob Der Username und Passwort richtig sind
+ *
+ * @author Thomas Fidorin
+ * @param request_string der request vom Server
+ * @return 1 für richtig, 0 für falsch
+ */
+int isPasswordUsernameRight(http_request * request){
+    string * filePath= cpy_str(getFilePath(request), strlen(getFilePath(request)));
+    str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
+    FILE *fptr;
+    fptr = fopen(filePath->str, "r");
+    char myString[2000];
+    fgets(myString, 2000, fptr);
+    free_str(filePath);
+    fclose(fptr);
+    return 1;
+}
