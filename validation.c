@@ -134,7 +134,11 @@ int isPasswordUsernameRight(http_request * request){
     free_str(raw);
     unsigned char hash[SHA_DIGEST_LENGTH];
     SHA1(password->str,password->len, hash);
-    password->str= base64_encode(hash, 20, &password->len);
+    string *hashedPasswort= calloc(sizeof(string), 1);
+    if(raw == NULL) {
+        exit(3);
+    }
+    hashedPasswort->str= base64_encode(hash, 20, &hashedPasswort->len);
     char *temp= getFilePath(request);
     string * filePath= cpy_str(temp, strlen(temp));
     free(temp);
@@ -144,8 +148,9 @@ int isPasswordUsernameRight(http_request * request){
     string* combined= cpy_str(username->str,username->len);
     free_str(username);
     str_cat(combined, ":{SHA}", strlen(":{SHA}"));
-    str_cat(combined, password->str, password->len);
+    str_cat(combined, hashedPasswort->str, hashedPasswort->len);
     free_str(password);
+    free_str(hashedPasswort);
     char pointer;
     do{
         pointer= fgetc(fptr);
@@ -165,6 +170,7 @@ int isPasswordUsernameRight(http_request * request){
             pointer=fgetc(fptr);
         }
     } while (pointer!=EOF);
+
     free_str(combined);
     free_str(filePath);
     fclose(fptr);
