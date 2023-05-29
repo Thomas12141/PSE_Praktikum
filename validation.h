@@ -14,6 +14,9 @@
 #include "strlib.h"
 #include "config.h"
 #include "filelib.h"
+#include "base64.h"
+#include <openssl/sha.h>
+
 
 int isFileExistent(char* filepath);
 int isFileInsideDocroot(char* filepath, string* hostname);
