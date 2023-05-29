@@ -36,6 +36,36 @@ void sanitizeRequestedResource(http_request* request) {
 }
 
 /**
+ * Schpeichert den Athorization Header, wenn der gibt, wenn nicht wird auf Null gesetzt
+ *
+ * @author Thomas Fidorin
+ * @param request_string der request vom Server
+ * @return Der Athorization Header oder NULL, wenn den nicht gibt
+ */
+string* getAthorizationString(string* request_string){
+    string* authorizationString = cpy_str("Authorization: Basic ", strlen("Authorization: Basic "));
+    for(int i = 0; i< request_string->len; i++){
+        int j;
+        for (j = 0; j < authorizationString->len; ++j) {
+            if(authorizationString->str[j]!=request_string->str[i]){
+                i-=j;
+                break;
+            } else{i++;}
+        }
+        if(j==authorizationString->len){
+            int count=0;
+            while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
+                count++;
+            }
+            str_cat(authorizationString, &request_string->str[i], count);
+            return authorizationString;
+        }
+    }
+    free_str(authorizationString);
+    return NULL;
+}
+
+/**
  * Übersetzt einen request_string der Form String* in ein request der Form http_request struct.
  *
  * @author Jeremy Beltran
@@ -113,8 +143,10 @@ http_request* getRequestStruct(string* request_string){
 
     free_str(hostnameString);
 
+    string* authorizationString=getAthorizationString(request_string);
     return request;
 }
+
 
 /**
  * Gibt die http-response als String* zurück.
