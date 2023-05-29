@@ -161,7 +161,9 @@ int isPasswordUsernameRight(http_request * request){
                 break;
             }
         }
-        while (fgetc(fptr)!='\n'&&fgetc(fptr)!=EOF);
+        while (pointer!='\n'&&pointer!=EOF){
+            pointer=fgetc(fptr);
+        }
     } while (pointer!=EOF);
     free_str(combined);
     free_str(filePath);
