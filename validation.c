@@ -5,6 +5,7 @@
 #include "validation.h"
 #include "httplib.h"
 
+
 /**
  * Überprüft, ob ein Dateipfad im Dateiverzeichnis ist.
  * Das existierende Dateiverzeichnis wird mit cpy_str() in einen String* überführt und dann mit memcmp() verglichen.
@@ -110,5 +111,55 @@ int isAuthenticationRequired(string* hostname) {
     }
 
     free_str(tmpStr);
+    return 0;
+}
+
+/**
+ * Prüft ob Der Username und Passwort richtig sind
+ *
+ * @author Thomas Fidorin
+ * @param request_string der request vom Server
+ * @return 1 für richtig, 0 für falsch
+ */
+int isPasswordUsernameRight(http_request * request){
+    string *raw=_new_string();
+    raw->str =base64_decode(request->credentials->str, request->credentials->len, &raw->len);
+    int positionColon=0;
+    while (raw->str[positionColon] != ':'){positionColon++;}
+    string *username= cpy_str(raw->str, positionColon);
+    string *password= cpy_str(&raw->str[positionColon+1], raw->len-positionColon-1);
+    free_str(raw);
+    unsigned char hash[SHA_DIGEST_LENGTH];
+    SHA1(password->str,password->len, hash);
+    password->str= base64_encode(hash, 20, &password->len);
+
+    string * filePath= cpy_str(getFilePath(request), strlen(getFilePath(request)));
+    str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
+    FILE *fptr;
+    fptr = fopen(filePath->str, "r");
+    string* combined= cpy_str(username->str,username->len);
+    free_str(username);
+    str_cat(combined, ":{SHA}", strlen(":{SHA}"));
+    str_cat(combined, password->str, password->len);
+    free_str(password);
+    char pointer;
+    do{
+        pointer= fgetc(fptr);
+        for (int i = 0; i < combined->len; ++i) {
+            if (i==combined->len-1&&combined->str[i]==pointer){
+                free_str(combined);
+                free_str(filePath);
+                fclose(fptr);
+                return 1;
+            }else if(combined->str[i]==pointer){
+                pointer= fgetc(fptr);
+            } else{
+                break;
+            }
+        }
+        while (fgetc(fptr)!='/n'&&fgetc(fptr)!=EOF);
+    } while (pointer!=EOF);
+    free_str(filePath);
+    fclose(fptr);
     return 0;
 }

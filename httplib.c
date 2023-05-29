@@ -36,13 +36,13 @@ void sanitizeRequestedResource(http_request* request) {
 }
 
 /**
- * Schpeichert den Athorization Header, wenn der gibt, wenn nicht wird auf Null gesetzt
+ * Schpeichert die Credentials, wenn die gibt, wenn nicht wird auf Null gesetzt
  *
  * @author Thomas Fidorin
  * @param request_string der request vom Server
- * @return Der Athorization Header oder NULL, wenn den nicht gibt
+ * @return Die Credentials oder NULL, wenn den nicht gibt
  */
-string* getAthorizationString(string* request_string){
+string* getCredentialsString(string* request_string){
     string* authorizationString = cpy_str("Authorization: Basic ", strlen("Authorization: Basic "));
     for(int i = 0; i< request_string->len; i++){
         int j;
@@ -57,8 +57,9 @@ string* getAthorizationString(string* request_string){
             while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
                 count++;
             }
-            str_cat(authorizationString, &request_string->str[i], count);
-            return authorizationString;
+            free_str(authorizationString);
+            string* credentials = cpy_str(&request_string->str[i], count);
+            return credentials;
         }
     }
     free_str(authorizationString);
@@ -143,7 +144,7 @@ http_request* getRequestStruct(string* request_string){
 
     free_str(hostnameString);
 
-    string* authorizationString=getAthorizationString(request_string);
+    request->credentials=getCredentialsString(request_string);
     return request;
 }
 
@@ -208,6 +209,8 @@ void freeRequestStruct(http_request* req) {
     free_str(req->method);
     if(req->hostname != NULL)
         free_str(req->hostname);
+    if(req->credentials != NULL)
+        free_str(req->credentials);
     free(req);
 }
 
