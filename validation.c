@@ -122,7 +122,10 @@ int isAuthenticationRequired(string* hostname) {
  * @return 1 für richtig, 0 für falsch
  */
 int isPasswordUsernameRight(http_request * request){
-    string *raw=_new_string();
+    string *raw= calloc(sizeof(string), 1);
+    if(raw == NULL) {
+        exit(3);
+    }
     raw->str =base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
     while (raw->str[positionColon] != ':'){positionColon++;}
@@ -132,8 +135,9 @@ int isPasswordUsernameRight(http_request * request){
     unsigned char hash[SHA_DIGEST_LENGTH];
     SHA1(password->str,password->len, hash);
     password->str= base64_encode(hash, 20, &password->len);
-
-    string * filePath= cpy_str(getFilePath(request), strlen(getFilePath(request)));
+    char *temp= getFilePath(request);
+    string * filePath= cpy_str(temp, strlen(temp));
+    free(temp);
     str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
     FILE *fptr;
     fptr = fopen(filePath->str, "r");
@@ -159,6 +163,7 @@ int isPasswordUsernameRight(http_request * request){
         }
         while (fgetc(fptr)!='\n'&&fgetc(fptr)!=EOF);
     } while (pointer!=EOF);
+    free_str(combined);
     free_str(filePath);
     fclose(fptr);
     return 0;
