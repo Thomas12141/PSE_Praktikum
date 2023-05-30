@@ -57,14 +57,14 @@ string* str_cat(string* dest, const char* src, size_t len) {
     size_t total_len = dest->len + len;
 
     //Der reservierte Speicher von des->str wird auf die benötigte länge angepasst
-    dest->str = realloc(dest->str, total_len);
+    dest->str = realloc(dest->str, total_len+1);
     if( dest->str == NULL){
         exit(3);
     }
 
     //kopiert 'len' Bytes aus src auf die letzte Position von dest->str.
     memcpy(dest->str + dest->len,src, len);
-
+    dest->str[total_len]='\0';
     //Passt die länge von dest an
     dest->len = total_len;
 
