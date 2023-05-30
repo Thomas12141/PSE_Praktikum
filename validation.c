@@ -129,7 +129,7 @@ int isPasswordUsernameRight(http_request * request){
     if(raw == NULL) {
         exit(3);
     }
-    raw->str =base64_decode(request->credentials->str, request->credentials->len, &raw->len);
+    raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
     while (raw->str[positionColon] != ':'){positionColon++;}
     string *username= cpy_str(raw->str, positionColon);
