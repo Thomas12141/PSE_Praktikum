@@ -47,19 +47,23 @@ string* getCredentialsString(string* request_string){
     for(int i = 0; i< request_string->len; i++){
         int j;
         for (j = 0; j < authorizationString->len; ++j) {
-            if(authorizationString->str[j]!=request_string->str[i]){
-                i-=j;
-                break;
-            } else{i++;}
-        }
-        if(j==authorizationString->len){
-            int count=0;
-            while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
-                count++;
+            if(j==authorizationString->len-1&&i< request_string->len){
+                if(authorizationString->str[j]==request_string->str[i]){
+                    int count=0;
+                    while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
+                        count++;
+                    }
+                    free_str(authorizationString);
+                    string* credentials = cpy_str(&request_string->str[i], count);
+                    return credentials;
+                }
             }
-            free_str(authorizationString);
-            string* credentials = cpy_str(&request_string->str[i], count);
-            return credentials;
+            if(i< request_string->len){
+                if(authorizationString->str[j]!=request_string->str[i]){
+                    i-=j;
+                    break;
+                } else{i++;}
+            }
         }
     }
     free_str(authorizationString);
