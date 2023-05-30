@@ -105,7 +105,7 @@ int isProtocolValid(string* protocol) {
 int isAuthenticationRequired(http_request *httpRequest) {
     string* tmpStr = cpy_str("intern", 6);
 
-    if(str_cmp(httpRequest->hostname, tmpStr)&&httpRequest->credentials==NULL) {
+    if(str_cmp(httpRequest->hostname, tmpStr)) {
         free_str(tmpStr);
         return 1;
     }
@@ -131,6 +131,10 @@ int isPasswordUsernameRight(http_request * request){
     }
     raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
+    if(raw->str==NULL){
+        free(raw);
+        return 0;
+    }
     while (raw->str[positionColon] != ':'){positionColon++;}
     string *username= cpy_str(raw->str, positionColon);
     string *password= cpy_str(&raw->str[positionColon+1], raw->len-positionColon-1);

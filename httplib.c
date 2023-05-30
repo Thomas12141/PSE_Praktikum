@@ -54,7 +54,7 @@ string* getCredentialsString(string* request_string){
                         count++;
                     }
                     free_str(authorizationString);
-                    string* credentials = cpy_str(&request_string->str[i], count);
+                    string* credentials = cpy_str(&request_string->str[i+1], count-1);
                     return credentials;
                 }
             }
