@@ -245,7 +245,7 @@ string* process(string* request) {
         return getResponseString(getShortResponse("505", HTTP_505_MESSAGE));
     }
 
-    if(isAuthenticationRequired(requestStruct->hostname)&& !isPasswordUsernameRight(requestStruct)) {
+    if(isAuthenticationRequired(requestStruct)&& !isPasswordUsernameRight(requestStruct)) {
         freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("401", HTTP_401_MESSAGE));
     }

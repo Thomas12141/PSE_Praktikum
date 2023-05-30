@@ -179,7 +179,7 @@ string* getResponseString(http_response* response) {
     responseStr = str_cat(responseStr, contentSizeBuffer, strlen(contentSizeBuffer));
     if(response->header->isAuthenticationRequired) {
         responseStr = str_cat(responseStr, "\r\n", 2);
-        responseStr = str_cat(responseStr, "WWW-Authenticate: ", 18);
+        responseStr = str_cat(responseStr, "WWW-Authenticate: Basic realm=\"Login\"", strlen("WWW-Authenticate: Basic realm=\"Login\""));
     }
     responseStr = str_cat(responseStr, "\r\n\r\n", 4);
     responseStr = str_cat(responseStr, response->http_body->str, response->http_body->len);

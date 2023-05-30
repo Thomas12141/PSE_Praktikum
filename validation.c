@@ -102,10 +102,10 @@ int isProtocolValid(string* protocol) {
  * @param hostname ein String*
  * @return 1, wenn eine Authentifizierung benötigt wird, 0 wenn nicht.
  */
-int isAuthenticationRequired(string* hostname) {
+int isAuthenticationRequired(http_request *httpRequest) {
     string* tmpStr = cpy_str("intern", 6);
 
-    if(str_cmp(hostname, tmpStr)) {
+    if(str_cmp(httpRequest->hostname, tmpStr)&&httpRequest->credentials==NULL) {
         free_str(tmpStr);
         return 1;
     }
