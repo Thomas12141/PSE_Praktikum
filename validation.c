@@ -159,6 +159,9 @@ int isPasswordUsernameRight(http_request * request){
     free_str(password);
     free_str(hashedPasswort);
     char pointer;
+    if (fptr == NULL) {
+        return 0;
+    }
     do{
         pointer= fgetc(fptr);
         for (int i = 0; i < combined->len; ++i) {
