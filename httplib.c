@@ -230,7 +230,7 @@ string* getContentType(string* fileType){
                            "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
     char* contentTypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
-                              "application/msword", "text/html", "image/jepg", "image/jpg",
+                              "application/msword", "text/html", "image/jpeg", "image/jpg",
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
     for (int x = 0; x < 13; x++) {
