@@ -149,6 +149,8 @@ http_request* getRequestStruct(string* request_string){
     free_str(hostnameString);
 
     request->credentials=getCredentialsString(request_string);
+    request->length = request_string->len;
+    
     return request;
 }
 

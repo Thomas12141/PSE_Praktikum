@@ -119,7 +119,7 @@ static int setup_socket() {
  * Wenn ein Fehler auftritt wird error() aufgerufen.
  */
 static void main_loop_stdin() {
-    void *const buffer = malloc(BUFFER_SIZE);
+    void *const buffer = malloc(BUFFER_SIZE + 1);
     if (buffer == NULL) {
         error("ERROR at malloc.");
     }
@@ -127,8 +127,8 @@ static void main_loop_stdin() {
     /*
      * Lies die ankommenden Daten von dem Socket in das Array buffer.
      */
-    memset(buffer, 0, BUFFER_SIZE);
-    size_t length = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
+    memset(buffer, 0, BUFFER_SIZE + 1);
+    size_t length = read(STDIN_FILENO, buffer, BUFFER_SIZE + 1);
     if (length < 0) {
         if (errno != EINTR) {
             error("ERROR reading from socket");
@@ -161,7 +161,7 @@ static void main_loop() {
     struct sockaddr_in cli_addr;
     socklen_t clilen = sizeof(cli_addr);
 
-    void *const buffer = malloc(BUFFER_SIZE);
+    void *const buffer = malloc(BUFFER_SIZE + 1);
     if (buffer == NULL) {
         error("ERROR at malloc.");
     }
@@ -189,8 +189,8 @@ static void main_loop() {
         /*
          * Lies die ankommenden Daten von dem Socket in das Array buffer.
          */
-        memset(buffer, 0, BUFFER_SIZE);
-        length = read(newsockfd, buffer, BUFFER_SIZE - 1);
+        memset(buffer, 0, BUFFER_SIZE + 1);
+        length = read(newsockfd, buffer, BUFFER_SIZE + 1);
         if (length < 0) {
             if (errno == EINTR) {
                 break;
@@ -249,6 +249,12 @@ string* process(string* request) {
         freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("401", HTTP_401_MESSAGE));
     }
+
+    if(requestStruct->length > BUFFER_SIZE) {
+        freeRequestStruct(requestStruct);
+        return getResponseString(getShortResponse("413", HTTP_413_MESSAGE));
+    }
+
 
     if(char_cmp(requestStruct->resource_path->str, "/debug", requestStruct->resource_path->len, 6)) {
         http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
