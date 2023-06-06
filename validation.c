@@ -117,7 +117,7 @@ int isAuthenticationRequired(http_request *httpRequest) {
 /**
  * Prüft ob Der Username und Passwort richtig sind
  *
- * @author Thomas Fidorin
+ * @author Thomas Fidorin & Djordy von Rönn
  * @param request_string der request vom Server
  * @return 1 für richtig, 0 für falsch
  */
@@ -146,9 +146,9 @@ int isPasswordUsernameRight(http_request * request){
         exit(3);
     }
     hashedPasswort->str= base64_encode(hash, 20, &hashedPasswort->len);
-    char *temp= getFilePath(request);
+    char pathBuffer [PATH_MAX+1];
+    char* temp = realpath(DOCROOT, pathBuffer);
     string * filePath= cpy_str(temp, strlen(temp));
-    free(temp);
     str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
     FILE *fptr;
     fptr = fopen(filePath->str, "r");

@@ -50,7 +50,7 @@ string* getCredentialsString(string* request_string){
             if(j==authorizationString->len-1&&i< request_string->len){
                 if(authorizationString->str[j]==request_string->str[i]){
                     int count=0;
-                    while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
+                    while(i+count<request_string->len&&request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
                         count++;
                     }
                     free_str(authorizationString);
