@@ -126,11 +126,11 @@ http_request* getRequestStruct(string* request_string){
             if(str_cmp(hostnameString, paramStr)) {
                 i+=hostnameString->len;
 
-                while(request_string->str[i] == ' ') {
+                while((i + 4 < request_string->len&&request_string->str[i] == ' ')) {
                     i++;
                 }
                 hostnamePositions[0] = i;
-                while(request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ') {
+                while((i + 4 < request_string->len&&request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ')) {
                     i++;
                 }
                 hostnamePositions[1] = i;
