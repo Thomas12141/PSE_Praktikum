@@ -25,6 +25,12 @@ string* readFile(char* filepath) {
     fileSize = ftell(file);
     rewind(file);
 
+    if(fileSize == 0xffffffffffffffff) {
+        fclose(file);
+        return NULL;
+    }
+
+
     buffer = calloc(fileSize, 1);
     if(buffer == NULL) {
         fclose(file);
