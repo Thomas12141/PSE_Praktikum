@@ -8,15 +8,21 @@
 /**
  * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
  * Wenn der Dateipfad nicht auf "/" endet, wird er ohne Änderung zurückgegeben.
+ * Falls die Datei nicht existiert, wird resourcePath auf Null gesetzt.
  *
- * @author Matteo Illing
+ * @author Matteo Illing, Thomas Fidorin
  * @param resource_path Dateipfad, an den index.html angehängt wird.
- * @return Dateipfad mit index.html.
+ * @return Dateipfad mit index.html. Null wenn der Pfad nicht existiert.
  */
 void sanitizeRequestedResource(http_request* request) {
     request->resource_path = decodeString(request->resource_path);
 
     string* absoluteResourcePath = getDocrootpath(request->hostname);
+    if(absoluteResourcePath==NULL){
+        free_str(request->resource_path);
+        request->resource_path=NULL;
+        return ;
+    }
     char* filepathBuffer = calloc(PATH_MAX, 1);
     absoluteResourcePath = str_cat(absoluteResourcePath, request->resource_path->str, request->resource_path->len);
     char* filepath = calloc(absoluteResourcePath->len+1, 1);
@@ -206,11 +212,13 @@ string* getResponseString(http_response* response) {
 /**
  * Gibt den Speicher eines http_request struct frei.
  *
- * @author Matteo Illing
+ * @author Matteo Illing, Thomas Fidorin
  * @param req Der freizugebende http_request struct.
  */
 void freeRequestStruct(http_request* req) {
-    free_str(req->resource_path);
+    if(req->resource_path!=NULL){
+        free_str(req->resource_path);
+    }
     free_str(req->protocol);
     free_str(req->method);
     if(req->hostname != NULL)
