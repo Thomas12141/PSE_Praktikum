@@ -122,7 +122,7 @@ int isAuthenticationRequired(http_request *httpRequest) {
  * @return 1 für richtig, 0 für falsch
  */
 int isPasswordUsernameRight(http_request * request){
-    if(request->credentials==NULL){
+    if(request->credentials==NULL || request->credentials->len == 0) {
         return 0;
     }
     string *raw= calloc(sizeof(string), 1);
