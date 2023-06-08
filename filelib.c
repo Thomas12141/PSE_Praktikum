@@ -30,12 +30,7 @@ string* readFile(char* filepath) {
         return NULL;
     }
 
-    if(fileSize > 0x20000000000) {
-        fclose(file);
-        return NULL;
-    }
-
-    if(ftell(file) == -1L) {
+    if(fileSize > 0x20000000000) { // 512 MB
         fclose(file);
         return NULL;
     }
