@@ -133,6 +133,7 @@ int isPasswordUsernameRight(http_request * request){
         if(!(request->credentials->str[i]==43||
                 (request->credentials->str[i]>47&&request->credentials->str[i]<58)||request->credentials->str[i]==92
                 ||(request->credentials->str[i]>64&&request->credentials->str[i]<91))){
+            free(raw);
             return 0;
         }
     }
@@ -159,6 +160,12 @@ int isPasswordUsernameRight(http_request * request){
     hashedPasswort->str= base64_encode(hash, 20, &hashedPasswort->len);
     char pathBuffer [PATH_MAX+1];
     char* temp = realpath(DOCROOT, pathBuffer);
+    if (temp == NULL) {
+        free_str(username);
+        free_str(password);
+        free_str(hashedPasswort);
+        return 0;
+    }
     string * filePath= cpy_str(temp, strlen(temp));
     str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
     FILE *fptr;
