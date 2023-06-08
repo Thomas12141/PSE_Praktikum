@@ -7,38 +7,23 @@
 /**
  * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " ". Das Nullterminierungszeichen wird aus dem Pfad entfernt.
  *
- * @author Matteo Illing & Djordy von Rönn
+ * @author Thomas Fidorin
  * @param str String, in dem die Zeichen ersetzt werden sollen.
  * @return string* Der String mit dekodierten Sonderzeichen.
  */
 string* decodeString(string* str) {
-    int hexCharCounter = 0;
-    int termSymbolCounter = 0;
-    for(int i = 0; i < str->len; i++) {
-        if(str->str[i] == '%' && i + 2 < str->len - 2 + 2) {
-            if(str->str[i+1] == '0' && str->str[i+2] == '0') {
-                termSymbolCounter++;
-                str->str[i] = str->str[i + 2*hexCharCounter + 3*termSymbolCounter];
-                str->len -= 3;
-                continue;
+    int i=0;
+    while (i<str->len){
+        if(str->str[i]=='%'){
+            int temp=str->str[i+1]*16+str->str[i+2];
+            for (int j = i; j < str->len-1; ++j) {
+                str->str[j]=str->str[j+1];
             }
-            char c[3] = {'\0'};
-            memcpy(&c, &(str->str[i])+1, 2);
-            long code = strtol(c, NULL, 16);
-            hexCharCounter++;
-            str->str[i] = (char) code;
-            str->len -= 2;
-        } else if(hexCharCounter > 0 || termSymbolCounter > 0) {
-            str->str[i] = str->str[i + 2*hexCharCounter + 3*termSymbolCounter];
+            str->str[i]=temp;
+            str->len-=2;
         }
+        i++;
     }
-    if(hexCharCounter > 0) {
-        str->str = realloc(str->str, str->len);
-        if( str->str == NULL){
-            exit(3);
-        }
-    }
-
     return str;
 }
 
