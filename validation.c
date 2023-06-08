@@ -145,7 +145,7 @@ int isPasswordUsernameRight(http_request * request){
     }
     while (positionColon<raw->len&&raw->str[positionColon] != ':'){positionColon++;}
     if(positionColon==raw->len){
-        free(raw);
+        free_str(raw); ////////////////////////// leak
         return 0;
     }
     string *username= cpy_str(raw->str, positionColon);
