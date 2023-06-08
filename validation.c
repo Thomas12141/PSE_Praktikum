@@ -129,6 +129,13 @@ int isPasswordUsernameRight(http_request * request){
     if(raw == NULL) {
         exit(3);
     }
+    for (int i = 0; i < request->credentials->len; ++i) {
+        if(!(request->credentials->str[i]==43||
+                (request->credentials->str[i]>47&&request->credentials->str[i]<58)||request->credentials->str[i]==92
+                ||(request->credentials->str[i]>64&&request->credentials->str[i]<91))){
+            return 0;
+        }
+    }
     raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
     if(raw->str==NULL){
