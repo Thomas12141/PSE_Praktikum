@@ -132,7 +132,7 @@ int isPasswordUsernameRight(http_request * request){
     for (int i = 0; i < request->credentials->len; ++i) {
         if(!(request->credentials->str[i]==43||
                 (request->credentials->str[i]>47&&request->credentials->str[i]<58)||request->credentials->str[i]==92
-                ||(request->credentials->str[i]>64&&request->credentials->str[i]<91))){
+                ||(request->credentials->str[i]>64&&request->credentials->str[i]<91) || (request->credentials->str[i]>96&&request->credentials->str[i]<123) || (request->credentials->str[i] == 61)) ){
             free(raw);
             return 0;
         }
