@@ -30,6 +30,15 @@ string* readFile(char* filepath) {
         return NULL;
     }
 
+    if(fileSize > 0x20000000000) {
+        fclose(file);
+        return NULL;
+    }
+
+    if(ftell(file) == -1L) {
+        fclose(file);
+        return NULL;
+    }
 
     buffer = calloc(fileSize, 1);
     if(buffer == NULL) {
