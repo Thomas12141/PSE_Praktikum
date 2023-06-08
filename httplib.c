@@ -12,7 +12,6 @@
  *
  * @author Matteo Illing, Thomas Fidorin
  * @param resource_path Dateipfad, an den index.html angehängt wird.
- * @return Dateipfad mit index.html. Null wenn der Pfad nicht existiert.
  */
 void sanitizeRequestedResource(http_request* request) {
     request->resource_path = decodeString(request->resource_path);

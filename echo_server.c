@@ -272,6 +272,10 @@ string* process(string* request) {
     }
 
     sanitizeRequestedResource(requestStruct);
+    if(requestStruct->resource_path==NULL){
+        freeRequestStruct(requestStruct);
+        return getResponseString(getShortResponse("404", HTTP_404_MESSAGE));
+    }
     char* secureFilepath = getFilePath(requestStruct);
 
     if(!secureFilepath || !isFileInsideDocroot(secureFilepath, requestStruct->hostname)) {
