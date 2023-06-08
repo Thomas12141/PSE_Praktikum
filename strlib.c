@@ -15,7 +15,19 @@ string* decodeString(string* str) {
     int i=0;
     while (i<str->len){
         if(str->str[i]=='%'){
-            int temp=str->str[i+1]*16+str->str[i+2];
+            int temp=0;
+            if(str->str[i+1]>47&&str->str[i+1]<58){
+                temp+=str->str[i+1]-48;
+                temp*=16;
+            }else if(str->str[i+1]>64&&str->str[i+1]<71){
+                temp+=str->str[i+1]-65;
+                temp*=16;
+            }
+            if(str->str[i+2]>47&&str->str[i+2]<58){
+                temp+=str->str[i+2]-48;
+            }else if(str->str[i+2]>64&&str->str[i+2]<71){
+                temp+=str->str[i+2]-65;
+            }
             for (int j = i; j < str->len-1; ++j) {
                 str->str[j]=str->str[j+1];
             }
