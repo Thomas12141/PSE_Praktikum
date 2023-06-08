@@ -14,7 +14,7 @@
 string* decodeString(string* str) {
     int i=0;
     while (i<str->len){
-        if(str->str[i]=='%'){
+        if(str->str[i]=='%'&&i+2<str->len){
             int temp=0;
             if(str->str[i+1]>47&&str->str[i+1]<58){
                 temp+=str->str[i+1]-48;
@@ -28,11 +28,15 @@ string* decodeString(string* str) {
             }else if(str->str[i+2]>64&&str->str[i+2]<71){
                 temp+=str->str[i+2]-65;
             }
-            for (int j = i; j < str->len-1; ++j) {
-                str->str[j]=str->str[j+1];
+            for (int j = 0; j < 2; ++j) {
+                for (int j = i; j < str->len-1; ++j) {
+                    str->str[j]=str->str[j+1];
+                }
             }
             str->str[i]=temp;
             str->len-=2;
+            str->str[str->len]='\0';
+            str->str=realloc(str->str,str->len);
         }
         i++;
     }
