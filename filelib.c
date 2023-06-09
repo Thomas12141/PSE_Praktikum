@@ -25,10 +25,6 @@ string* readFile(char* filepath) {
     fileSize = ftell(file);
     rewind(file);
 
-    if(fileSize == 0xffffffffffffffff) {
-        fclose(file);
-        return NULL;
-    }
 
     if(fileSize > 0x20000000000) { // 512 MB
         fclose(file);
@@ -137,4 +133,28 @@ string* getDocrootpath(string* hostname) {
     free_str(intern_str);
     free_str(extern_str);
     return docrootPathString;
+}
+
+/**
+ * Prüft ob die Datei größer als 512MB. Im Fall, dass die Datei nicht vorhanden, wird true zurückgegeben.
+ *
+ * @author Thomas Fidorin
+ * @param path Dateipfad
+ * @return 1 für richtig, 0 für falsch
+ */
+int ifFileTooBig(char * path){
+
+    FILE* file = fopen(path, "rb");
+    if(file == NULL) {
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_END);
+    unsigned long fileSize = ftell(file);
+    if(fileSize > 0x20000000000) { // 512 MB
+        fclose(file);
+        return 1;
+    }
+
+    return 0;
 }

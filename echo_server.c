@@ -284,6 +284,11 @@ string* process(string* request) {
         return getResponseString(getShortResponse("403", HTTP_403_MESSAGE));
     }
 
+    if(ifFileTooBig(secureFilepath)) {
+        freeRequestStruct(requestStruct);
+        return getResponseString(getShortResponse("413", HTTP_413_MESSAGE));
+    }
+
     if(!isFileExistent(secureFilepath)) {
         freeRequestStruct(requestStruct);
         free(secureFilepath);
