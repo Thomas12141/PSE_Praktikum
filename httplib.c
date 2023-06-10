@@ -30,7 +30,7 @@ void sanitizeRequestedResource(http_request* request) {
     realpath(filepath, filepathBuffer);
 
     string* fileTest = readFile(filepathBuffer);
-    if(fileTest == NULL || (fileTest->len > 0 && fileTest->str[0] == '\0')) {
+    if(fileTest == NULL) {
         request->resource_path = str_cat(request->resource_path, "/index.html", 11);
     }
 

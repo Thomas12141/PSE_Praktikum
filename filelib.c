@@ -2,6 +2,7 @@
 // Created by Matteo Illing on 08.05.23.
 //
 
+
 #include "filelib.h"
 
 /**
@@ -20,7 +21,10 @@ string* readFile(char* filepath) {
     if(file == NULL) {
         return NULL;
     }
-
+    struct stat sb;
+    if( stat( filepath, &sb) != -1&&S_ISREG( sb.st_mode ) == 0){
+        return NULL;
+    }
     fseek(file, 0, SEEK_END); // seek to end of file
     fileSize = ftell(file);
     rewind(file);
@@ -155,6 +159,6 @@ int ifFileTooBig(char * path){
         fclose(file);
         return 1;
     }
-
+    fclose(file);
     return 0;
 }
