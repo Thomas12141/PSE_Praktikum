@@ -12,44 +12,47 @@
  * @return string* Der String mit dekodierten Sonderzeichen.
  */
 string* decodeString(string* str) {
-    int i=0;
-    while (i<str->len){
-        if(str->str[i]=='%'&&i+2<str->len){
-            int temp=0;
-            if(str->str[i+1]>47&&str->str[i+1]<58){
-                temp+=str->str[i+1]-48;
-                temp*=16;
-            }else if(str->str[i+1]>97&&str->str[i+1]<103){
-                temp+=str->str[i+1]-87;
-                temp*=16;
-            }else if(str->str[i+1]>64&&str->str[i+1]<71){
-                temp+=str->str[i+1]-55;
-                temp*=16;
-            }else{
-                continue;
-            }
-            if(str->str[i+2]>47&&str->str[i+2]<58){
-                temp+=str->str[i+2]-48;
-            }else if(str->str[i+2]>64&&str->str[i+2]<71){
-                temp+=str->str[i+2]-55;
-            }else if(str->str[i+1]>97&&str->str[i+1]<103){
-                temp+=str->str[i+1]-87;
-            }else{
-                continue;
-            }
-            for (int k = 0; k < 2; ++k) {
-                for (int j = i; j < str->len-1; ++j) {
-                    str->str[j]=str->str[j+1];
+    int isItDone=0;
+    while (!isItDone){
+        isItDone=1;
+        int i=0;
+        while (i<str->len){
+            if(str->str[i]=='%'&&i+2<str->len){
+                int temp=0;
+                if(str->str[i+1]>49&&str->str[i+1]<58){
+                    temp+=str->str[i+1]-48;
+                }else if(str->str[i+1]>97&&str->str[i+1]<103){
+                    temp+=str->str[i+1]-87;
+                }else if(str->str[i+1]>64&&str->str[i+1]<71){
+                    temp+=str->str[i+1]-55;
                 }
+                temp*=16;
+                if(str->str[i+2]>47&&str->str[i+2]<58){
+                    temp+=str->str[i+2]-48;
+                }else if(str->str[i+2]>64&&str->str[i+2]<71){
+                    temp+=str->str[i+2]-55;
+                }else if(str->str[i+1]>97&&str->str[i+1]<103){
+                    temp+=str->str[i+1]-87;
+                }
+                if(temp<32||temp>255){
+                    i++;
+                    continue;
+                }
+                for (int k = 0; k < 2; ++k) {
+                    for (int j = i; j < str->len-1; ++j) {
+                        str->str[j]=str->str[j+1];
+                    }
+                }
+                isItDone=0;
+                str->str[i]=temp;
+                str->len-=2;
+                str->str[str->len]='\0';
+                str->str=realloc(str->str,str->len);
+            }else if(str->str[i]=='+'){
+                str->str[i]=' ';
             }
-            str->str[i]=temp;
-            str->len-=2;
-            str->str[str->len]='\0';
-            str->str=realloc(str->str,str->len);
-        }else if(str->str[i]=='+'){
-            str->str[i]=' ';
+            i++;
         }
-        i++;
     }
     return str;
 }
