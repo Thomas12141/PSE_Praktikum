@@ -50,7 +50,9 @@ $ python3 ./tests.py
 Additionally, you may run the afl fuzzer using these steps:
 
 ```bash
-
+# Run sudo apt-get install afl-clang in terminal
+# Go into the server directory
+# Run ./afl_run.sh
 ```
 
 ## Compatability Disclaimer
