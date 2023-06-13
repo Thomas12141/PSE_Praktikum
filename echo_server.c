@@ -240,6 +240,21 @@ string* process(string* request) {
         return getResponseString(getShortResponse("400", HTTP_400_MESSAGE));
     }
 
+    if(char_cmp(requestStruct->resource_path->str, "/debug", requestStruct->resource_path->len, 6)) {
+        http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
+        free_str(res->http_body);
+        res->http_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
+        res->http_body = str_cat(res->http_body, " ", 1);
+        res->http_body = str_cat(res->http_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
+        res->http_body = str_cat(res->http_body, " ", 1);
+        res->http_body = str_cat(res->http_body,requestStruct->protocol->str,requestStruct->protocol->len);
+        res->header->content_length = res->http_body->len;
+
+        freeRequestStruct(requestStruct);
+
+        return getResponseString(res);
+    }
+
     if(!isProtocolValid(requestStruct->protocol)) {
         freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("505", HTTP_505_MESSAGE));
@@ -256,20 +271,7 @@ string* process(string* request) {
     }
 
 
-    if(char_cmp(requestStruct->resource_path->str, "/debug", requestStruct->resource_path->len, 6)) {
-        http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
-        free_str(res->http_body);
-        res->http_body = cpy_str(requestStruct->method->str, requestStruct->method->len);
-        res->http_body = str_cat(res->http_body, " ", 1);
-        res->http_body = str_cat(res->http_body,requestStruct->resource_path->str,requestStruct->resource_path->len);
-        res->http_body = str_cat(res->http_body, " ", 1);
-        res->http_body = str_cat(res->http_body,requestStruct->protocol->str,requestStruct->protocol->len);
-        res->header->content_length = res->http_body->len;
 
-        freeRequestStruct(requestStruct);
-
-        return getResponseString(res);
-    }
 
     sanitizeRequestedResource(requestStruct);
     if(requestStruct->resource_path==NULL){
