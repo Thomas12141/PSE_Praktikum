@@ -196,7 +196,7 @@ int isPasswordUsernameRight(http_request * request){
         }
         while (pointer!='\n'&&pointer!=EOF){
             pointer=fgetc(fptr);
-        }
+        };
     } while (pointer!=EOF);
 
     free_str(combined);
