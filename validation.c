@@ -102,10 +102,10 @@ int isProtocolValid(string* protocol) {
  * @param hostname ein String*
  * @return 1, wenn eine Authentifizierung benötigt wird, 0 wenn nicht.
  */
-int isAuthenticationRequired(string* hostname) {
+int isAuthenticationRequired(http_request *httpRequest) {
     string* tmpStr = cpy_str("intern", 6);
 
-    if(str_cmp(hostname, tmpStr)) {
+    if(str_cmp(httpRequest->hostname, tmpStr)) {
         free_str(tmpStr);
         return 1;
     }
@@ -117,21 +117,37 @@ int isAuthenticationRequired(string* hostname) {
 /**
  * Prüft ob Der Username und Passwort richtig sind
  *
- * @author Thomas Fidorin
+ * @author Thomas Fidorin & Djordy von Rönn
  * @param request_string der request vom Server
  * @return 1 für richtig, 0 für falsch
  */
 int isPasswordUsernameRight(http_request * request){
-    if(request->credentials==NULL){
+    if(request->credentials==NULL || request->credentials->len == 0) {
         return 0;
     }
     string *raw= calloc(sizeof(string), 1);
     if(raw == NULL) {
         exit(3);
     }
-    raw->str =base64_decode(request->credentials->str, request->credentials->len, &raw->len);
+    for (int i = 0; i < request->credentials->len; ++i) {
+        if(!(request->credentials->str[i]==43||
+                (request->credentials->str[i]>47&&request->credentials->str[i]<58)||request->credentials->str[i]==92
+                ||(request->credentials->str[i]>64&&request->credentials->str[i]<91) || (request->credentials->str[i]>96&&request->credentials->str[i]<123) || (request->credentials->str[i] == 61)) ){
+            free(raw);
+            return 0;
+        }
+    }
+    raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
-    while (raw->str[positionColon] != ':'){positionColon++;}
+    if(raw->str==NULL){
+        free(raw);
+        return 0;
+    }
+    while (positionColon<raw->len&&raw->str[positionColon] != ':'){positionColon++;}
+    if(positionColon==raw->len){
+        free_str(raw);
+        return 0;
+    }
     string *username= cpy_str(raw->str, positionColon);
     string *password= cpy_str(&raw->str[positionColon+1], raw->len-positionColon-1);
     free_str(raw);
@@ -142,9 +158,15 @@ int isPasswordUsernameRight(http_request * request){
         exit(3);
     }
     hashedPasswort->str= base64_encode(hash, 20, &hashedPasswort->len);
-    char *temp= getFilePath(request);
+    char pathBuffer [PATH_MAX+1];
+    char* temp = realpath(DOCROOT, pathBuffer);
+    if (temp == NULL) {
+        free_str(username);
+        free_str(password);
+        free_str(hashedPasswort);
+        return 0;
+    }
     string * filePath= cpy_str(temp, strlen(temp));
-    free(temp);
     str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
     FILE *fptr;
     fptr = fopen(filePath->str, "r");
@@ -155,6 +177,9 @@ int isPasswordUsernameRight(http_request * request){
     free_str(password);
     free_str(hashedPasswort);
     char pointer;
+    if (fptr == NULL) {
+        return 0;
+    }
     do{
         pointer= fgetc(fptr);
         for (int i = 0; i < combined->len; ++i) {

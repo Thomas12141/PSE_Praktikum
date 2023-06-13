@@ -9,6 +9,7 @@
 #define HTTP_401_MESSAGE "Unauthorized"
 #define HTTP_404_MESSAGE "Not found"
 #define HTTP_403_MESSAGE "Forbidden"
+#define HTTP_413_MESSAGE "Request Entity Too Large"
 #define HTTP_501_MESSAGE "Not Implemented"
 #define HTTP_505_MESSAGE "HTTP Version Not Supported"
 #define HTTP_200_MESSAGE "OK"

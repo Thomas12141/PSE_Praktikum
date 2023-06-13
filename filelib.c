@@ -2,6 +2,7 @@
 // Created by Matteo Illing on 08.05.23.
 //
 
+
 #include "filelib.h"
 
 /**
@@ -20,16 +21,23 @@ string* readFile(char* filepath) {
     if(file == NULL) {
         return NULL;
     }
-
+    struct stat sb;
+    if( stat( filepath, &sb) != -1&&S_ISREG( sb.st_mode ) == 0){
+        return NULL;
+    }
     fseek(file, 0, SEEK_END); // seek to end of file
     fileSize = ftell(file);
     rewind(file);
-    if(fileSize > BUFFER_SIZE) {
+
+
+    if(fileSize > 0x20000000000) { // 512 MB
+        fclose(file);
         return NULL;
     }
 
     buffer = calloc(fileSize, 1);
     if(buffer == NULL) {
+        fclose(file);
         return NULL;
     }
 
@@ -105,14 +113,18 @@ string* getFiletype (char* resource_path, int len) {
 /**
  * Gibt den Docroot-Pfad abhängig vom Hostnamen als String* zurück.
  * Wenn der Hostname nicht "intern" oder "extern" entspricht, wird der Default-Dateipfad verwendet.
+ * Falls der Docroot nicht existiert, wird Null zurückgegeben.
  *
- * @author Jeremy Beltran
+ * @author Jeremy Beltran,Thomas Fidorin
  * @param hostname Der Hostname als string*.
- * @return Der Docroot-Pfad als string*.
+ * @return Der Docroot-Pfad als string*. Null, wenn der Docroot nicht existiert.
  */
 string* getDocrootpath(string* hostname) {
     char pathBuffer [PATH_MAX+1];
     char* ptr = realpath(DOCROOT, pathBuffer);
+    if(ptr==NULL){
+        return NULL;
+    }
     string* docrootPathString = str_cat(cpy_str(ptr, strlen(ptr)), "/", 1);
 
     string* intern_str = cpy_str("intern", 6);
@@ -125,4 +137,28 @@ string* getDocrootpath(string* hostname) {
     free_str(intern_str);
     free_str(extern_str);
     return docrootPathString;
+}
+
+/**
+ * Prüft ob die Datei größer als 512MB. Im Fall, dass die Datei nicht vorhanden, wird true zurückgegeben.
+ *
+ * @author Thomas Fidorin
+ * @param path Dateipfad
+ * @return 1 für richtig, 0 für falsch
+ */
+int ifFileTooBig(char * path){
+
+    FILE* file = fopen(path, "rb");
+    if(file == NULL) {
+        return 0;
+    }
+
+    fseek(file, 0, SEEK_END);
+    unsigned long fileSize = ftell(file);
+    if(fileSize > 0x20000000000) { // 512 MB
+        fclose(file);
+        return 1;
+    }
+    fclose(file);
+    return 0;
 }

@@ -28,6 +28,7 @@ struct http_request {
     string* hostname; /**< Hier wird angegeben, ob auf die interne oder externe Seite zugegriffen werden soll.*/
     string* credentials; /**< Wenn es keine credentials gibt wird der Wert auf NULL gesetzt, wenn ja, dann wird dort als string username und passwort gesetzt
  * mit ":" dazwischen*/
+    unsigned long length; /**< Die Länge des request buffers*/
 };
 typedef struct http_request http_request;
 

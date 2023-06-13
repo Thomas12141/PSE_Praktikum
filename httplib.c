@@ -8,15 +8,20 @@
 /**
  * Hängt die Datei index.html an den übergebenen Dateipfad an, wenn er auf ein "/" endet.
  * Wenn der Dateipfad nicht auf "/" endet, wird er ohne Änderung zurückgegeben.
+ * Falls die Datei nicht existiert, wird resourcePath auf Null gesetzt.
  *
- * @author Matteo Illing
+ * @author Matteo Illing, Thomas Fidorin
  * @param resource_path Dateipfad, an den index.html angehängt wird.
- * @return Dateipfad mit index.html.
  */
 void sanitizeRequestedResource(http_request* request) {
     request->resource_path = decodeString(request->resource_path);
 
     string* absoluteResourcePath = getDocrootpath(request->hostname);
+    if(absoluteResourcePath==NULL){
+        free_str(request->resource_path);
+        request->resource_path=NULL;
+        return ;
+    }
     char* filepathBuffer = calloc(PATH_MAX, 1);
     absoluteResourcePath = str_cat(absoluteResourcePath, request->resource_path->str, request->resource_path->len);
     char* filepath = calloc(absoluteResourcePath->len+1, 1);
@@ -25,7 +30,7 @@ void sanitizeRequestedResource(http_request* request) {
     realpath(filepath, filepathBuffer);
 
     string* fileTest = readFile(filepathBuffer);
-    if(fileTest == NULL || (fileTest->len > 0 && fileTest->str[0] == '\0')) {
+    if(fileTest == NULL) {
         request->resource_path = str_cat(request->resource_path, "/index.html", 11);
     }
 
@@ -47,19 +52,23 @@ string* getCredentialsString(string* request_string){
     for(int i = 0; i< request_string->len; i++){
         int j;
         for (j = 0; j < authorizationString->len; ++j) {
-            if(authorizationString->str[j]!=request_string->str[i]){
-                i-=j;
-                break;
-            } else{i++;}
-        }
-        if(j==authorizationString->len){
-            int count=0;
-            while(request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
-                count++;
+            if(j==authorizationString->len-1&&i< request_string->len){
+                if(authorizationString->str[j]==request_string->str[i]){
+                    int count=0;
+                    while(i+count<request_string->len&&request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
+                        count++;
+                    }
+                    free_str(authorizationString);
+                    string* credentials = cpy_str(&request_string->str[i+1], count-1);
+                    return credentials;
+                }
             }
-            free_str(authorizationString);
-            string* credentials = cpy_str(&request_string->str[i], count);
-            return credentials;
+            if(i< request_string->len){
+                if(authorizationString->str[j]!=request_string->str[i]){
+                    i-=j;
+                    break;
+                } else{i++;}
+            }
         }
     }
     free_str(authorizationString);
@@ -122,11 +131,11 @@ http_request* getRequestStruct(string* request_string){
             if(str_cmp(hostnameString, paramStr)) {
                 i+=hostnameString->len;
 
-                while(request_string->str[i] == ' ') {
+                while((i + 4 < request_string->len&&request_string->str[i] == ' ')) {
                     i++;
                 }
                 hostnamePositions[0] = i;
-                while(request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ') {
+                while((i + 4 < request_string->len&&request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ')) {
                     i++;
                 }
                 hostnamePositions[1] = i;
@@ -145,6 +154,8 @@ http_request* getRequestStruct(string* request_string){
     free_str(hostnameString);
 
     request->credentials=getCredentialsString(request_string);
+    request->length = request_string->len;
+    
     return request;
 }
 
@@ -179,7 +190,7 @@ string* getResponseString(http_response* response) {
     responseStr = str_cat(responseStr, contentSizeBuffer, strlen(contentSizeBuffer));
     if(response->header->isAuthenticationRequired) {
         responseStr = str_cat(responseStr, "\r\n", 2);
-        responseStr = str_cat(responseStr, "WWW-Authenticate: ", 18);
+        responseStr = str_cat(responseStr, "WWW-Authenticate: Basic realm=\"Login\"", strlen("WWW-Authenticate: Basic realm=\"Login\""));
     }
     responseStr = str_cat(responseStr, "\r\n\r\n", 4);
     responseStr = str_cat(responseStr, response->http_body->str, response->http_body->len);
@@ -200,11 +211,13 @@ string* getResponseString(http_response* response) {
 /**
  * Gibt den Speicher eines http_request struct frei.
  *
- * @author Matteo Illing
+ * @author Matteo Illing, Thomas Fidorin
  * @param req Der freizugebende http_request struct.
  */
 void freeRequestStruct(http_request* req) {
-    free_str(req->resource_path);
+    if(req->resource_path!=NULL){
+        free_str(req->resource_path);
+    }
     free_str(req->protocol);
     free_str(req->method);
     if(req->hostname != NULL)
@@ -226,7 +239,7 @@ string* getContentType(string* fileType){
                            "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
 
     char* contentTypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
-                              "application/msword", "text/html", "image/jepg", "image/jpg",
+                              "application/msword", "text/html", "image/jpeg", "image/jpg",
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
     for (int x = 0; x < 13; x++) {
