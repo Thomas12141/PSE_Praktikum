@@ -1,6 +1,3 @@
-//
-// Created by Matteo Illing on 20.04.23.
-//
 
 #include "validation.h"
 #include "httplib.h"
@@ -113,7 +110,27 @@ int isAuthenticationRequired(http_request *httpRequest) {
     free_str(tmpStr);
     return 0;
 }
-
+/**
+ * Prüft ob ein String Base64 kodiert
+ *
+ * @author Thomas Fidorin
+ * @param request_string der request vom Server
+ * @return 1 für richtig, 0 für falsch
+ */
+int istCredentialsNichtBase64Kodiert(http_request * request) {
+    for (int i = 0; i < request->credentials->len; ++i) {
+        if (!(request->credentials->str[i] == 43 ||
+              (request->credentials->str[i] > 47 && request->credentials->str[i] < 58) ||
+              request->credentials->str[i] == 92
+              || (request->credentials->str[i] > 64 && request->credentials->str[i] < 91) ||
+              (request->credentials->str[i] > 96
+               && request->credentials->str[i] < 123) ||
+              (request->credentials->str[i] == 61))) {
+            return 1;
+        }
+    }
+    return 0;
+}
 /**
  * Prüft ob Der Username und Passwort richtig sind
  *
@@ -129,13 +146,9 @@ int isPasswordUsernameRight(http_request * request){
     if(raw == NULL) {
         exit(3);
     }
-    for (int i = 0; i < request->credentials->len; ++i) {
-        if(!(request->credentials->str[i]==43||
-                (request->credentials->str[i]>47&&request->credentials->str[i]<58)||request->credentials->str[i]==92
-                ||(request->credentials->str[i]>64&&request->credentials->str[i]<91) || (request->credentials->str[i]>96&&request->credentials->str[i]<123) || (request->credentials->str[i] == 61)) ){
-            free(raw);
-            return 0;
-        }
+    if(istCredentialsNichtBase64Kodiert(request) ){
+        free(raw);
+        return 0;
     }
     raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon=0;
