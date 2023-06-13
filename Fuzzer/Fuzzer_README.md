@@ -1,13 +1,14 @@
-First, open a terminal in the direktory of the fuzzer. Enter into the terminal:
-~~~
-sudo bash -c 'echo core >/proc/sys/kernel/core_pattern'
-~~~
-Then open a new terminal and enter:
-~~~
-cd /sys/devices/system/cpu
-sudo bash -c 'echo performance | tee cpu*/cpufreq/scaling_governor'
-~~~
-Finally let fuzzer run with:
-~~~
-./afl_run.sh
-~~~
+# Running the fuzzer
+```bash
+# Navigate to fuzzer directory
+$ cd /path/to/pse-webserver/Fuzzer
+# Redirect core dumps
+$ sudo bash -c 'echo core >/proc/sys/kernel/core_pattern'
+# Disable cpu scaling
+$ cd /sys/devices/system/cpu
+$ sudo bash -c 'echo performance | tee cpu*/cpufreq/scaling_governor'
+# Navigate to fuzzer directory
+$ cd /path/to/pse-webserver/Fuzzer
+# Start the fuzzer
+$ sh ./afl_run.sh
+```
