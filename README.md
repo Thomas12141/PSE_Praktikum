@@ -7,8 +7,9 @@
 
 ## Installation
 Software Requirements:
+- [LLVM/Clang](https://clang.llvm.org/)
 - [CMake](https://cmake.org/)
-- GNU / [make](https://www.gnu.org/software/make/)
+- [GNU/make](https://www.gnu.org/software/make/)
 - [OpenSSL](https://www.openssl.org/)
 - [Git](https://git-scm.com/) (optional)
 
@@ -47,13 +48,8 @@ $ cd /path/to/pse-webserver/pewpewlaz0rt4nk
 # Run the tests
 $ python3 ./tests.py
 ```
-Additionally, you may run the afl fuzzer using these steps:
 
-```bash
-# Run sudo apt-get install afl-clang in terminal
-# Go into the server directory
-# Run ./afl_run.sh
-```
+Additionally, you may run the afl fuzzer according to this [README.md](./Fuzzer/README.md).
 
 ## Compatability Disclaimer
 The server is not intended to be compatible with Windows or MacOS!
