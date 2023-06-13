@@ -1,6 +1,3 @@
-//
-// Created by Matteo Illing on 20.04.23.
-//
 
 #include "validation.h"
 #include "httplib.h"
