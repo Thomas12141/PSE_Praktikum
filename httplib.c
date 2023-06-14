@@ -11,17 +11,18 @@
  * Falls die Datei nicht existiert, wird resourcePath auf Null gesetzt.
  *
  * @author Matteo Illing, Thomas Fidorin
- * @param resource_path Dateipfad, an den index.html angehängt wird.
+ * @param request Die HTTP Request
  */
 void sanitizeRequestedResource(http_request* request) {
     request->resource_path = decodeString(request->resource_path);
 
     string* absoluteResourcePath = getDocrootpath(request->hostname);
-    if(absoluteResourcePath==NULL){
+    if(absoluteResourcePath == NULL){
         free_str(request->resource_path);
-        request->resource_path=NULL;
-        return ;
+        request->resource_path = NULL;
+        return;
     }
+
     char* filepathBuffer = calloc(PATH_MAX, 1);
     absoluteResourcePath = str_cat(absoluteResourcePath, request->resource_path->str, request->resource_path->len);
     char* filepath = calloc(absoluteResourcePath->len+1, 1);
@@ -34,53 +35,58 @@ void sanitizeRequestedResource(http_request* request) {
         request->resource_path = str_cat(request->resource_path, "/index.html", 11);
     }
 
-    if(fileTest)
+    if(fileTest) {
         free_str(fileTest);
+    }
     free(filepathBuffer);
     free(filepath);
 }
 
 /**
- * Schpeichert die Credentials, wenn die gibt, wenn nicht wird auf Null gesetzt
+ * Entnimmt (wenn vorhanden) die Credentials auf dem Authorization Header.
  *
  * @author Thomas Fidorin
- * @param request_string der request vom Server
- * @return Die Credentials oder NULL, wenn den nicht gibt
+ * @param request_string Die HTTP Request, als String repräsentiert
+ * @return Die Credentials oder NULL
  */
-string* getCredentialsString(string* request_string){
+string* getCredentialsString(string* request_string) {
     string* authorizationString = cpy_str("Authorization: Basic ", strlen("Authorization: Basic "));
-    for(int i = 0; i< request_string->len; i++){
+
+    for(int i = 0; i < request_string->len; ++i){
         int j;
         for (j = 0; j < authorizationString->len; ++j) {
-            if(j==authorizationString->len-1&&i< request_string->len){
-                if(authorizationString->str[j]==request_string->str[i]){
-                    int count=0;
-                    while(i+count<request_string->len&&request_string->str[i+count] != '\r' && request_string->str[i+count] != '\n') {
-                        count++;
+            if(j == authorizationString->len - 1 && i < request_string->len) {
+                if(authorizationString->str[j] == request_string->str[i]) {
+                    int count = 0;
+                    while(i + count<request_string->len && request_string->str[i + count] != '\r' && request_string->str[i + count] != '\n') {
+                        ++count;
                     }
                     free_str(authorizationString);
-                    string* credentials = cpy_str(&request_string->str[i+1], count-1);
+                    string* credentials = cpy_str(&request_string->str[i + 1], count - 1);
                     return credentials;
                 }
             }
-            if(i< request_string->len){
-                if(authorizationString->str[j]!=request_string->str[i]){
-                    i-=j;
+            if(i < request_string->len){
+                if(authorizationString->str[j] != request_string->str[i]) {
+                    i -= j;
                     break;
-                } else{i++;}
+                } else{
+                    ++i;
+                }
             }
         }
     }
+
     free_str(authorizationString);
     return NULL;
 }
 
 /**
- * Übersetzt einen request_string der Form String* in ein request der Form http_request struct.
+ * Übersetzt einen request_string der Form string* in eine http_request struct Repräsentation.
  *
  * @author Jeremy Beltran
- * @param request_string Der zu übersetzende String*.
- * @return Ein http_request struct mit den Attributen method, resource_path und protocol.
+ * @param request_string Der zu übersetzende string pointer
+ * @return Ein http_request pointer oder NULL
  */
 http_request* getRequestStruct(string* request_string){
     http_request* request = calloc(sizeof(http_request), 1);
@@ -92,14 +98,14 @@ http_request* getRequestStruct(string* request_string){
     int endpositionen[3];
     int argumentCount = 0;
 
-    for (int i = 0; i < request_string->len; i++) {
-        if(i+1 < request_string->len) {
-            if (request_string->str[i+1] == ' ' || request_string->str[i+1] == '\r') {
+    for (int i = 0; i < request_string->len; ++i) {
+        if(i + 1 < request_string->len) {
+            if (request_string->str[i + 1] == ' ' || request_string->str[i + 1] == '\r') {
                 endpositionen[argumentCount] = i;
-                argumentCount++;
+                ++argumentCount;
             }
 
-            if (argumentCount == 3 || request_string->str[i+1] == '\r' || request_string->str[i+1] == '\n') {
+            if (argumentCount == 3 || request_string->str[i + 1] == '\r' || request_string->str[i + 1] == '\n') {
                 break;
             }
         }
@@ -125,18 +131,18 @@ http_request* getRequestStruct(string* request_string){
 
     string* hostnameString = cpy_str("host:", 5);
     int hostnamePositions[2];
-    for(int i = endpositionen[2]; i < request_string->len; i++) {
+    for(int i = endpositionen[2]; i < request_string->len; ++i) {
         if(i + 4 < request_string->len) {
             string* paramStr = str_lower(cpy_str(request_string->str + i, 5));
             if(str_cmp(hostnameString, paramStr)) {
-                i+=hostnameString->len;
+                i += hostnameString->len;
 
                 while((i + 4 < request_string->len&&request_string->str[i] == ' ')) {
-                    i++;
+                    ++i;
                 }
                 hostnamePositions[0] = i;
                 while((i + 4 < request_string->len&&request_string->str[i] != '\r' && request_string->str[i] != ':' && request_string->str[i] != ' ')) {
-                    i++;
+                    ++i;
                 }
                 hostnamePositions[1] = i;
                 request->hostname = cpy_str(request_string->str + hostnamePositions[0], hostnamePositions[1] - hostnamePositions[0]);
@@ -153,7 +159,7 @@ http_request* getRequestStruct(string* request_string){
 
     free_str(hostnameString);
 
-    request->credentials=getCredentialsString(request_string);
+    request->credentials = getCredentialsString(request_string);
     request->length = request_string->len;
     
     return request;
@@ -161,14 +167,14 @@ http_request* getRequestStruct(string* request_string){
 
 
 /**
- * Gibt die http-response als String* zurück.
+ * Übersetzt eine http_response in eine string* Repräsentation.
  *
  * @author Matteo Illing
  * @param response http-response der Form struct http_response.
  * @return http-response der Form String*.
  */
 string* getResponseString(http_response* response) {
-    //maximum value of ulong is 4294967295 -> has 10 digits
+    // maximum value of ulong is 4294967295 -> has 10 digits
     char* contentSizeBuffer = calloc(10, 1);
     if (contentSizeBuffer == NULL){
         exit(3);
@@ -215,7 +221,7 @@ string* getResponseString(http_response* response) {
  * @param req Der freizugebende http_request struct.
  */
 void freeRequestStruct(http_request* req) {
-    if(req->resource_path!=NULL){
+    if(req->resource_path != NULL){
         free_str(req->resource_path);
     }
     free_str(req->protocol);
@@ -232,7 +238,7 @@ void freeRequestStruct(http_request* req) {
  *
  * @author Simon Lammers
  * @param fileType Die Dateiendung ohne Punkt als string*.
- * @return Den contentType als string*.
+ * @return Den contentType als string* oder einen neuen string* falls der Typ nicht identifiziert werden konnte.
  */
 string* getContentType(string* fileType){
     char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
@@ -242,12 +248,12 @@ string* getContentType(string* fileType){
                               "application/msword", "text/html", "image/jpeg", "image/jpg",
                               "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
 
-    for (int x = 0; x < 13; x++) {
+    for (int x = 0; x < 13; ++x) {
         int type_length = strlen(filetypeArray[x]);
             if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
                 int contentType_length = strlen(contentTypeArray[x]);
                 free_str(fileType);
-                return cpy_str(contentTypeArray[x],contentType_length);
+                return cpy_str(contentTypeArray[x], contentType_length);
             }
     }
 
@@ -256,11 +262,11 @@ string* getContentType(string* fileType){
 }
 
 /**
- * Konstruiert die Statusmeldungen in Form eines http_response structs.
+ * Konstruiert die Statusmeldungen in Form einer http_response struct.
  *
  * @author Matteo Illing
- * @param statusCode Der zu verwendende Statuscode.
- * @param message Die dazugehörige Status-message.
+ * @param statusCode Der zu verwendende Statuscode. [Ein valider HTTP Status Code]
+ * @param message Die dazugehörige Status-message. [Eine valide HTTP Status Message]
  * @return Der http_response struct.
  */
 http_response* getShortResponse(char* statusCode, char* message) {
@@ -281,7 +287,6 @@ http_response* getShortResponse(char* statusCode, char* message) {
         header->isAuthenticationRequired = 1;
         free_str(response->http_body);
         response->http_body = cpy_str("Authentication Required", 23);
-
     }
 
     return response;
