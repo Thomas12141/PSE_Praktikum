@@ -1,17 +1,14 @@
-//
-// Created by Matteo Illing on 08.05.23.
-//
-
-
 #include "filelib.h"
 
 /**
  * Ließt den Inhalt einer Datei filepath ein und gibt diesen als string* zurück.
  * Der Inhalt wird in char* buffer eingelesen und dann mit cpy_str in ein String* umgewandelt.
+ * Bei Dateien großer als 512MB oder bei einem Lesenfehler oder bei einem Ordner wird NULL zurückgegeben.
+ * Diese String muss am Ende gefreit. Wenn es nicht NULL zurückgibt.
  *
- * @author Matteo Illing
+ * @author Matteo Illing, Thomas Fidorin
  * @param filepath Der Dateipfad.
- * @return string* Dateiinhalt.
+ * @return string* Dateiinhalt oder NULL, wenn die Datei zu groß oder nicht vorhanden.
  */
 string* readFile(char* filepath) {
     char* buffer;
@@ -52,6 +49,7 @@ string* readFile(char* filepath) {
 
 /**
  * Konstruiert den Dateipfad für das übergebene Objekt des Typs http_request*.
+ * Die zurückgegebene pointer muss am Ende gefreit werden.
  *
  * @author Matteo Illing
  * @param request Das http_request*-Objekt, für das der Dateipfad konstruiert werden soll.
@@ -79,12 +77,13 @@ char* getFilePath(http_request* request) {
 }
 
 /**
- * Ermittelt den fileType (Dateiendung) einer Datei.
+ * Ermittelt den fileType (Dateiendung) einer Datei. Wenn der nicht vorhanden ist, wird txt zurückgegeben.
+ * Der Pfad muss an Ende gefreit werden.
  *
  * @author Simon Lammers
  * @param resource_path Der Dateipfad der betroffenen Datei als char*.
  * @param len Die Länge des Dateipfads.
- * @return Den fileType ohne Punkt als string*.
+ * @return Den fileType ohne Punkt als string*. Wenn der nicht vorhanden ist, wird txt zurückgegeben.
  */
 string* getFiletype (char* resource_path, int len) {
 
@@ -114,6 +113,7 @@ string* getFiletype (char* resource_path, int len) {
  * Gibt den Docroot-Pfad abhängig vom Hostnamen als String* zurück.
  * Wenn der Hostname nicht "intern" oder "extern" entspricht, wird der Default-Dateipfad verwendet.
  * Falls der Docroot nicht existiert, wird Null zurückgegeben.
+ * Wenn die Rückgabe nicht NULL ist, muss der String später gefreit werden.
  *
  * @author Jeremy Beltran,Thomas Fidorin
  * @param hostname Der Hostname als string*.
@@ -140,7 +140,7 @@ string* getDocrootpath(string* hostname) {
 }
 
 /**
- * Prüft ob die Datei größer als 512MB. Im Fall, dass die Datei nicht vorhanden, wird true zurückgegeben.
+ * Prüft ob die Datei größer als 512MB. Im Fall, dass die Datei nicht vorhanden oder kleiner als 512MB ist, wird false zurückgegeben.
  *
  * @author Thomas Fidorin
  * @param path Dateipfad
