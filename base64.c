@@ -2,7 +2,11 @@
 
 
 
-
+/**
+ * Die Base64 Zeichen Tabelle.
+ *
+ * @author Sebastian Schinzel
+ */
 static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
                                 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
                                 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
@@ -14,6 +18,11 @@ static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
 static char *decoding_table = NULL;
 static int mod_table[] = {0, 2, 1};
 
+/**
+ * Bildet die Base64 Dekodierungstabelle. Am Ende muss die Tabelle gereit werden.
+ *
+ * @author Sebastian Schinzel
+ */
 void build_decoding_table1() {
 
     int i;
@@ -24,7 +33,17 @@ void build_decoding_table1() {
 }
 
 
-
+/**
+ * Die Methode encodiert eine Base64 Zeichenkette.
+ * Die Methode prüft nicht, ob die Zeichenkette wirklich Base64.
+ * Wenn die Methode eine nicht base64 Zeichenkette bekommt, kann es zu unerwatete Ergebnisse führen.
+ *
+ * @author Sebastian Schinzel
+ * @param data die Zeichekette, die encodiert werden sollte.
+ * @param input_length die Länge der Zeichekette, die encodiert werden sollte.
+ * @param output_length ein pointe auf die Länge der Zeichekette, die am Ende rauskommen sollte.
+ * @return ein Zeiger auf die encodierte Zeichenkette.
+ */
 char *base64_encode(const unsigned char *data,
                     size_t input_length,
                     size_t *output_length) {
@@ -56,7 +75,15 @@ char *base64_encode(const unsigned char *data,
     return encoded_data;
 }
 
-
+/**
+ * Die Methode decodiert eineZeichenkette zu Base64 Zeichenkette.
+ *
+ * @author Sebastian Schinzel
+ * @param data die Zeichekette, die decodiert werden sollte.
+ * @param input_length die Länge der Zeichekette, die decodiert werden sollte.
+ * @param output_length ein pointe auf die Länge der Zeichekette, die am Ende rauskommen sollte.
+ * @return ein Zeiger auf die decodierte Zeichenkette.
+ */
 unsigned char *base64_decode(const char *data,
                              size_t input_length,
                              size_t *output_length) {
@@ -94,7 +121,11 @@ unsigned char *base64_decode(const char *data,
     return decoded_data;
 }
 
-
+/**
+ * freit die base64 tabelle.
+ *
+ * @author Sebastian Schinzel
+ */
 void base64_cleanup() {
     free(decoding_table);
 }
