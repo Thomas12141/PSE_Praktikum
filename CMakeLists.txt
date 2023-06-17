@@ -15,4 +15,8 @@ install(TARGETS pse_webserver DESTINATION bin)
 set(OPENSSL_USE_STATIC_LIBS TRUE)
 find_package(OpenSSL REQUIRED)
 
-target_link_libraries(pse_webserver OpenSSL::Crypto)
+find_library(MAGIC_LIBRARY magic)
+
+set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+
+target_link_libraries(pse_webserver OpenSSL::Crypto ${MAGIC_LIBRARY})

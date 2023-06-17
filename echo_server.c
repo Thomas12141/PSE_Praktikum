@@ -319,7 +319,7 @@ string* process(string* request) {
     http_response* res = getShortResponse("200", HTTP_200_MESSAGE);
 
     string* filetype = getFiletype(secureFilepath, strlen(secureFilepath));
-    string* contenttype = getContentType(filetype);
+    string* contenttype = getContentType(secureFilepath);
     free(secureFilepath);
     freeRequestStruct(requestStruct);
 

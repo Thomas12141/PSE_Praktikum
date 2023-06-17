@@ -16,6 +16,7 @@
 #include "strlib.h"
 #include "config.h"
 #include "http_status.h"
+#include <magic.h>
 
 /**
  * @struct http_request
@@ -59,7 +60,7 @@ typedef struct http_response http_response;
 http_request* getRequestStruct(string* str);
 string* getResponseString(http_response* response);
 void freeRequestStruct(http_request* req);
-string* getContentType(string* fileType);
+string* getContentType(char* fileType);
 http_response* getShortResponse(char* statusCode, char* message);
 void sanitizeRequestedResource(http_request* request);
 string* getCredentialsString(string* request_string);
