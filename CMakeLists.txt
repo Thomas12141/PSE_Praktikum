@@ -17,6 +17,6 @@ find_package(OpenSSL REQUIRED)
 
 find_library(MAGIC_LIBRARY magic)
 
-set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -g")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -g")
 
 target_link_libraries(pse_webserver OpenSSL::Crypto ${MAGIC_LIBRARY})
