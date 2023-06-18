@@ -239,7 +239,6 @@ string* getContentType(char* fileType){
     magic_t magic;
     magic = magic_open(MAGIC_MIME_TYPE);
     magic_load(magic, NULL);
-    magic_compile(magic, NULL);
     mime = magic_file(magic, fileType);
     string * contentType= cpy_str(mime, strlen(mime));
     magic_close(magic);
