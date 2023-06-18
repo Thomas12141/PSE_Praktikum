@@ -9,6 +9,7 @@
  *
  * @author Matteo Illing
  * @param filepath Der zu überprüfende Dateipfad.
+ * @param hostname Der Hostname im request-Header
  * @return 1, wenn der Dateipfad im Dateiverzeichnis ist, 0 wenn nicht.
  */
 int isFileInsideDocroot(char* filepath, string* hostname) {
@@ -110,11 +111,12 @@ int isAuthenticationRequired(http_request *httpRequest) {
     free_str(tmpStr);
     return 0;
 }
+
 /**
- * Prüft ob ein String Base64 kodiert
+ * Prüft, ob ein String Base64 kodiert ist.
  *
  * @author Thomas Fidorin
- * @param request_string der request vom Server
+ * @param request_string Der request vom Server
  * @return 1 für richtig, 0 für falsch
  */
 int istCredentialsNichtBase64Kodiert(http_request * request) {
@@ -131,46 +133,58 @@ int istCredentialsNichtBase64Kodiert(http_request * request) {
     }
     return 0;
 }
+
 /**
- * Prüft ob Der Username und Passwort richtig sind
+ * Prüft, ob Username und Passwort richtig sind.
  *
- * @author Thomas Fidorin & Djordy von Rönn
- * @param request_string der request vom Server
+ * @author Thomas Fidorin, Djordy von Rönn
+ * @param request_string Der request vom Server
  * @return 1 für richtig, 0 für falsch
  */
 int isPasswordUsernameRight(http_request * request){
-    if(request->credentials==NULL || request->credentials->len == 0) {
+    // Prüft, ob die credentials leer sind
+    if(request->credentials == NULL || request->credentials->len == 0) {
         return 0;
     }
-    string *raw= calloc(sizeof(string), 1);
+
+    string *raw = calloc(sizeof(string), 1);
     if(raw == NULL) {
         exit(3);
     }
-    if(istCredentialsNichtBase64Kodiert(request) ){
+
+    // Prüft auf eine korrekte Base64-Kodierung
+    if(istCredentialsNichtBase64Kodiert(request)){
         free(raw);
         return 0;
     }
+
     raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
-    int positionColon=0;
-    if(raw->str==NULL){
+    int positionColon = 0;
+    if(raw->str == NULL){
         free(raw);
         return 0;
     }
-    while (positionColon<raw->len&&raw->str[positionColon] != ':'){positionColon++;}
-    if(positionColon==raw->len){
+
+    while (positionColon < raw->len && raw->str[positionColon] != ':'){positionColon++;}
+    if(positionColon == raw->len){
         free_str(raw);
         return 0;
     }
-    string *username= cpy_str(raw->str, positionColon);
-    string *password= cpy_str(&raw->str[positionColon+1], raw->len-positionColon-1);
+
+    string *username = cpy_str(raw->str, positionColon);
+    string *password = cpy_str(&raw->str[positionColon + 1], raw->len-positionColon - 1);
     free_str(raw);
+
+    // Hashed die Eingaben
     unsigned char hash[SHA_DIGEST_LENGTH];
     SHA1(password->str,password->len, hash);
-    string *hashedPasswort= calloc(sizeof(string), 1);
+    string *hashedPasswort = calloc(sizeof(string), 1);
+
     if(raw == NULL) {
         exit(3);
     }
-    hashedPasswort->str= base64_encode(hash, 20, &hashedPasswort->len);
+
+    hashedPasswort->str = base64_encode(hash, 20, &hashedPasswort->len);
     char pathBuffer [PATH_MAX+1];
     char* temp = realpath(DOCROOT, pathBuffer);
     if (temp == NULL) {
@@ -179,41 +193,46 @@ int isPasswordUsernameRight(http_request * request){
         free_str(hashedPasswort);
         return 0;
     }
-    string * filePath= cpy_str(temp, strlen(temp));
+
+    string * filePath = cpy_str(temp, strlen(temp));
     str_cat(filePath, "/htpasswd", strlen("/htpasswd"));
     FILE *fptr;
     fptr = fopen(filePath->str, "r");
-    string* combined= cpy_str(username->str,username->len);
+    string* combined = cpy_str(username->str,username->len);
+
     free_str(username);
     str_cat(combined, ":{SHA}", strlen(":{SHA}"));
     str_cat(combined, hashedPasswort->str, hashedPasswort->len);
     free_str(password);
     free_str(hashedPasswort);
+
     char pointer;
     if (fptr == NULL) {
         return 0;
     }
+
     do{
-        pointer= fgetc(fptr);
+        pointer = fgetc(fptr);
         for (int i = 0; i < combined->len; ++i) {
-            if (i==combined->len-1&&combined->str[i]==pointer){
+            if (i == combined->len - 1 && combined->str[i] == pointer){
                 free_str(combined);
                 free_str(filePath);
                 fclose(fptr);
                 return 1;
-            }else if(combined->str[i]==pointer){
-                pointer= fgetc(fptr);
+            }else if(combined->str[i] == pointer){
+                pointer = fgetc(fptr);
             } else{
                 break;
             }
         }
-        while (pointer!='\n'&&pointer!=EOF){
-            pointer=fgetc(fptr);
+        while (pointer != '\n'&&pointer != EOF){
+            pointer = fgetc(fptr);
         };
-    } while (pointer!=EOF);
+    } while (pointer != EOF);
 
     free_str(combined);
     free_str(filePath);
     fclose(fptr);
+
     return 0;
 }
