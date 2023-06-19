@@ -5,36 +5,37 @@
 #include "strlib.h"
 
 /**
- * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " ". Das Nullterminierungszeichen wird aus dem Pfad entfernt.
+ * Entfernt hexadezimale Zeichen von einem String*, beispielsweise "%20" = " ".
+ * Das Nullterminierungszeichen wird aus dem Pfad entfernt.
  *
  * @author Thomas Fidorin
  * @param str String, in dem die Zeichen ersetzt werden sollen.
  * @return string* Der String mit dekodierten Sonderzeichen.
  */
 string* decodeString(string* str) {
-    int isItDone=0;
+    int isItDone = 0;
     while (!isItDone){
-        isItDone=1;
-        int i=0;
-        while (i<str->len){
-            if(str->str[i]=='%'&&i+2<str->len){
-                int temp=0;
-                if(str->str[i+1]>49&&str->str[i+1]<58){
-                    temp+=str->str[i+1]-48;
-                }else if(str->str[i+1]>97&&str->str[i+1]<103){
-                    temp+=str->str[i+1]-87;
-                }else if(str->str[i+1]>64&&str->str[i+1]<71){
-                    temp+=str->str[i+1]-55;
+        isItDone = 1;
+        int i = 0;
+        while (i < str->len){
+            if(str->str[i] == '%' && i+2 < str->len){
+                int temp = 0;
+                if(str->str[i+1] > 49 && str->str[i+1] < 58){
+                    temp += str->str[i+1] - 48;
+                }else if(str->str[i+1] > 97 && str->str[i+1] < 103){
+                    temp += str->str[i+1] - 87;
+                }else if(str->str[i+1] > 64 && str->str[i+1] < 71){
+                    temp += str->str[i+1] - 55;
                 }
-                temp*=16;
-                if(str->str[i+2]>47&&str->str[i+2]<58){
-                    temp+=str->str[i+2]-48;
-                }else if(str->str[i+2]>64&&str->str[i+2]<71){
-                    temp+=str->str[i+2]-55;
-                }else if(str->str[i+1]>97&&str->str[i+1]<103){
-                    temp+=str->str[i+1]-87;
+                temp *= 16;
+                if(str->str[i+2] > 47 && str->str[i+2] < 58){
+                    temp += str->str[i+2] - 48;
+                }else if(str->str[i+2] > 64 && str->str[i+2] < 71){
+                    temp += str->str[i+2] - 55;
+                }else if(str->str[i+1] > 97 && str->str[i+1] < 103){
+                    temp += str->str[i+1] - 87;
                 }
-                if(temp<32||temp>255){
+                if(temp < 32 || temp > 255){
                     i++;
                     continue;
                 }
@@ -43,13 +44,13 @@ string* decodeString(string* str) {
                         str->str[j]=str->str[j+1];
                     }
                 }
-                isItDone=0;
-                str->str[i]=temp;
-                str->len-=2;
-                str->str[str->len]='\0';
-                str->str=realloc(str->str,str->len);
-            }else if(str->str[i]=='+'){
-                str->str[i]=' ';
+                isItDone = 0;
+                str->str[i] = temp;
+                str->len -= 2;
+                str->str[str->len] = '\0';
+                str->str = realloc(str->str,str->len);
+            }else if(str->str[i] == '+'){
+                str->str[i] = ' ';
             }
             i++;
         }
@@ -89,7 +90,7 @@ string* str_cat(string* dest, const char* src, size_t len) {
 /**
  * Erstellt einen neuen leeren String und gibt das Ergebnis zurück.
  * Im Fehlerfall (z. B. kein Speicher verfügbar), wird das Programm
- * beendet.
+ * beendet. Der neue string* muss am Ende gefreit werden.
  *
  * Dies ist eine "interne" Funktion, die nur innerhalb der strlib
  * aufgerufen werden sollte.
@@ -128,7 +129,7 @@ void print_string(string* str) {
 /**
  * Wandelt einen char-String src mit einer Länge len um
  * in einen String vom Typ string*. Im Fehlerfall wird das
- * Programm beendet.
+ * Programm beendet. Der string* muss am Ende gefreit werden.
  *
  * @param src Der Quell-string.
  * @param len Die Länge des Quell-Strings.
@@ -218,7 +219,7 @@ string* str_lower(string* src){
 
     for (int i = 0; i < src->len; i++){
         if (src->str[i] >= 'A' && src->str[i] <= 'Z'){
-            src->str[i] = src->str[i]+32;
+            src->str[i] = src->str[i] + 32;
         }
     }
 
