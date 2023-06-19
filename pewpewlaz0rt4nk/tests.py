@@ -297,5 +297,539 @@ cannon += Beam(
     request='GET /../htpasswd HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
     response=['HTTP/1.1 403']
 )
+
+############################################################################################
+# Folgende Tests wurden uns freundlicherweise von der Gruppe PG4-1 zur Verfügung gestellt. #
+############################################################################################
+
+cannon += Beam(
+    description='Host in Kleinbuchstaben (host)',
+    request='GET / HTTP/1.1\r\nhost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Kein Host-Header HTTP/1.0',
+    request='GET / HTTP/1.0\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Debug-Seite',
+    request='GET /debug HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Host "intern"',
+    request='GET / HTTP/1.1\r\nHost: intern\r\n\r\n',
+    response=['HTTP/1.1 401', 'Content-Type: ', 'Content-Length: ', 'WWW-Authenticate: Basic realm="Login"']
+)
+
+cannon += Beam(
+    description='Host "intern" mit Leerzeichen am Ende',
+    request='GET / HTTP/1.1\r\nHost: intern \r\n\r\n',
+    response=['HTTP/1.1 401', 'Content-Type: ', 'Content-Length: ', 'WWW-Authenticate: Basic realm="Login"']
+)
+
+cannon += Beam(
+    description='Host "extern"',
+    request='GET / HTTP/1.1\r\nHost: extern\r\n\r\n',
+    response=['HTTP/1.1 200 OK',  'Content-Type: text/html', 'Content-Length: 246', '',
+              '<html>',
+              '        <head>',
+              '                <title>PSE Extern</title>',
+              '                <script language="JavaScript" src="js/javascript.js" ></script>',
+              '        </head>',
+              '        <body>'
+              ]
+)
+
+cannon += Beam(
+    description='Host "extern" mit Port',
+    request='GET / HTTP/1.1\r\nHost: extern:8080\r\n\r\n',
+    response=['HTTP/1.1 200 OK', 'Content-Type: text/html', 'Content-Length: 246', '',
+              '<html>',
+              '        <head>',
+              '                <title>PSE Extern</title>',
+              '                <script language="JavaScript" src="js/javascript.js" ></script>',
+              '        </head>',
+              '        <body>'
+              ]
+)
+
+cannon += Beam(
+    description='HTTP/1.0',
+    request='GET / HTTP/1.0\r\nHost: extern\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Ungültige HTTP-Version',
+    request='GET / HTTP/1.2\r\nHost: extern\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Keine Ressource und keine HTTP-Version angegeben',
+    request='GET \r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='default/index.html: passende Content-Length und Content-Type',
+    request='GET /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: text/html', 'Content-Length: 5900']
+)
+
+cannon += Beam(
+    description='default/images/TUX1.PNG: passende Content-Length und Content-Type',
+    request='GET /images/TUX1.PNG HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: image/png', 'Content-Length: 39594']
+)
+
+cannon += Beam(
+    description='default/images/tux.jpg: passende Content-Length und Content-Type',
+    request='GET /images/tux.jpg HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: image/jpeg', 'Content-Length: 9883']
+)
+
+cannon += Beam(
+    description='default/images/tux.png: passende Content-Length und Content-Type',
+    request='GET /images/tux.png HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: image/png', 'Content-Length: 39594']
+)
+
+cannon += Beam(
+    description='default/js/javascript.js: passende Content-Length und Content-Type',
+    request='GET /js/javascript.js HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: text/plain', 'Content-Length: 74']
+)
+
+cannon += Beam(
+    description='default/images/tux: passende Content-Length',
+    request='GET /images/tux HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', '', 'Content-Length: 39594']
+)
+
+cannon += Beam(
+    description='default/images/ein leerzeichen.png: passende Content-Length und Content-Type',
+    request='GET /images/ein%20leerzeichen.png HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: image/png', 'Content-Length: 39594']
+)
+
+cannon += Beam(
+    description='default/images'
+                '/aaaaaaaaaaaaaaaaaaa[...].png: 404 Error',
+    request='GET '
+            '/images/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='implizites index.html',
+    request='GET / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200', 'Content-Type: text/html', 'Content-Length: 5900']
+)
+
+cannon += Beam(
+    description='Pfad außerhalb von DocumentRoot',
+    request='GET /../../../../../etc/passwd HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 403']
+)
+
+cannon += Beam(
+    description='Zugriff auf Datei in "intern" mit Host "default"',
+    request='GET /../intern/index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 403']
+)
+
+cannon += Beam(
+    description='Methode: POST',
+    request='POST / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: HEAD',
+    request='HEAD / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: PUT',
+    request='PUT / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: DELETE',
+    request='DELETE / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: CONNECT',
+    request='CONNECT / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: OPTIONS',
+    request='OPTIONS / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: TRACE',
+    request='TRACE / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Methode: PATCH',
+    request='PATCH / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Keine HTTP-Methode (HTTP/1.0)',
+    request='/ HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Keine HTTP-Methode mit Leerzeichen (HTTP/1.0)',
+    request=' / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Keine HTTP-Methode (HTTP/1.1)',
+    request='/ HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Keine HTTP-Methode mit Leerzeichen (HTTP/1.1)',
+    request=' / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Echo_Server /debug',
+    request='GET /debug HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200 OK']
+)
+
+cannon += Beam(
+    description='Fehlendes 1. Space in der Request',
+    request='GET/index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400 Bad Request']
+)
+
+cannon += Beam(
+    description='Fehlende Spaces in der Request',
+    request='GET/index.htmlHTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400 Bad Request']
+)
+
+cannon += Beam(
+    description='Fehlender Absatz in der Request',
+    request='GET /index.html HTTP/1.1Host: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Ressource beginnt nicht mit /',
+    request='GET index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Valide Methode POST, die nicht unterstützt wird',
+    request='POST /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode HEAD, die nicht unterstützt wird',
+    request='HEAD /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode PUT, die nicht unterstützt wird',
+    request='PUT /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode DELETE, die nicht unterstützt wird',
+    request='DELETE /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode CONNECT, die nicht unterstützt wird',
+    request='CONNECT /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode OPTIONS, die nicht unterstützt wird',
+    request='OPTIONS /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode TRACE, die nicht unterstützt wird',
+    request='TRACE /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Valide Methode PATCH, die nicht unterstützt wird',
+    request='PATCH /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Invalide Methode: LINK',
+    request='LINK / HTTP/1.1\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+cannon += Beam(
+    description='Invalide Methode: UNLINK',
+    request='LINK / HTTP/1.1\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Invalide Methode',
+    request='INVALID_METHOD /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='HTTP/2, valide aber nicht unterstützt',
+    request='GET /index.html HTTP/2\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='HTTP/3, valide aber nicht unterstützt',
+    request='GET /index.html HTTP/3\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Valide Methode OPTIONS, die nicht unterstützt wird',
+    request='OPTIONS /index.html HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='HTTP/0.9, mit get kleingeschrieben',
+    request='get /uiofuiozgf\r\n',
+    response=['HTTP/1.1 400 Bad Request']
+)
+
+cannon += Beam(
+    description='HTTP/0.9 aber mit POST',
+    request='POST /\r\n',
+    response=['HTTP/1.1 400 Bad Request']
+)
+
+cannon += Beam(
+    description='HTTP/0.9 aber mit Leerzeichen zuviel',
+    request='GET / \r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Echo_Server /debug mit nicht standard Methode',
+    request='Custom_GET_Method /debug HTTP/1.0\r\n\r\n',
+    response=['HTTP/1.1 200 OK']
+)
+
+cannon += Beam(
+    description='Keine Ressource angegeben',
+    request='GET  HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Keine Http-Version angegeben',
+    request='GET /\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='ShortRequest ohne ressource',
+    request='GET \r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='long Path"',
+    request='GET /index.html/index.html/index.html/index.html/index.htmlv/index.htmlv/index.html/index.html/index.html/index.html/index.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Space before Method:Get"',
+    request=' GET / HTTP/1.1\r\nHost: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 501']
+)
+
+cannon += Beam(
+    description='Kein CRLF nach 0.9 Anfrage',
+    request='GET /index.html',
+    response=[
+        'HTTP/1.1 400 Bad Request'
+    ]
+)
+
+cannon += Beam(
+    description='Nur GET',
+    request='GET\r\n\r\n',
+    response=[
+        'HTTP/1.1 400 Bad Request'
+    ]
+)
+
+cannon += Beam(
+    description='Nur GET mit zwei Leerzeichen',
+    request='GET  \r\n',
+    response=[
+        'HTTP/1.1 400 Bad Request'
+    ]
+)
+
+cannon += Beam(
+    description='Nur GET mit zwei Leerzeichen und NewLine',
+    request='GET  \r\n\r\n',
+    response=[
+        'HTTP/1.1 400 Bad Request'
+    ]
+)
+
+cannon += Beam(
+    description='Nur GET mit Pfad, ohne CRLF',
+    request='GET /',
+    response=[
+        'HTTP/1.1 400 Bad Request'
+    ]
+)
+
+cannon += Beam(
+    description='Anfrage ohne Header, keine leere Zeile',
+    request='GET / HTTP/1.0\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='URI "/n\\r\\ndex.html"',
+    request='GET /n\r\ndex.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Kein CR',
+    request='GET /index.html HTTP/1.0\n\r\n',
+    response=['HTTP/1.1 400 Bad Request']
+)
+
+cannon += Beam(
+    description='Nicht ASCII Alphabet',
+    request='GET /бел HTTP/1.0\r\n\r\n',
+    response=['HTTP/1.1 505']
+)
+
+cannon += Beam(
+    description='Keine ASCII Zeichen',
+    request='GET /ÜÖ.html HTTP/1.1\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Datei Punkt URL Encoded',
+    request='GET /images/tux%2Epng HTTP/1.1\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Lange Anfrage',
+    request='GET / HTTP/1.1\r\n' + 'Connection: close' * 100 + '\r\n\r\n',
+    response=['HTTP/1.1 200 OK'],
+)
+
+cannon += Beam(
+    description='Bad URI "/in\\0dex.html"',
+    request='GET /in\0dex.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Bad URI "/in\\xffdex.html"',
+    request='GET /in\xffdex.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Bad URI "/in\\tdex.html"',
+    request='GET /in\tdex.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='Bad URI chars "/inäÖÜdex.html"',
+    request='GET /inäÖÜdex.html HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 404']
+)
+
+cannon += Beam(
+    description='NULL before Header',
+    request='GET /index.html HTTP/1.1\r\0\n\0Host: {host}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Request is double CRLF',
+    request='\r\n\r\n',
+    response=['HTTP/1.1 400']
+)
+
+cannon += Beam(
+    description='Access with %20',
+    request='GET /images/ein%20leerzeichen.png HTTP/1.1\r\nHost: {host}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='GET with Entity-Body and without Content-Length',
+    request='GET /index.html HTTP/1.1\r\nHost: {host}\r\n\r\nTESTTESTTEST',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='GET with Entity-Body and Content-Length: 10',
+    request='GET /index.html HTTP/1.1\r\nContent-Length: 10\r\nHost: {host}\r\n\r\nTESTTESTTE',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='Groß- und Kleinbuchstaben abwechselnd in Host-Header',
+    request='GET /debug HTTP/1.1\r\nhOsT: {host}:{port}\r\n\r\n',
+    response=['HTTP/1.1 200']
+)
+
+cannon += Beam(
+    description='host header is intern',
+    request='GET /index.html HTTP/1.1\r\nHost:  intern    \r\n\r\n',
+    response=['HTTP/1.1 401']
+)
+
 # Pew pew!
 cannon.pewpew()
