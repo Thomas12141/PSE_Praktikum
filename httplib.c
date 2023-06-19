@@ -228,18 +228,18 @@ void freeRequestStruct(http_request* req) {
 }
 
 /**
- * Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).
+ * Ermittelt den contentType der Datei auf Basis des Dateipfads als string pointer. Der String muss am Ende gefreit werden.
  *
- * @author Simon Lammers
- * @param fileType Die Dateiendung ohne Punkt als string*.
+ * @author Thomas Fidorin
+ * @param filePath Der Pfad der Datei.
  * @return Den contentType als string*.
  */
-string* getContentType(char* fileType){
+string* getContentType(char* filePath){
     const char *mime;
     magic_t magic;
     magic = magic_open(MAGIC_MIME_TYPE);
     magic_load(magic, NULL);
-    mime = magic_file(magic, fileType);
+    mime = magic_file(magic, filePath);
     string * contentType= cpy_str(mime, strlen(mime));
     magic_close(magic);
     return contentType;
