@@ -234,31 +234,21 @@ void freeRequestStruct(http_request* req) {
 }
 
 /**
- * Ermittelt den contentType der Datei auf Basis des fileTypes (Dateiendung, siehe getFileType()).
+ * Ermittelt den contentType der Datei auf Basis des Dateipfads als string pointer. Der String muss am Ende gefreit werden.
  *
- * @author Simon Lammers
- * @param fileType Die Dateiendung ohne Punkt als string*.
- * @return Den contentType als string* oder einen neuen string* falls der Typ nicht identifiziert werden konnte.
+ * @author Thomas Fidorin
+ * @param filePath Der Pfad der Datei.
+ * @return Den contentType als string*.
  */
-string* getContentType(string* fileType){
-    char* filetypeArray[13] = {"acc", "txt", "png", "css", "doc", "html",
-                           "jpeg", "jpg", "mp3", "mp4", "mpeg", "pdf", "js"};
-
-    char* contentTypeArray[13] = {"audio/acc", "text/plain", "image/png", "text/css",
-                              "application/msword", "text/html", "image/jpeg", "image/jpg",
-                              "audio/mpeg", "video/mp4", "video/mpeg", "application/pdf", "text/javascript"};
-
-    for (int x = 0; x < 13; ++x) {
-        int type_length = strlen(filetypeArray[x]);
-            if (char_cmp(fileType->str, filetypeArray[x], fileType->len, type_length)) {
-                int contentType_length = strlen(contentTypeArray[x]);
-                free_str(fileType);
-                return cpy_str(contentTypeArray[x], contentType_length);
-            }
-    }
-
-    free_str(fileType);
-    return _new_string();
+string* getContentType(char* filePath){
+    const char *mime;
+    magic_t magic;
+    magic = magic_open(MAGIC_MIME_TYPE);
+    magic_load(magic, NULL);
+    mime = magic_file(magic, filePath);
+    string * contentType= cpy_str(mime, strlen(mime));
+    magic_close(magic);
+    return contentType;
 }
 
 /**
