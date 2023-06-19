@@ -225,12 +225,11 @@ static void main_loop() {
 }
 
 /**
- * Verarbeitet den übergebenen request-String* struct und gibt eine entsprechende http_response* als string* struct zurück.
- * Wenn die http_request ungültig ist, besteht die http_response aus, den Fehlern entsprechenden, Statusmeldungen.
+ * Verarbeitet den übergebenen Request string* und gibt eine entsprechende HTTP Response als string* zurück.
  *
  * @author Matteo Illing
- * @param request Der http_request struct.
- * @return Der http_response struct.
+ * @param request Der HTTP Request string*.
+ * @return Der HTTP Response string*.
  */
 string* process(string* request) {
     http_request* requestStruct = getRequestStruct(request);
@@ -269,9 +268,6 @@ string* process(string* request) {
         freeRequestStruct(requestStruct);
         return getResponseString(getShortResponse("413", HTTP_413_MESSAGE));
     }
-
-
-
 
     sanitizeRequestedResource(requestStruct);
     if(requestStruct->resource_path==NULL){
