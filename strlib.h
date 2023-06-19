@@ -11,6 +11,10 @@
 #include <assert.h>
 #include "config.h"
 
+/**
+ * Ein struct, welches dazu dient nicht-nullterminierte String, sammt der Länge, zu speichern.
+ * Wobei len die Länge eines Strings abbildet und str den Inhalt.
+ */
 struct string {
     size_t len;
     char* str;
