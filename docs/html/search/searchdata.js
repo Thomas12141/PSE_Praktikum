@@ -2,11 +2,12 @@ var indexSectionsWithContent =
 {
   0: "_bcdefghilmprsv",
   1: "hs",
-  2: "cefhsv",
-  3: "_cdefghimprs",
-  4: "chilmprs",
+  2: "bcefhrsv",
+  3: "_bcdefghimprs",
+  4: "cdehilmprs",
   5: "hs",
-  6: "bdhp"
+  6: "bdhp",
+  7: "r"
 };
 
 var indexSectionNames =
@@ -17,17 +18,19 @@ var indexSectionNames =
   3: "functions",
   4: "variables",
   5: "typedefs",
-  6: "defines"
+  6: "defines",
+  7: "pages"
 };
 
 var indexSectionLabels =
 {
-  0: "Alle",
-  1: "Datenstrukturen",
-  2: "Dateien",
-  3: "Funktionen",
-  4: "Variablen",
-  5: "Typdefinitionen",
-  6: "Makrodefinitionen"
+  0: "All",
+  1: "Data Structures",
+  2: "Files",
+  3: "Functions",
+  4: "Variables",
+  5: "Typedefs",
+  6: "Macros",
+  7: "Pages"
 };
 

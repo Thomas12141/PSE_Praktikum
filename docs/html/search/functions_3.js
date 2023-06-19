@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['error_0',['error',['../echo__server_8c.html#a9a17d0c19f2fb4ee55752f4b6840331e',1,'echo_server.c']]]
+  ['decodestring_116',['decodeString',['../strlib_8c.html#adc6384378a32f1dc4c38433010b8e5d2',1,'decodeString(string *str):&#160;strlib.c'],['../strlib_8h.html#adc6384378a32f1dc4c38433010b8e5d2',1,'decodeString(string *str):&#160;strlib.c']]]
 ];

@@ -1,12 +1,5 @@
 var searchData=
 [
-  ['get_5fchar_5fstr_0',['get_char_str',['../strlib_8c.html#a9e9d16809436626d08b1d841416b01b2',1,'get_char_str(string *str):&#160;strlib.c'],['../strlib_8h.html#a9e9d16809436626d08b1d841416b01b2',1,'get_char_str(string *str):&#160;strlib.c']]],
-  ['get_5flength_1',['get_length',['../strlib_8c.html#a6d71a368e3ca5be66f239b6daae663e1',1,'get_length(string *str):&#160;strlib.c'],['../strlib_8h.html#a6d71a368e3ca5be66f239b6daae663e1',1,'get_length(string *str):&#160;strlib.c']]],
-  ['getcontenttype_2',['getContentType',['../httplib_8c.html#afa027296bfbae62de1c3c7bff56572a5',1,'getContentType(string *fileType):&#160;httplib.c'],['../httplib_8h.html#afa027296bfbae62de1c3c7bff56572a5',1,'getContentType(string *fileType):&#160;httplib.c']]],
-  ['getdocrootpath_3',['getDocrootpath',['../filelib_8c.html#a54c4d2e28fbb338308aaa0d018ab757a',1,'getDocrootpath(string *hostname):&#160;filelib.c'],['../filelib_8h.html#a54c4d2e28fbb338308aaa0d018ab757a',1,'getDocrootpath(string *hostname):&#160;filelib.c']]],
-  ['getfilepath_4',['getFilePath',['../filelib_8c.html#a1d67cfaa09cf3d31758aa5eb681ac778',1,'getFilePath(http_request *request):&#160;filelib.c'],['../filelib_8h.html#a1d67cfaa09cf3d31758aa5eb681ac778',1,'getFilePath(http_request *request):&#160;filelib.c']]],
-  ['getfiletype_5',['getFiletype',['../filelib_8c.html#a8a22f175e127f5ad3825435e395adb21',1,'getFiletype(char *resource_path, int len):&#160;filelib.c'],['../filelib_8h.html#a8a22f175e127f5ad3825435e395adb21',1,'getFiletype(char *resource_path, int len):&#160;filelib.c']]],
-  ['getrequeststruct_6',['getRequestStruct',['../httplib_8c.html#a1528a77b372086ed55e471dd21b68211',1,'getRequestStruct(string *request_string):&#160;httplib.c'],['../httplib_8h.html#aa2fb8419195dcfe07830c66cef8d0b79',1,'getRequestStruct(string *str):&#160;httplib.c']]],
-  ['getresponsestring_7',['getResponseString',['../httplib_8c.html#ab2eb6ae090b4b0b29d49a86393cca4b8',1,'getResponseString(http_response *response):&#160;httplib.c'],['../httplib_8h.html#ab2eb6ae090b4b0b29d49a86393cca4b8',1,'getResponseString(http_response *response):&#160;httplib.c']]],
-  ['getshortresponse_8',['getShortResponse',['../httplib_8c.html#ad5d8868483bdeb56e9032d59fdc1b99a',1,'getShortResponse(char *statusCode, char *message):&#160;httplib.c'],['../httplib_8h.html#ad5d8868483bdeb56e9032d59fdc1b99a',1,'getShortResponse(char *statusCode, char *message):&#160;httplib.c']]]
+  ['free_5fstr_118',['free_str',['../strlib_8c.html#ae988132fd8cdb8fc75ef5a2c639e41dc',1,'free_str(string *str):&#160;strlib.c'],['../strlib_8h.html#ae988132fd8cdb8fc75ef5a2c639e41dc',1,'free_str(string *str):&#160;strlib.c']]],
+  ['freerequeststruct_119',['freeRequestStruct',['../httplib_8c.html#a280ac7b9c2842917cd830745595f5142',1,'freeRequestStruct(http_request *req):&#160;httplib.c'],['../httplib_8h.html#a280ac7b9c2842917cd830745595f5142',1,'freeRequestStruct(http_request *req):&#160;httplib.c']]]
 ];

@@ -23,17 +23,18 @@
  @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var menudata={children:[
-{text:"Hauptseite",url:"index.html"},
-{text:"Datenstrukturen",url:"annotated.html",children:[
-{text:"Datenstrukturen",url:"annotated.html"},
-{text:"Datenstruktur-Verzeichnis",url:"classes.html"},
-{text:"Datenstruktur-Elemente",url:"functions.html",children:[
-{text:"Alle",url:"functions.html"},
-{text:"Variablen",url:"functions_vars.html"}]}]},
-{text:"Dateien",url:"files.html",children:[
-{text:"Auflistung der Dateien",url:"files.html"},
-{text:"Globale Elemente",url:"globals.html",children:[
-{text:"Alle",url:"globals.html",children:[
+{text:"Main Page",url:"index.html"},
+{text:"Related Pages",url:"pages.html"},
+{text:"Data Structures",url:"annotated.html",children:[
+{text:"Data Structures",url:"annotated.html"},
+{text:"Data Structure Index",url:"classes.html"},
+{text:"Data Fields",url:"functions.html",children:[
+{text:"All",url:"functions.html"},
+{text:"Variables",url:"functions_vars.html"}]}]},
+{text:"Files",url:"files.html",children:[
+{text:"File List",url:"files.html"},
+{text:"Globals",url:"globals.html",children:[
+{text:"All",url:"globals.html",children:[
 {text:"_",url:"globals.html#index__5F"},
 {text:"b",url:"globals.html#index_b"},
 {text:"c",url:"globals.html#index_c"},
@@ -47,8 +48,9 @@ var menudata={children:[
 {text:"p",url:"globals.html#index_p"},
 {text:"r",url:"globals.html#index_r"},
 {text:"s",url:"globals.html#index_s"}]},
-{text:"Funktionen",url:"globals_func.html",children:[
+{text:"Functions",url:"globals_func.html",children:[
 {text:"_",url:"globals_func.html#index__5F"},
+{text:"b",url:"globals_func.html#index_b"},
 {text:"c",url:"globals_func.html#index_c"},
 {text:"d",url:"globals_func.html#index_d"},
 {text:"e",url:"globals_func.html#index_e"},
@@ -60,6 +62,6 @@ var menudata={children:[
 {text:"p",url:"globals_func.html#index_p"},
 {text:"r",url:"globals_func.html#index_r"},
 {text:"s",url:"globals_func.html#index_s"}]},
-{text:"Variablen",url:"globals_vars.html"},
-{text:"Typdefinitionen",url:"globals_type.html"},
-{text:"Makrodefinitionen",url:"globals_defs.html"}]}]}]}
+{text:"Variables",url:"globals_vars.html"},
+{text:"Typedefs",url:"globals_type.html"},
+{text:"Macros",url:"globals_defs.html"}]}]}]}

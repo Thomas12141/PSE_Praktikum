@@ -1,0 +1,9 @@
+digraph "http_response_header"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="http_response_header",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Diese Struktur enthält alle nötigen Eigenschaften eines http_response_header."];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" content_type\nprotocol\nreason_phrase\nstatus_code" ,fontname="Helvetica"];
+  Node2 [label="string",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstring.html",tooltip=" "];
+}

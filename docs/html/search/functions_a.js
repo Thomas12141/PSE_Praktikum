@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['readfile_0',['readFile',['../filelib_8c.html#a6f6d98a965295b2ba0cb66aa2c0649c6',1,'readFile(char *filepath):&#160;filelib.c'],['../filelib_8h.html#a6f6d98a965295b2ba0cb66aa2c0649c6',1,'readFile(char *filepath):&#160;filelib.c']]],
-  ['register_5fsignal_1',['register_signal',['../echo__server_8c.html#a24845b0baa2a60859cba921b7b287c92',1,'echo_server.c']]]
+  ['print_5fstring_143',['print_string',['../strlib_8c.html#adaf7921c8c14ecd87e941c4b71b70dac',1,'print_string(string *str):&#160;strlib.c'],['../strlib_8h.html#adaf7921c8c14ecd87e941c4b71b70dac',1,'print_string(string *str):&#160;strlib.c']]],
+  ['process_144',['process',['../echo__server_8c.html#aacebf039d8ecd2b99a9e64453266b7f3',1,'echo_server.c']]]
 ];
