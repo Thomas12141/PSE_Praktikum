@@ -13,46 +13,46 @@
  * @return string* Der String mit dekodierten Sonderzeichen.
  */
 string* decodeString(string* str) {
-    int isItDone = 0;
-    while (!isItDone){
-        isItDone = 1;
+    int isDecoded = 0;
+    while(!isDecoded) {
+        isDecoded = 1;
         int i = 0;
-        while (i < str->len){
-            if(str->str[i] == '%' && i+2 < str->len){
+        while(i < str->len) {
+            if(str->str[i] == '%' && i + 2 < str->len) {
                 int temp = 0;
-                if(str->str[i+1] > 49 && str->str[i+1] < 58){
-                    temp += str->str[i+1] - 48;
-                }else if(str->str[i+1] > 97 && str->str[i+1] < 103){
-                    temp += str->str[i+1] - 87;
-                }else if(str->str[i+1] > 64 && str->str[i+1] < 71){
-                    temp += str->str[i+1] - 55;
+                if(str->str[i + 1] > 49 && str->str[i + 1] < 58) {
+                    temp += str->str[i + 1] - 48;
+                } else if(str->str[i + 1] > 97 && str->str[i + 1] < 103) {
+                    temp += str->str[i + 1] - 87;
+                } else if(str->str[i + 1] > 64 && str->str[i + 1] < 71) {
+                    temp += str->str[i + 1] - 55;
                 }
                 temp *= 16;
-                if(str->str[i+2] > 47 && str->str[i+2] < 58){
-                    temp += str->str[i+2] - 48;
-                }else if(str->str[i+2] > 64 && str->str[i+2] < 71){
-                    temp += str->str[i+2] - 55;
-                }else if(str->str[i+1] > 97 && str->str[i+1] < 103){
-                    temp += str->str[i+1] - 87;
+                if(str->str[i + 2] > 47 && str->str[i + 2] < 58) {
+                    temp += str->str[i + 2] - 48;
+                } else if(str->str[i + 2] > 64 && str->str[i + 2] < 71) {
+                    temp += str->str[i + 2] - 55;
+                } else if(str->str[i + 1] > 97 && str->str[i + 1] < 103) {
+                    temp += str->str[i + 1] - 87;
                 }
-                if(temp < 32 || temp > 255){
-                    i++;
+                if(temp < 32 || temp > 255) {
+                    ++i;
                     continue;
                 }
                 for (int k = 0; k < 2; ++k) {
-                    for (int j = i; j < str->len-1; ++j) {
-                        str->str[j]=str->str[j+1];
+                    for (int j = i; j < str->len - 1; ++j) {
+                        str->str[j] = str->str[j + 1];
                     }
                 }
-                isItDone = 0;
+                isDecoded = 0;
                 str->str[i] = temp;
                 str->len -= 2;
                 str->str[str->len] = '\0';
-                str->str = realloc(str->str,str->len);
-            }else if(str->str[i] == '+'){
+                str->str = realloc(str->str, str->len);
+            } else if(str->str[i] == '+') {
                 str->str[i] = ' ';
             }
-            i++;
+            ++i;
         }
     }
     return str;
@@ -68,20 +68,16 @@ string* decodeString(string* str) {
  * @return Die konkatenierten Strings dest und src als String*.
  */
 string* str_cat(string* dest, const char* src, size_t len) {
-
-    //Berechnet die neue länge des Strings
     size_t total_len = dest->len + len;
 
-    //Der reservierte Speicher von des->str wird auf die benötigte länge angepasst
-    dest->str = realloc(dest->str, total_len+1);
-    if( dest->str == NULL){
+    dest->str = realloc(dest->str, total_len + 1);
+    if(dest->str == NULL) {
         exit(3);
     }
 
-    //kopiert 'len' Bytes aus src auf die letzte Position von dest->str.
-    memcpy(dest->str + dest->len,src, len);
-    dest->str[total_len]='\0';
-    //Passt die länge von dest an
+    memcpy(dest->str + dest->len, src, len);
+
+    dest->str[total_len] = '\0';
     dest->len = total_len;
 
     return dest;
@@ -109,7 +105,6 @@ string* _new_string() {
     }
 
     str->str[0] = '\0';
-
     str->len = 0;
 
     return str;
@@ -121,7 +116,7 @@ string* _new_string() {
  * @param str Der auszugebende string*.
  */
 void print_string(string* str) {
-    for(int i=0; i < str->len; i++) {
+    for(int i = 0; i < str->len; ++i) {
         putchar(str->str[i]);
     }
 }
@@ -136,7 +131,6 @@ void print_string(string* str) {
  * @return string* Ein Zeiger auf den neu erzeugten string.
  */
 string* cpy_str(const char* src, size_t len) {
-
     assert(src != NULL);
 
     string* dest = calloc(sizeof(string), 1);
@@ -201,7 +195,7 @@ int str_cmp(string* str1, string* str2) {
         return 0;
     }
 
-    if (memcmp(str1->str,str2->str,str1->len) == 0) {
+    if (memcmp(str1->str, str2->str, str1->len) == 0) {
         return 1;
     }
 
@@ -215,10 +209,9 @@ int str_cmp(string* str1, string* str2) {
  * @param src Der String*.
  * @return Der modifizierte String* in lowercase.
  */
-string* str_lower(string* src){
-
-    for (int i = 0; i < src->len; i++){
-        if (src->str[i] >= 'A' && src->str[i] <= 'Z'){
+string* str_lower(string* src) {
+    for (int i = 0; i < src->len; ++i) {
+        if (src->str[i] >= 'A' && src->str[i] <= 'Z') {
             src->str[i] = src->str[i] + 32;
         }
     }
