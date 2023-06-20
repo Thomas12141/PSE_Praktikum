@@ -11,7 +11,7 @@ Software Requirements:
 - [CMake](https://cmake.org/)
 - [GNU/make](https://www.gnu.org/software/make/)
 - [OpenSSL](https://www.openssl.org/)
-- [Libmagic](https://packages.debian.org/unstable/libdevel/libmagic-dev)
+- [Libmagic](https://man7.org/linux/man-pages/man3/magic_load.3.html)
 - [Git](https://git-scm.com/) (optional)
 
 ```bash
