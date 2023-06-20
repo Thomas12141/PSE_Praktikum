@@ -17,8 +17,9 @@ string* process(string *request);
 static bool run = true;
 
 /**
- * Gibt eine Fehlermeldung *msg* aus und beendet das Programm.
+ * Gibt eine Fehlermeldung msg* aus und beendet das Programm.
  * @param msg Die Fehlermeldung.
+ * @author Sebastian Schinzel
  */
 static void error(char *msg) {
     fprintf(stderr, "%s", msg);
@@ -30,8 +31,9 @@ static void error(char *msg) {
 }
 
 /**
- * Diese Funktion wird aufgerufen, wenn das Programm das *SIGINT*-Signal empfängt. Es beendet den Server.
+ * Diese Funktion wird aufgerufen, wenn das Programm das SIGINT-Signal empfängt. Es beendet den Server.
  * @param signum Die Signalnummer.
+ * @author Sebastian Schinzel
  */
 static void handle_signal(int signum) {
     if (signum != SIGINT) {
@@ -46,6 +48,7 @@ static void handle_signal(int signum) {
 
 /**
  * Registriert das SIGINT-Signal (Strg+C) um den Server beenden zu können.
+ * @author Sebastian Schinzel
  */
 static void register_signal() {
     struct sigaction action;
@@ -67,6 +70,7 @@ static void register_signal() {
 /**
  * Erstellt und konfiguriert den Netzwerk-Socket, über den die Verbindungen
  * angenommen werden.
+ * @author Sebastian Schinzel
  */
 static int setup_socket() {
     int opt = 1;
@@ -117,6 +121,7 @@ static int setup_socket() {
 /**
  * Liest Daten von stdin ein, überführt sie in einen string* und übergibt sie an process().
  * Wenn ein Fehler auftritt wird error() aufgerufen.
+ * @author Sebastian Schinzel
  */
 static void main_loop_stdin() {
     void *const buffer = malloc(BUFFER_SIZE + 1);
@@ -152,6 +157,7 @@ static void main_loop_stdin() {
 
 /**
  * Die Hauptschleife, in der eingehende Verbindungen angenommen werden.
+ * @author Sebastian Schinzel
  */
 static void main_loop() {
     const int sockfd = setup_socket();
@@ -328,6 +334,15 @@ string* process(string* request) {
     return getResponseString(res);
 }
 
+/**
+ * Der Einstiegspunkt des Programms.
+ * Hier wird entschieden ob die Verarbeitung via stdin oder TCP geschehen soll.
+ * Wird "stdin" als Argument übergeben, wird die Verarbeitung über stdin abgehandelt.
+ *
+ * @author Sebastian Schinzel
+ * @param argc Die Anzahl der an das Programm übergebenen Argumente.
+ * @param argv Der "Vektor", welcher die übergebenen Argumente enthält. Es handelt sich hierbei um NULL terminierte Strings.
+ */
 int main(int argc, char *argv[]) {
     register_signal();
 
