@@ -1,12 +1,5 @@
 var searchData=
 [
-  ['iffiletoobig_131',['ifFileTooBig',['../filelib_8h.html#aeea94d0895d7bd8ff936f10a85c2b634',1,'ifFileTooBig(char *path):&#160;filelib.c'],['../filelib_8c.html#aeea94d0895d7bd8ff936f10a85c2b634',1,'ifFileTooBig(char *path):&#160;filelib.c']]],
-  ['isauthenticationrequired_132',['isAuthenticationRequired',['../validation_8c.html#a13d1c6c70922a27d7b683cb05a477e7f',1,'isAuthenticationRequired(http_request *httpRequest):&#160;validation.c'],['../validation_8h.html#a13d1c6c70922a27d7b683cb05a477e7f',1,'isAuthenticationRequired(http_request *httpRequest):&#160;validation.c']]],
-  ['isfileaccessible_133',['isFileAccessible',['../validation_8c.html#ac1569d83de2e304c01207889d7a7467c',1,'isFileAccessible(char *filepath):&#160;validation.c'],['../validation_8h.html#ac1569d83de2e304c01207889d7a7467c',1,'isFileAccessible(char *filepath):&#160;validation.c']]],
-  ['isfileexistent_134',['isFileExistent',['../validation_8c.html#a2d5fa32041667f9b7105aec075ae9d50',1,'isFileExistent(char *filepath):&#160;validation.c'],['../validation_8h.html#a2d5fa32041667f9b7105aec075ae9d50',1,'isFileExistent(char *filepath):&#160;validation.c']]],
-  ['isfileinsidedocroot_135',['isFileInsideDocroot',['../validation_8c.html#a905478c0635429564cd2a7a2813d902f',1,'isFileInsideDocroot(char *filepath, string *hostname):&#160;validation.c'],['../validation_8h.html#a905478c0635429564cd2a7a2813d902f',1,'isFileInsideDocroot(char *filepath, string *hostname):&#160;validation.c']]],
-  ['ismethodvalid_136',['isMethodValid',['../validation_8c.html#a26d6b23f2c10e2560521ea5ecae8a14a',1,'isMethodValid(string *method):&#160;validation.c'],['../validation_8h.html#a26d6b23f2c10e2560521ea5ecae8a14a',1,'isMethodValid(string *method):&#160;validation.c']]],
-  ['ispasswordusernameright_137',['isPasswordUsernameRight',['../validation_8c.html#a34ae1366088eaf0f931d403dd1cfa78d',1,'isPasswordUsernameRight(http_request *request):&#160;validation.c'],['../validation_8h.html#a34ae1366088eaf0f931d403dd1cfa78d',1,'isPasswordUsernameRight(http_request *request):&#160;validation.c']]],
-  ['isprotocolvalid_138',['isProtocolValid',['../validation_8c.html#a9018b9a0433a5825f2dff2ceb6c306f0',1,'isProtocolValid(string *protocol):&#160;validation.c'],['../validation_8h.html#a9018b9a0433a5825f2dff2ceb6c306f0',1,'isProtocolValid(string *protocol):&#160;validation.c']]],
-  ['istcredentialsnichtbase64kodiert_139',['istCredentialsNichtBase64Kodiert',['../validation_8c.html#a1f809369edcb2f5bee8c0a5e47be8ce5',1,'validation.c']]]
+  ['print_5fstring_129',['print_string',['../strlib_8c.html#adaf7921c8c14ecd87e941c4b71b70dac',1,'print_string(string *str):&#160;strlib.c'],['../strlib_8h.html#adaf7921c8c14ecd87e941c4b71b70dac',1,'print_string(string *str):&#160;strlib.c']]],
+  ['process_130',['process',['../echo__server_8c.html#aacebf039d8ecd2b99a9e64453266b7f3',1,'echo_server.c']]]
 ];

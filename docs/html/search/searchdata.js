@@ -3,8 +3,8 @@ var indexSectionsWithContent =
   0: "_bcdefghilmprsv",
   1: "hs",
   2: "bcefhrsv",
-  3: "_bcdefghimprs",
-  4: "cdehilmprs",
+  3: "_bcdfgimprs",
+  4: "chilmprs",
   5: "hs",
   6: "bdhp",
   7: "r"

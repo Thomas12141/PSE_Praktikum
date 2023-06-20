@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['len_161',['len',['../structstring.html#a7360b55975153b822efc5217b7734e6a',1,'string']]],
-  ['length_162',['length',['../structhttp__request.html#a9ee64c7b918513891b3834b93ad0e501',1,'http_request']]]
+  ['protocol_146',['protocol',['../structhttp__request.html#ab53e38b280863e87a7a64526faacb4c9',1,'http_request::protocol()'],['../structhttp__response__header.html#ab53e38b280863e87a7a64526faacb4c9',1,'http_response_header::protocol()']]]
 ];

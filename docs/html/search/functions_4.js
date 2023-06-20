@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['error_117',['error',['../echo__server_8c.html#a9a17d0c19f2fb4ee55752f4b6840331e',1,'echo_server.c']]]
+  ['free_5fstr_107',['free_str',['../strlib_8c.html#ae988132fd8cdb8fc75ef5a2c639e41dc',1,'free_str(string *str):&#160;strlib.c'],['../strlib_8h.html#ae988132fd8cdb8fc75ef5a2c639e41dc',1,'free_str(string *str):&#160;strlib.c']]],
+  ['freerequeststruct_108',['freeRequestStruct',['../httplib_8c.html#a280ac7b9c2842917cd830745595f5142',1,'freeRequestStruct(http_request *req):&#160;httplib.c'],['../httplib_8h.html#a280ac7b9c2842917cd830745595f5142',1,'freeRequestStruct(http_request *req):&#160;httplib.c']]]
 ];

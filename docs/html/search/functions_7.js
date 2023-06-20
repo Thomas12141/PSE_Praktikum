@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handle_5fsignal_130',['handle_signal',['../echo__server_8c.html#a748a7d6959709b662884fd256a382a60',1,'echo_server.c']]]
+  ['main_128',['main',['../echo__server_8c.html#a0ddf1224851353fc92bfbff6f499fa97',1,'echo_server.c']]]
 ];
