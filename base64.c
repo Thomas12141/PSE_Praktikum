@@ -37,6 +37,7 @@ void build_decoding_table1() {
  * Die Methode encodiert eine Base64 Zeichenkette.
  * Die Methode prüft nicht, ob die Zeichenkette wirklich Base64.
  * Wenn die Methode eine nicht base64 Zeichenkette bekommt, kann es zu unerwatete Ergebnisse führen.
+ * Die Rückgabe muss am Ende gefreit werden.
  *
  * @author Sebastian Schinzel
  * @param data die Zeichekette, die encodiert werden sollte.
@@ -77,6 +78,7 @@ char *base64_encode(const unsigned char *data,
 
 /**
  * Die Methode decodiert eineZeichenkette zu Base64 Zeichenkette.
+ * Die Rückgabe muss am Ende gefreit werden.
  *
  * @author Sebastian Schinzel
  * @param data die Zeichekette, die decodiert werden sollte.
