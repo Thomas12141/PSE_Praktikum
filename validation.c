@@ -157,16 +157,18 @@ int isPasswordUsernameRight(http_request * request){
         free(raw);
         return 0;
     }
-
+    build_decoding_table1();
     raw->str = base64_decode(request->credentials->str, request->credentials->len, &raw->len);
     int positionColon = 0;
     if(raw->str == NULL){
+        base64_cleanup();
         free(raw);
         return 0;
     }
 
     while (positionColon < raw->len && raw->str[positionColon] != ':'){positionColon++;}
     if(positionColon == raw->len){
+        base64_cleanup();
         free_str(raw);
         return 0;
     }
@@ -180,10 +182,6 @@ int isPasswordUsernameRight(http_request * request){
     SHA1(password->str,password->len, hash);
     string *hashedPasswort = calloc(sizeof(string), 1);
 
-    if(raw == NULL) {
-        exit(3);
-    }
-
     hashedPasswort->str = base64_encode(hash, 20, &hashedPasswort->len);
     char pathBuffer [PATH_MAX+1];
     char* temp = realpath(DOCROOT, pathBuffer);
@@ -191,6 +189,7 @@ int isPasswordUsernameRight(http_request * request){
         free_str(username);
         free_str(password);
         free_str(hashedPasswort);
+        base64_cleanup();
         return 0;
     }
 
@@ -208,6 +207,7 @@ int isPasswordUsernameRight(http_request * request){
 
     char pointer;
     if (fptr == NULL) {
+        base64_cleanup();
         return 0;
     }
 
@@ -218,6 +218,7 @@ int isPasswordUsernameRight(http_request * request){
                 free_str(combined);
                 free_str(filePath);
                 fclose(fptr);
+                base64_cleanup();
                 return 1;
             }else if(combined->str[i] == pointer){
                 pointer = fgetc(fptr);
@@ -233,6 +234,7 @@ int isPasswordUsernameRight(http_request * request){
     free_str(combined);
     free_str(filePath);
     fclose(fptr);
+    base64_cleanup();
 
     return 0;
 }

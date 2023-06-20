@@ -19,7 +19,7 @@ static char *decoding_table = NULL;
 static int mod_table[] = {0, 2, 1};
 
 /**
- * Bildet die Base64 Dekodierungstabelle. Am Ende muss die Tabelle gereit werden.
+ * Bildet die Base64 Dekodierungstabelle. Am Ende muss die Tabelle gefreit werden.
  *
  * @author Sebastian Schinzel
  */
