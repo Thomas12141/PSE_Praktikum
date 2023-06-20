@@ -19,7 +19,7 @@ static char *decoding_table = NULL;
 static int mod_table[] = {0, 2, 1};
 
 /**
- * Bildet die Base64 Dekodierungstabelle. Am Ende muss die Tabelle gefreit werden.
+ * Bildet die Base64 Dekodierungstabelle. Am Ende muss die Tabelle freigegeben werden.
  *
  * @author Sebastian Schinzel
  */
@@ -35,9 +35,9 @@ void build_decoding_table1() {
 
 /**
  * Die Methode encodiert eine Base64 Zeichenkette.
- * Die Methode prüft nicht, ob die Zeichenkette wirklich Base64.
- * Wenn die Methode eine nicht base64 Zeichenkette bekommt, kann es zu unerwatete Ergebnisse führen.
- * Die Rückgabe muss am Ende gefreit werden.
+ * Die Methode prüft nicht, ob die Zeichenkette wirklich in Base64 kodiert ist.
+ * Sollte die Methode eine Zeichenkette erhalten, welche nicht in Base64 kodiert ist, kann dies zu unerwarteten Ergebnissen führen.
+ * Die Rückgabe muss am Ende freigegeben werden.
  *
  * @author Sebastian Schinzel
  * @param data die Zeichekette, die encodiert werden sollte.
@@ -77,8 +77,8 @@ char *base64_encode(const unsigned char *data,
 }
 
 /**
- * Die Methode decodiert eineZeichenkette zu Base64 Zeichenkette.
- * Die Rückgabe muss am Ende gefreit werden.
+ * Die Methode decodiert eine Base64 Zeichenkette.
+ * Die Rückgabe muss am Ende freigegeben werden.
  *
  * @author Sebastian Schinzel
  * @param data die Zeichekette, die decodiert werden sollte.
@@ -124,7 +124,7 @@ unsigned char *base64_decode(const char *data,
 }
 
 /**
- * freit die base64 tabelle.
+ * Gibt die Base64 Tabelle frei.
  *
  * @author Sebastian Schinzel
  */
